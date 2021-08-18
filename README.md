@@ -1,8 +1,8 @@
 # Rife-Vulkan-GUI
 #
 # Installation: (linux)
-git clone https://github.com/TNTwise/Rife-Vulkan-GUI.git <br />
+Download the Latest Release of Rife-Vulkan-GUI <br />
+Extract the files <br / >
 cd Rife-Vulkan-GUI <br />
-sudo chmod +x GUI.py
 pip install opencv-python <br />
 python GUI.py <br />
