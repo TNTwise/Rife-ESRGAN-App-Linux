@@ -1,4 +1,4 @@
-# Rife-Vulkan-GUI
+# Rife-Vulkan-GUI, Based on rife-ncnn-vulkan
 # Installation: (linux)
 Download the Latest Release of Rife-Vulkan-GUI. <br />
 Extract the files. <br />
@@ -15,3 +15,4 @@ This means you are most likely using integrated graphics, using your RAM as VRAM
 If thats not the case, your gpu might not support vulkan. <br />
 If your gpu doesn't support vulkan, I'd recommend using https://github.com/hzwer/arXiv2020-RIFE instead. <br />
 If It says its done, but the video file is corrupt. most likely an error happened. 
+THESE ISSUES ARE NOT FROM MY PROGRAM. DO NOT ASK FOR SUPPORT ON THIS PAGE.
