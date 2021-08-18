@@ -13,6 +13,8 @@ homedir = os.path.expanduser("~")
 #Button
 
 def browseFiles():
+    global thisdir
+    thisdir = os.getcwd()
     global filename
     filename = filedialog.askopenfilename(initialdir = f"{homedir}",
                                           title = "Select a File",
@@ -26,8 +28,7 @@ def output():
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = f"{homedir}",
                                           title = "Select a Folder",)
-    global thisdir
-    thisdir = os.getcwd()
+    
 
 #create label
 label_file_explorer = Label(main_window,
