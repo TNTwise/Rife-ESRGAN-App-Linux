@@ -13,4 +13,5 @@ error: ../mesa-21.1.6/src/intel/vulkan/anv_device.c:3543: GPU hung on one of our
 vkQueueSubmit failed -4 <br />
 This means you are most likely using integrated graphics, using your RAM as VRAM and you do not have enough.<br />
 If thats not the case, your gpu might not support vulkan. <br />
-If your gpu doesn't support vulkan, I'd recommend using https://github.com/hzwer/arXiv2020-RIFE instead.
+If your gpu doesn't support vulkan, I'd recommend using https://github.com/hzwer/arXiv2020-RIFE instead. <br />
+If It says its done, but the video file is corrupt. most likely an error happened. 
