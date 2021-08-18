@@ -12,5 +12,6 @@ If you have any issues, use python GUI.py to open up a terminal window to see wh
 # Known issues: <br />
 error: ../mesa-21.1.6/src/intel/vulkan/anv_device.c:3543: GPU hung on one of our command buffers (VK_ERROR_DEVICE_LOST) <br />
 vkQueueSubmit failed -4 <br />
-This means you are on an intel cpu, using your RAM as VRAM and you do not have enough. <br />
-I'd recommend using https://github.com/hzwer/arXiv2020-RIFE instead.
+This means you are most likely using integrated graphics, using your RAM as VRAM and you do not have enough.<br />
+If thats not the case, your gpu might not support vulkan. <br />
+If your gpu doesn't support vulkan, I'd recommend using https://github.com/hzwer/arXiv2020-RIFE instead.
