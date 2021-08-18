@@ -26,6 +26,8 @@ def output():
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = f"{homedir}",
                                           title = "Select a Folder",)
+    global thisdir
+    thisdir = os.getcwd()
 
 #create label
 label_file_explorer = Label(main_window,
@@ -63,7 +65,7 @@ def on_click():
     os.system(f'ffmpeg -i {filename} -vn -acodec copy audio.m4a -y')
     os.system(f'ffmpeg -i {filename} input_frames/frame_%08d.png')
     os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
-    os.system(f'ffmpeg -framerate {fps*2} -i output_frames/%08d.png -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p {outputdir}/output.mp4 -y')
+    os.system(f'ffmpeg -framerate {fps*2} -i {thisdir}/output_frames/%08d.png -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p {outputdir}/output.mp4 -y')
 Button(main_window, text="Start!", command=on_click).grid(row = 2, column = 0)
 
 def center_window(w=300, h=200):
