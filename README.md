@@ -1,4 +1,5 @@
 # Rife-Vulkan-GUI, Based on rife-ncnn-vulkan
+#DO NOT CLONE REPO. CLONING RESULTS IN A BUG. DOWNLOAD FROM RELEASE TAB
 # Installation: (linux)
 Download the Latest Release of Rife-Vulkan-GUI. <br />
 Extract the files. <br />
