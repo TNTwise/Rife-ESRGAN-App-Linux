@@ -1,6 +1,6 @@
 # Rife-Vulkan-GUI, Based on rife-ncnn-vulkan
 DO NOT CLONE REPO. CLONING RESULTS IN A BUG. DOWNLOAD FROM RELEASE TAB <br />
-I do not update the source code regularly. The source code is already in the releases.
+I do not update the source code regularly. The source code is already in the releases I push out.
 # Installation: (linux)
 Download the Latest Release of Rife-Vulkan-GUI. <br />
 Extract the files. <br />
