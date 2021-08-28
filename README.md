@@ -2,6 +2,7 @@
 # Installation: (linux)
 Download the Latest Release of Rife-Vulkan-GUI. <br />
 Extract the files. <br />
+install opencv-python, tk, and xterm (according to your distrobution)<br /> 
 Run start. <br />
 If it does not run, right click and go to properties -> permissions and check Allow executing file as program.<br />
 
