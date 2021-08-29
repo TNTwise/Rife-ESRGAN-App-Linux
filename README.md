@@ -8,7 +8,11 @@ Install opencv-python, tk, and xterm (according to your distrobution)<br />
 Run start. <br />
 If it does not run, right click and go to properties -> permissions and check Allow executing file as program.<br />
 
-
+# Usage:
+Select a video with Input Video<br />
+Select a Output Directory with Output Folder.<br />
+Select 2X or 4X depending on how many times you want your video to be interpolated.<br />
+Start!.<br />
 # Known issues: <br />
 error: ../mesa-21.1.6/src/intel/vulkan/anv_device.c:3543: GPU hung on one of our command buffers (VK_ERROR_DEVICE_LOST) <br />
 vkQueueSubmit failed -4 <br />
