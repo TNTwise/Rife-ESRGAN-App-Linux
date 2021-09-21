@@ -11,6 +11,7 @@ import tkinter
 import sys
 import os.path
 from tkinter import *
+from PIL import ImageTk,Image
 from tkinter import filedialog
 import time
 from multiprocessing import Queue, Process
@@ -29,16 +30,18 @@ import ntpath
 from sys import exit
 import glob
 import os.path
+import pathlib
+
 main_window = Tk()
 
 cmd = 'ls -l'
-homedir = os.path.expanduser("~")
+homedir = os.path.expanduser(r"~")
 
 
 # use threading
 # create listbox object
 
-listbox = Listbox(main_window, height=2,
+listbox = Listbox(main_window, height=3,
                   width=6,
                   bg="grey",
                   activestyle='dotbox',
@@ -49,8 +52,9 @@ listbox = Listbox(main_window, height=2,
 
 # insert elements by their
 # index and names.
-OPTIONS = ["2X","4X"]
+OPTIONS = ["2X","4X","8X"]
 listbox.insert('end', *OPTIONS)
+
 
 def show():
     for idx in listbox.curselection():
@@ -59,6 +63,8 @@ def show():
             on_click()
         elif OPTIONS[idx] == "4X":
             times4()
+        elif OPTIONS[idx] == "8X":
+            times8()
     # ...
 
 
@@ -72,26 +78,29 @@ def threading():
     t1.start()
 def exit_thread():
     # Call work function
-    t1 = Thread(target=exit)
+    t1 = Thread(target=exi11)
     t1.start()
 #Button
-
+global thisdir
+thisdir = os.getcwd()
 def browseFiles():
-    global thisdir
-    thisdir = os.getcwd()
+
     global filename
-    filename = filedialog.askopenfilename(initialdir = f"{homedir}",
+    filename = filedialog.askopenfilename(initialdir = fr"{homedir}",
                                           title = "Select a File",
                                           filetypes = (("Video Files",
-                                                        "*.mp4*"),
+                                                        '*.mp4'),
                                                        ("all files",
                                                         "*.*")))
+
     global mp4name
     mp4name = ntpath.basename(filename)
     #change label contents
     label_file_explorer.configure(text="File Opened: " + mp4name,
                                   font=("Arial", 10)
                                  )
+    global extension
+    extension = (pathlib.Path(f'{filename}/{mp4name}').suffix)
 
 
 def output():
@@ -99,19 +108,19 @@ def output():
 
 
     global outputdir
-    outputdir = filedialog.askdirectory(initialdir = f"{homedir}",
+    outputdir = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
 
 
 
 
 def get_fps():
-    cap=cv2.VideoCapture(f'{filename}')
+    cap=cv2.VideoCapture(fr'{filename}')
     global fps
     fps = cap.get(cv2.CAP_PROP_FPS)
     global done
     done = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps.mp4",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
                  font=("Arial", 11),
                  fg="green")
     global Interpolation
@@ -127,18 +136,35 @@ def get_fps():
 
 
 
+
+
+
 def get_fps2():
-    cap=cv2.VideoCapture(f'{outputdir}/temp.mp4')
+    cap=cv2.VideoCapture(fr'{thisdir}/temp.mp4')
     global fps2
     fps2 = cap.get(cv2.CAP_PROP_FPS)
     global done2
     done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps.mp4",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
                  font=("Arial", 11),
                  fg="green")
     global Interpolation2
     Interpolation2 = Label(main_window,
                            text=f"Interpolation 4X Started!",
+                           font=("Arial", 11),
+                           fg="yellow")
+def get_fps3():
+    cap=cv2.VideoCapture(fr'{thisdir}/temp2.mp4')
+    global fps3
+    fps3 = cap.get(cv2.CAP_PROP_FPS)
+    global done3
+    done3 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
+                 font=("Arial", 11),
+                 fg="green")
+    global Interpolation3
+    Interpolation3 = Label(main_window,
+                           text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
                            fg="yellow")
 
@@ -159,10 +185,14 @@ button_explore = Button(main_window,
 button_output = Button(main_window,
                         text = "Output Folder",
                         command = output)
+def exi11():
+    os.system('pkill -f GUI.py')
+
 button_exit = Button(main_window,
                         text = "EXIT",
-                        command = exit,
+                        command = exi11,
                         justify=CENTER )
+
 
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
@@ -172,28 +202,25 @@ listbox.grid(column = 3, row = 5)
 rife_vulkan.grid(column=3, row=0)
 
 
-def exit():
-    exit()
-
-
 
 
 
 def on_click():
+
     get_fps()
     os.system("gnome-terminal -e")
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe {filename}')
-    os.system(f'ffmpeg -i {filename} -vn -acodec copy audio.m4a -y')
+    os.system(f'ffprobe "{filename}"')
+    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=3,row=9)
-    os.system(f'ffmpeg -i {filename} input_frames/frame_%08d.png')
+    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
     os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
-    os.system(f'ffmpeg -framerate {fps*2} -i {thisdir}/output_frames/%08d.png -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p {outputdir}/{mp4name}_{fps*2}fps.mp4 -y')
+    os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
 
@@ -221,14 +248,14 @@ def times4():
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe {outputdir}/temp.mp4')
-    os.system(f'ffmpeg -i {outputdir}/temp.mp4 -vn -acodec copy audio.m4a -y')
-    os.system(f'ffmpeg -i {outputdir}/temp.mp4 input_frames/frame_%08d.png')
+    os.system(f'ffprobe "{thisdir}/temp.mp4"')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
     os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
-    os.system(f'ffmpeg -framerate {fps2 * 2} -i {thisdir}/output_frames/%08d.png -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p {outputdir}/{mp4name}_{fps2 * 2}fps.mp4 -y')
-    os.system(f'rm -rf {outputdir}/temp.mp4')
+    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
+    os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3, row=9)
 def on_click2():
@@ -239,16 +266,64 @@ def on_click2():
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe {filename}')
-    os.system(f'ffmpeg -i {filename} -vn -acodec copy audio.m4a -y')
+    os.system(f'ffprobe "{filename}"')
+    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=3,row=9)
-    os.system(f'ffmpeg -i {filename} input_frames/frame_%08d.png')
+    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
     os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
-    os.system(f'ffmpeg -framerate {fps * 2} -i {thisdir}/output_frames/%08d.png -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p {outputdir}/temp.mp4 -y')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.after(0, Interpolation.destroy())
 
+def times8():
+
+    on_click2()
+    on_click3()
+    global timestwo2
+    timestwo2 = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 4X interpolation. Generated temp.mp4.",
+                     fg="blue")
+    timestwo2.grid(column=3,row=9)
+    get_fps3()
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{thisdir}/temp2.mp4"')
+    os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" -vn -acodec copy audio.m4a -y')
+    timestwo2.after(0, timestwo2.destroy())
+    os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
+    Interpolation3.grid(column=3,row=9)
+    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
+    os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
+    Interpolation3.after(0, Interpolation3.destroy())
+    done3.grid(column=3, row=9)
+def on_click3():
+
+    get_fps2()
+    global timestwo2
+    timestwo3 = Label(main_window,
+                      font=("Arial", 11),
+                      text=f"Finished 2X interpolation. Generated temp.mp4.",
+                      fg="blue")
+    timestwo3.grid(column=3, row=9)
+    os.system("gnome-terminal -e")
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{thisdir}/temp.mp4"')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+    timestwo3.after(0, timestwo3.destroy())
+    Interpolation2.grid(column=3, row=9)
+    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
+    Interpolation2.after(0, Interpolation2.destroy())
+    os.system(fr'rm -rf "{thisdir}/temp.mp4"')
 main_window.geometry("700x500")
 main_window.title('rife-ncnn-vulkan')
 
