@@ -4,14 +4,12 @@ os.system('pip install opencv-python')
 os.system('pip install tk')
 os.system('rm get-pip.py')
 from tkinter.ttk import Progressbar
-from _cffi_backend import callback
 os.system('pip install opencv-python')
 import cv2
 import tkinter
 import sys
 import os.path
 from tkinter import *
-from PIL import ImageTk,Image
 from tkinter import filedialog
 import time
 from multiprocessing import Queue, Process
@@ -326,7 +324,7 @@ def on_click3():
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
 main_window.geometry("700x500")
 main_window.title('rife-ncnn-vulkan')
-
+main_window.resizable(False, False) 
 main_window.mainloop()
 
 
