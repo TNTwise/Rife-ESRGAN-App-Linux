@@ -1,6 +1,6 @@
 # Rife-Vulkan-GUI-Linux
 # Installation: <br>
-Install  opencv,  tk, xterm, and pip according to your distro. <br>
+Install  opencv,  tkinter, xterm, and pip according to your distro. <br>
 Install Rife-Vulkan-GUI-Linux from the RELEASES tab.  <br>
 # DO NOT CLONE THIS. IT WILL RESULT IN AN ERROR <br>
 Start the start file. If It does not start, select Allow running as a program under preferences. <br>
