@@ -3,7 +3,7 @@
 Install  opencv,  tkinter, xterm, and pip according to your distro. <br>
 Download Rife-Vulkan-GUI-Linux from the RELEASES tab.  <br>
 Unzip the folder and open the unzipped folder<br>
-Open the terminal in the folder and run <br>
+Open the terminal in the folder and run <br> <br>
 chmod +x install.sh 
 <br>
 sudo ./install.sh
