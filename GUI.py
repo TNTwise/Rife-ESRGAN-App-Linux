@@ -1,11 +1,14 @@
 import os
-os.system('python3 get-pip.py')
-os.system('pip install opencv-python')
-os.system('pip install tk')
-os.system('rm get-pip.py')
+global thisdir
+thisdir = os.getcwd()
+if(os.path.isfile(thisdir+"/programstate")) == False:
+    os.mknod(thisdir+"/programstate")
+    os.system('python3 get-pip.py')
+    os.system('pip install opencv-python')
+    os.system('pip install tk')
+    os.system('rm get-pip.py')
+
 from tkinter.ttk import Progressbar
-os.system('pip install opencv-python')
-import cv2
 import tkinter
 import sys
 import os.path
@@ -29,7 +32,7 @@ from sys import exit
 import glob
 import os.path
 import pathlib
-
+import cv2
 main_window = Tk()
 
 cmd = 'ls -l'
@@ -39,37 +42,151 @@ homedir = os.path.expanduser(r"~")
 # use threading
 # create listbox object
 
-listbox = Listbox(main_window, height=3,
-                  width=6,
+listbox = Listbox(main_window, height=7,
+                  width=10,
                   bg="grey",
                   activestyle='dotbox',
                   font="Helvetica",
+                  selectmode=MULTIPLE,
                   fg="blue")
 
 
 
 # insert elements by their
 # index and names.
-OPTIONS = ["2X","4X","8X"]
+OPTIONS = ["2X","4X","8X","Rife-2","Rife-3","Rife-4","Rife-Anime"]
 listbox.insert('end', *OPTIONS)
 
 
 def show():
+    i = 0
+    rifever=""
     for idx in listbox.curselection():
-
+        
         if OPTIONS[idx] == "2X":
-            on_click()
+            i = 1
         elif OPTIONS[idx] == "4X":
-            times4()
+            i = 2
         elif OPTIONS[idx] == "8X":
-            times8()
+            i = 3
+
+        if OPTIONS[idx] == "Rife-2":
+            p = 1
+        elif OPTIONS[idx] == "Rife-3":
+            p = 2
+        elif OPTIONS[idx] == "Rife-4":
+            p = 3
+        elif OPTIONS[idx] == "Rife-Anime":
+            p = 4
+        
+        print(rifever)
+    if p == 1:
+            rifever = "-m rife-v2.4"
+    if p == 2:
+            rifever = "-m rife-v3.1"
+    if p == 3:
+            rifever = "-m rife-v4.6"
+    if p == 4:
+            rifever = "-m rife-anime"
+    if i == 1:
+            on_click(rifever)
+    if i == 2:
+            times4(rifever)
+    if i == 3:
+            times8(rifever)
+    # ...
+
+
+# Progress bar widget
+#  progress = Progressbar(main_window, orient=HORIZONTAL,
+                        #length=100, mode='determinate')
+
+
+# Function responsible for the updation
+# of the progress bar value
+'''def bar():
+    import time
+    progress['value'] = 20
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 40
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 50
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 60
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 80
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 100
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 80
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 60
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 50
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 40
+    main_window.update_idletasks()
+    time.sleep(0.5)
+
+    progress['value'] = 20
+    main_window.update_idletasks()
+    time.sleep(0.5)
+    progress['value'] = 0
+
+
+Button(main_window, text = 'Start', command = bar).grid(column=3, pady = 10, row=10)
+
+progress.grid(column=3, row =10,pady=50, padx=100)
+'''
+# This button will initialize
+# the progress bar
+
+#listbox.grid(column=3,row=8)
+
+#rifelist = Listbox(main_window, height=3,
+#                  width=6,
+#                  bg="grey",
+#                  activestyle='dotbox',
+#                  font="Helvetica",
+#                  exportselection=1,
+#                  fg="blue")
+
+
+
+# insert elements by their
+# index and names.
+#option = ["Rife-2","Rife-3","Rife-4"]
+#rifelist.insert('end', *option)
+
+
+#def show2():
+
     # ...
 
 
 
 
 
-listbox.grid(column=0,row=8)
+
+
 def threading():
     # Call work function
     t1 = Thread(target=show)
@@ -79,8 +196,7 @@ def exit_thread():
     t1 = Thread(target=exi11)
     t1.start()
 #Button
-global thisdir
-thisdir = os.getcwd()
+
 def browseFiles():
 
     global filename
@@ -195,16 +311,26 @@ button_exit = Button(main_window,
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
 label_file_explorer.grid(column = 3, row = 8, columnspan = 4)
-button_exit.grid(column=3, row=6)
-listbox.grid(column = 3, row = 5)
+button_exit.grid(column=3, row=7)
+listbox.grid(column = 3, row = 6)
 rife_vulkan.grid(column=3, row=0)
+#rifelist.grid(column=3,row=5)
 
 
 
 
-
-def on_click():
-
+def on_click(rifever):
+    start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    #def percent_done():
+        #list_of_output_files = glob.glob(f'{thisdir}/output_frames/*')  # * means all if need specific format then *.csv
+        #latest_output_file = max(list_of_output_files, key=os.path.getctime)
+        #list_of_input_files = glob.glob(f'{thisdir}/input_frames/*')  # * means all if need specific format then *.csv
+        #latest_input_file = max(list_of_input_files, key=os.path.getctime)
+        #list_of_input_files * 2
+        #percent_done = (list_of_input_files/list_of_output_files)
+        #print(percent_done)
     get_fps()
     os.system("gnome-terminal -e")
     os.system('rm -rf input_frames')
@@ -217,23 +343,28 @@ def on_click():
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
+    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 
 
 
 
-
-Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
-
+start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
 
 
 
-def times4():
 
-    on_click2()
+def times4(rifever):
+    start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+
+    on_click2(rifever)
 
     global timestwo
     timestwo = Label(main_window,
@@ -251,12 +382,15 @@ def times4():
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3, row=9)
-def on_click2():
+    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+def on_click2(rifever):
 
     get_fps()
     os.system("gnome-terminal -e")
@@ -270,14 +404,16 @@ def on_click2():
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.after(0, Interpolation.destroy())
 
-def times8():
-
-    on_click2()
-    on_click3()
+def times8(rifever):
+    start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    on_click2(rifever)
+    on_click3(rifever)
     global timestwo2
     timestwo2 = Label(main_window,
                      font=("Arial", 11),
@@ -294,12 +430,15 @@ def times8():
     timestwo2.after(0, timestwo2.destroy())
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
     Interpolation3.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
     done3.grid(column=3, row=9)
-def on_click3():
+    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+def on_click3(rifever):
 
     get_fps2()
     global timestwo2
@@ -318,10 +457,11 @@ def on_click3():
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     timestwo3.after(0, timestwo3.destroy())
     Interpolation2.grid(column=3, row=9)
-    os.system('./rife-ncnn-vulkan -i input_frames -o output_frames')
+    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
     Interpolation2.after(0, Interpolation2.destroy())
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+
 main_window.geometry("700x500")
 main_window.title('rife-ncnn-vulkan')
 main_window.resizable(False, False) 
