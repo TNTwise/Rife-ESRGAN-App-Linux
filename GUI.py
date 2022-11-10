@@ -7,7 +7,10 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('pip install opencv-python')
     os.system('pip install tk')
     os.system('rm get-pip.py')
-
+import os
+import glob
+import pathlib
+from pathlib import Path
 from tkinter.ttk import Progressbar
 import tkinter
 import sys
@@ -79,7 +82,6 @@ def show():
         elif OPTIONS[idx] == "Rife-Anime":
             p = 4
         
-        print(rifever)
     if p == 1:
             rifever = "-m rife-v2.4"
     if p == 2:
@@ -94,103 +96,54 @@ def show():
             times4(rifever)
     if i == 3:
             times8(rifever)
-    # ...
 
 
-# Progress bar widget
-#  progress = Progressbar(main_window, orient=HORIZONTAL,
-                        #length=100, mode='determinate')
+def progressBar2x():
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    global progressbar
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar.grid(column=3, row=20)
+    # Add progressbar updater
+    progressbar["maximum"]=100
+    while i == 2:
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) * 4
+        e = frames_processed/amount_of_output_files
+        e*= 100
+        e = int(e)
+        progressbar['value'] = e * 2
+        progressbar.update()
+# work on this later, it will change the progressbar based on the amount of interpolation.
+'''def progressBar4x(): 
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 4
+    global progressbar
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar.grid(column=3, row=20)
+    # Add progressbar updater
+    progressbar["maximum"]=100
+    while i == 2:
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) * 4
+        e = frames_processed/amount_of_output_files
+        e*= 100
+        e = int(e)
+        progressbar['value'] = e * 2
+        progressbar.update()'''
 
-
-# Function responsible for the updation
-# of the progress bar value
-'''def bar():
-    import time
-    progress['value'] = 20
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 40
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 50
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 60
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 80
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 100
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 80
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 60
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 50
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 40
-    main_window.update_idletasks()
-    time.sleep(0.5)
-
-    progress['value'] = 20
-    main_window.update_idletasks()
-    time.sleep(0.5)
-    progress['value'] = 0
-
-
-Button(main_window, text = 'Start', command = bar).grid(column=3, pady = 10, row=10)
-
-progress.grid(column=3, row =10,pady=50, padx=100)
-'''
-# This button will initialize
-# the progress bar
-
-#listbox.grid(column=3,row=8)
-
-#rifelist = Listbox(main_window, height=3,
-#                  width=6,
-#                  bg="grey",
-#                  activestyle='dotbox',
-#                  font="Helvetica",
-#                  exportselection=1,
-#                  fg="blue")
-
-
-
-# insert elements by their
-# index and names.
-#option = ["Rife-2","Rife-3","Rife-4"]
-#rifelist.insert('end', *option)
-
-
-#def show2():
-
-    # ...
-
-
-
-
-
-
-
+#Calls respective function
+def pbthread2x():
+    # Call work function
+    t1 = Thread(target=progressBar2x)
+    t1.start()
 def threading():
     # Call work function
     t1 = Thread(target=show)
     t1.start()
+    
 def exit_thread():
     # Call work function
     t1 = Thread(target=exi11)
@@ -318,8 +271,8 @@ rife_vulkan.grid(column=3, row=0)
 
 
 
-
 def on_click(rifever):
+    
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -343,6 +296,7 @@ def on_click(rifever):
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
+    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')
     Interpolation.after(0, Interpolation.destroy())
@@ -360,6 +314,7 @@ start_button = Button(main_window, text="Start!", command=threading).grid(row = 
 
 
 def times4(rifever):
+    
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -382,7 +337,8 @@ def times4(rifever):
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
@@ -391,9 +347,7 @@ def times4(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click2(rifever):
-
     get_fps()
-    os.system("gnome-terminal -e")
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
@@ -404,11 +358,13 @@ def on_click2(rifever):
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.after(0, Interpolation.destroy())
 
 def times8(rifever):
+    
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -430,7 +386,8 @@ def times8(rifever):
     timestwo2.after(0, timestwo2.destroy())
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
     Interpolation3.grid(column=3,row=9)
-    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
@@ -439,7 +396,6 @@ def times8(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click3(rifever):
-
     get_fps2()
     global timestwo2
     timestwo3 = Label(main_window,
@@ -457,7 +413,8 @@ def on_click3(rifever):
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     timestwo3.after(0, timestwo3.destroy())
     Interpolation2.grid(column=3, row=9)
-    os.system('./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    pbthread2x()            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
     Interpolation2.after(0, Interpolation2.destroy())
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
