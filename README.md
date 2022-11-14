@@ -1,5 +1,4 @@
- # A simple gui for interpolating videos with rife.
+ # A simple GUI for Rife Vulkan on linux
 Dependencies:
 OpenCV
 Tkinter
-Xterm
