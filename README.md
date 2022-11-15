@@ -11,5 +11,5 @@ Fix Progress bar on different interpolation modes. <br />
 Use default terminal instead of xterm
 
 ```
-To run this program, you can just click on Start or run "python start.py" in your terminal.
+To run this program, you can just click on "Start" or run "python start.py" in your terminal.
 ```
