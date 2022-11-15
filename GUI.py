@@ -217,6 +217,8 @@ def get_fps2():
     global fps2
 
     fps2 = cap.get(cv2.CAP_PROP_FPS)
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     global done2
     done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
@@ -231,6 +233,8 @@ def get_fps3():
     cap=cv2.VideoCapture(fr'{thisdir}/temp2.mp4')
     global fps3
     fps3 = cap.get(cv2.CAP_PROP_FPS)
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     global done3
     done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
@@ -326,7 +330,8 @@ def times4(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
-
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     on_click2(rifever)
 
     global timestwo
@@ -356,6 +361,8 @@ def times4(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click2(rifever):
     get_fps()
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
@@ -376,6 +383,8 @@ def times8(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     on_click2(rifever)
     on_click3(rifever)
     global timestwo2
@@ -405,6 +414,8 @@ def times8(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click3(rifever):
     get_fps2()
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     global timestwo2
     timestwo3 = Label(main_window,
                       font=("Arial", 11),
