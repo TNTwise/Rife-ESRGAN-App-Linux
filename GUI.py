@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import os
 global thisdir
 thisdir = os.getcwd()
@@ -179,6 +180,7 @@ def output():
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
+    
 
 
 
@@ -187,6 +189,8 @@ def get_fps():
     cap=cv2.VideoCapture(fr'{filename}')
     global fps
     fps = cap.get(cv2.CAP_PROP_FPS)
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     global done
     done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
@@ -211,6 +215,7 @@ def get_fps():
 def get_fps2():
     cap=cv2.VideoCapture(fr'{thisdir}/temp.mp4')
     global fps2
+
     fps2 = cap.get(cv2.CAP_PROP_FPS)
     global done2
     done2 = Label(main_window,
@@ -278,6 +283,8 @@ def on_click(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    if 'outputdir' not in globals():
+        outputdir = (homedir+"/")
     #def percent_done():
         #list_of_output_files = glob.glob(f'{thisdir}/output_frames/*')  # * means all if need specific format then *.csv
         #latest_output_file = max(list_of_output_files, key=os.path.getctime)
@@ -287,7 +294,6 @@ def on_click(rifever):
         #percent_done = (list_of_input_files/list_of_output_files)
         #print(percent_done)
     get_fps()
-    os.system("gnome-terminal -e")
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
