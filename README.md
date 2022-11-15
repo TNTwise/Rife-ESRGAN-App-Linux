@@ -14,7 +14,7 @@ Use default terminal instead of xterm
 To run this program, you can just click on "Start" or run "python start.py" in your terminal.
 ```
 # Installing Dependencies
-Ubuntu <br />
+On Ubuntu <br />
 ```
 sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip
 ```
