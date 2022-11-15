@@ -3,7 +3,6 @@ import os
 global thisdir
 thisdir = os.getcwd()
 if(os.path.isfile(thisdir+"/programstate")) == False:
-    os.system("sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip")
     os.mknod(thisdir+"/programstate")
     os.system('python3 get-pip.py')
     os.system('pip install opencv-python')
