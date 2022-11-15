@@ -4,8 +4,8 @@ OpenCV
 Tkinter
 Xterm
 
-#TODO
-Create a settings menu with a selector for a default output folder.
-Set default output folder to home directory
-Fix Progress bar on different interpolation modes.
-Use default term instead of xterm
+#TODO \n
+Create a settings menu with a selector for a default output folder. \n
+Set default output folder to home directory \n 
+Fix Progress bar on different interpolation modes. \n
+Use default terminal instead of xterm
