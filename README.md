@@ -17,5 +17,5 @@ To run this program, you can just click on "Start" or run "python start.py" in y
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip
+sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm
 ```
