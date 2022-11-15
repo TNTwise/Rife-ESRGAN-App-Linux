@@ -1,4 +1,4 @@
- # A simple GUI for Rife Vulkan on linux
+ # A simple GUI for Rife Vulkan on Linux
 Dependencies:
 OpenCV
 Tkinter
