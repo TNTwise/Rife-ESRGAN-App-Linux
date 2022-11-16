@@ -12,7 +12,7 @@ Fix Progress bar on different interpolation modes. <br />
 Use default terminal instead of xterm. <br />
 Add longer dependencies section. <br />
 Add a limit of 2 selections in each times interpolation and rife version menu. <br />
-Round fps for a video name <br />
+Round fps for a video name. <br />
 Maybe package as appimage? <br />
 Show errors on GUI itself, so i can remove the xterm dependency.
 ```
