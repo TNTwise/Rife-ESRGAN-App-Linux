@@ -64,7 +64,8 @@ listbox.insert('end', *OPTIONS)
 
 
 def show():
-    i = 0
+    i = 3
+    p = 1
     rifever=""
     for idx in listbox.curselection():
         
@@ -83,7 +84,7 @@ def show():
             p = 3
         elif OPTIONS[idx] == "Rife-Anime":
             p = 4
-        
+    
     if p == 1:
             rifever = "-m rife-v2.4"
     if p == 2:
@@ -98,10 +99,7 @@ def show():
             times4(rifever)
     if i == 3:
             times8(rifever)
-    if 'p' not in locals():
-        rifever = "-m rife-v4.6"
-    if i not in locals():
-        on_click(rifever)
+    
 
 
 def progressBar2x():
