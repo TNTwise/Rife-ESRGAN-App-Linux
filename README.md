@@ -19,3 +19,7 @@ On Ubuntu <br />
 ```
 sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm
 ```
+On Arch/Arch based Distros <br />
+```
+sudo pacman -S tk opencv xterm ffmpeg python-pip
+```
