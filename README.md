@@ -12,7 +12,7 @@ Fix Progress bar on different interpolation modes. <br />
 Use default terminal instead of xterm. <br />
 Add longer dependencies section. <br />
 Maybe package as appimage? <br />
-
+Show errors on GUI itself, so i can remove the xterm dependency.
 ```
 To run this program, you can just click on "Start" or run "python start.py" in your terminal.
 ```
