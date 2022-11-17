@@ -324,7 +324,6 @@ def on_click(rifever):
 
 
 
-
 start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
 
 
