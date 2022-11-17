@@ -64,8 +64,8 @@ listbox.insert('end', *OPTIONS)
 
 
 def show():
-    i = 3
-    p = 1
+    i = 1
+    p = 3
     rifever=""
     for idx in listbox.curselection():
         
