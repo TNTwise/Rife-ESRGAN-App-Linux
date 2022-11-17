@@ -64,6 +64,7 @@ listbox.insert('end', *OPTIONS)
 
 
 def show():
+    # These 2 variables are the defaults, will need to remove when make default selector.
     i = 1
     p = 3
     rifever=""
@@ -291,6 +292,7 @@ def on_click(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    # this if statement sets default output dir, may need to remove when add selector.
     if 'outputdir' not in globals():
         global outputdir
         outputdir = (homedir+"/")
@@ -334,6 +336,8 @@ def times4(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+
     if 'outputdir' not in globals():
         global outputdir
         outputdir = (homedir+"/")
@@ -366,6 +370,8 @@ def times4(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click2(rifever):
     get_fps()
+        # this if statement sets default output dir, may need to remove when add selector.
+
     if 'outputdir' not in globals():
         global outputdir
         outputdir = (homedir+"/")
@@ -389,6 +395,8 @@ def times8(rifever):
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+
     if 'outputdir' not in globals():
         global outputdir
         outputdir = (homedir+"/")
@@ -421,6 +429,8 @@ def times8(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
 def on_click3(rifever):
     get_fps2()
+        # this if statement sets default output dir, may need to remove when add selector.
+
     if 'outputdir' not in globals():
         global outputdir
         outputdir = (homedir+"/")
