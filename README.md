@@ -16,7 +16,6 @@ Add a limit of 2 selections in each times interpolation and rife version menu. <
 Round fps for a video name. <br />
 Maybe package as appimage? <br />
 Show errors on GUI itself, so i can remove the xterm dependency. <br />
-Add explicit support for multiple media formats <br />
 ```
 To run this program, you can just click on "Start" or run "python start.py" in your terminal.
 ```
