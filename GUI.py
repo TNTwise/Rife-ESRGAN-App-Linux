@@ -9,6 +9,7 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('python3 get-pip.py')
     os.system('pip install opencv-python')
     os.system('pip install tk')
+    os.system('pip install pillow')
     os.system('rm get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
@@ -42,6 +43,8 @@ import os.path
 import pathlib
 import cv2
 import csv
+from tkinter import *
+from PIL import Image, ImageTk
 main_window = Tk()
 
 cmd = 'ls -l'
@@ -107,11 +110,15 @@ def sel_default_output_folder():
     default_output_label.destroy()
     default_output_label_1 = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
     default_output_label_1.grid(column=0, row=1)
-    #global outputdir
-    #outputdir = current_default_output_folder[0]
+    
+settings_icon = Image.open(thisdir+"/icons/settings_icon.webp") # sets settings_icon to the gear icon in the icons folder 
+resize_image = settings_icon.resize((32, 32))
+settings_icon = ImageTk.PhotoImage(resize_image)
+#and resizes it
+
 
 settings_menu_button = Button(main_window,
-                        text = "x",
+                        image=settings_icon, # sets settings icon image for button
                         command = settings_window)
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=2, row=0)
@@ -174,23 +181,7 @@ def progressBar2x():
         progressbar['value'] = e * 2
         progressbar.update()
 # work on this later, it will change the progressbar based on the amount of interpolation.
-'''def progressBar4x(): 
-    i = 2
-    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 4
-    global progressbar
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
-    progressbar.grid(column=3, row=20)
-    # Add progressbar updater
-    progressbar["maximum"]=100
-    while i == 2:
-        frames_processed = len(list(Path('output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) * 4
-        e = frames_processed/amount_of_output_files
-        e*= 100
-        e = int(e)
-        progressbar['value'] = e * 2
-        progressbar.update()'''
+
 
 #Calls respective function
 def pbthread2x():
@@ -239,7 +230,7 @@ def output():
         with open(thisdir+"/temp", "w") as f:
             f.write(outputdir)
 
-# get output dir from programstate
+# get output dir from programstate, this will only happen if temp file doesnt exist.
 def get_output_dir():
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
@@ -247,9 +238,9 @@ def get_output_dir():
         outputdir = row
     outputdir = outputdir[0]
     return outputdir
-
+# gets fps of video, for all get_fps methods.
 def get_fps():
-    if os.path.isfile(thisdir+"/temp") == False:
+    if os.path.isfile(thisdir+"/temp") == False: # same if statement to check what outputdir to get. Checks if temp file exists or not
         outputdir = get_output_dir()
     else:
         f = open(thisdir+"/temp")
@@ -332,7 +323,7 @@ def get_fps3():
 
 
 
-#create label
+#create labels
 label_file_explorer = Label(main_window,
                             text = "",
                             fg = "yellow")
@@ -357,7 +348,7 @@ button_exit = Button(main_window,
                         command = exi11,
                         justify=CENTER )
 
-
+# this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
 label_file_explorer.grid(column = 3, row = 8, columnspan = 4)
@@ -367,13 +358,15 @@ rife_vulkan.grid(column=3, row=0)
 #rifelist.grid(column=3,row=5)
 
 
-
+# different modes of interpolation
 def on_click(rifever):
     
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
     # this if statement sets default output dir, may need to remove when add selector.
+    # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
+    # This is for all modes of interpolation
     if os.path.isfile(thisdir+"/temp") == False:
         outputdir = get_output_dir()
     
@@ -384,15 +377,9 @@ def on_click(rifever):
             outputdir = row
         outputdir = outputdir[0]
     
-    #def percent_done():
-        #list_of_output_files = glob.glob(f'{thisdir}/output_frames/*')  # * means all if need specific format then *.csv
-        #latest_output_file = max(list_of_output_files, key=os.path.getctime)
-        #list_of_input_files = glob.glob(f'{thisdir}/input_frames/*')  # * means all if need specific format then *.csv
-        #latest_input_file = max(list_of_input_files, key=os.path.getctime)
-        #list_of_input_files * 2
-        #percent_done = (list_of_input_files/list_of_output_files)
-        #print(percent_done)
+    # Calls get_fps function
     get_fps()
+    #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
@@ -403,16 +390,17 @@ def on_click(rifever):
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    pbthread2x()        # will fix progressbar soon, this calls the 2x version of the progressbar
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')# -y overwrites the file if it exists, delete this and check if file exists. If it does, add (1) to the file.
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
+    # these re-enable the start, input, and output buttons
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
-    os.system("rm -rf "+thisdir+"/temp")
+    os.system("rm -rf "+thisdir+"/temp") # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
 
 
 
