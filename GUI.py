@@ -2,13 +2,16 @@
 import os
 global thisdir
 thisdir = os.getcwd()
+homedir = os.path.expanduser(r"~")
+
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.system('python3 get-pip.py')
     os.system('pip install opencv-python')
     os.system('pip install tk')
     os.system('rm get-pip.py')
-    
+    with open (thisdir+"/programstate", "w") as f:
+        f.write(homedir)
 import os
 import glob
 import pathlib
@@ -38,10 +41,10 @@ import glob
 import os.path
 import pathlib
 import cv2
+import csv
 main_window = Tk()
 
 cmd = 'ls -l'
-homedir = os.path.expanduser(r"~")
 
 
 # use threading
@@ -62,6 +65,56 @@ listbox = Listbox(main_window, height=7,
 OPTIONS = ["2X","4X","8X","Rife-2","Rife-3","Rife-4","Rife-Anime"]
 listbox.insert('end', *OPTIONS)
 
+
+# Insert settings menu here
+def settings_window():
+    global settings_window
+    settings_window = Tk()
+    # Dumb problems require dumb solutions
+    
+    button_select_default_output = Button(settings_window,
+                        text = "Select default output folder",
+                        command = sel_default_output_folder)
+    
+    button_select_default_output.grid(column=0, row=0)
+    
+    f = open(thisdir+"/programstate", "r")
+    f = csv.reader(f)
+    for row in f:
+        current_default_output_folder = row
+    #displays current default output folder
+    global default_output_label
+    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
+    default_output_label.grid(column=0, row=1)
+
+    settings_window.geometry("600x200")
+    settings_window.title('Settings')
+    settings_window.resizable(False, False) 
+    settings_window.mainloop()
+
+def sel_default_output_folder():
+    global select_default_output_folder
+    select_default_output_folder = filedialog.askdirectory(initialdir = fr"{homedir}",
+                                          title = "Select a Folder",)
+    with open(thisdir+"/programstate", "w") as f:
+        f.write(select_default_output_folder)
+
+    f = open(thisdir+"/programstate", "r")
+    f = csv.reader(f)
+    for row in f:
+        current_default_output_folder = row
+    #displays current default output folder
+    default_output_label.destroy()
+    default_output_label_1 = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
+    default_output_label_1.grid(column=0, row=1)
+    #global outputdir
+    #outputdir = current_default_output_folder[0]
+
+settings_menu_button = Button(main_window,
+                        text = "x",
+                        command = settings_window)
+# Sets the grid location of the settings menu button                        
+settings_menu_button.grid(column=2, row=0)
 
 def show():
     # These 2 variables are the defaults, will need to remove when make default selector.
@@ -178,23 +231,35 @@ def browseFiles():
 
 def output():
 
-
-
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
-    
+    if os.path.isfile(thisdir+"/temp") == False and isinstance(outputdir, str) == True:
+        os.mknod(thisdir+"/temp")
+        with open(thisdir+"/temp", "w") as f:
+            f.write(outputdir)
 
-
-
+# get output dir from programstate
+def get_output_dir():
+    f = open(thisdir+"/programstate", "r")
+    f = csv.reader(f)
+    for row in f:
+        outputdir = row
+    outputdir = outputdir[0]
+    return outputdir
 
 def get_fps():
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
     cap=cv2.VideoCapture(fr'{filename}')
     global fps
     fps = cap.get(cv2.CAP_PROP_FPS)
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
     global done
     done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
@@ -217,13 +282,19 @@ def get_fps():
 
 
 def get_fps2():
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
     cap=cv2.VideoCapture(fr'{thisdir}/temp.mp4')
     global fps2
 
     fps2 = cap.get(cv2.CAP_PROP_FPS)
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    done.destroy()
     global done2
     done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
@@ -235,12 +306,19 @@ def get_fps2():
                            font=("Arial", 11),
                            fg="yellow")
 def get_fps3():
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
     cap=cv2.VideoCapture(fr'{thisdir}/temp2.mp4')
     global fps3
     fps3 = cap.get(cv2.CAP_PROP_FPS)
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    done.destroy()
+    done2.destroy()
     global done3
     done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
@@ -252,6 +330,8 @@ def get_fps3():
                            font=("Arial", 11),
                            fg="yellow")
 
+
+
 #create label
 label_file_explorer = Label(main_window,
                             text = "",
@@ -259,7 +339,7 @@ label_file_explorer = Label(main_window,
 
 
 rife_vulkan = Label (main_window,
-                            text = "                    rife-ncnn-vulkan by nihui                    "
+                            text = "               rife-ncnn-vulkan by nihui                    "
                                                            ,
                             font=("Arial", 25),
                             fg = "blue")
@@ -294,9 +374,16 @@ def on_click(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
     # this if statement sets default output dir, may need to remove when add selector.
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
+    
     #def percent_done():
         #list_of_output_files = glob.glob(f'{thisdir}/output_frames/*')  # * means all if need specific format then *.csv
         #latest_output_file = max(list_of_output_files, key=os.path.getctime)
@@ -317,13 +404,15 @@ def on_click(rifever):
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
     pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')
+    os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')# -y overwrites the file if it exists, delete this and check if file exists. If it does, add (1) to the file.
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    os.system("rm -rf "+thisdir+"/temp")
 
 
 
@@ -339,9 +428,17 @@ def times4(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    # this if statement sets default output dir, may need to remove when add selector.
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
+    
     on_click2(rifever)
 
     global timestwo
@@ -369,13 +466,11 @@ def times4(rifever):
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    os.system("rm -rf "+thisdir+"/temp")
+
 def on_click2(rifever):
     get_fps()
-        # this if statement sets default output dir, may need to remove when add selector.
-
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
@@ -389,7 +484,7 @@ def on_click2(rifever):
     pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
-    Interpolation.after(0, Interpolation.destroy())
+    Interpolation.destroy()
 
 def times8(rifever):
     
@@ -398,9 +493,17 @@ def times8(rifever):
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
+    # this if statement sets default output dir, may need to remove when add selector.
+    if os.path.isfile(thisdir+"/temp") == False:
+        outputdir = get_output_dir()
+    
+    else:
+        f = open(thisdir+"/temp")
+        f = csv.reader(f)
+        for row in f:
+            outputdir = row
+        outputdir = outputdir[0]
+
     on_click2(rifever)
     on_click3(rifever)
     global timestwo2
@@ -428,20 +531,18 @@ def times8(rifever):
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    os.system("rm -rf "+thisdir+"/temp")
 def on_click3(rifever):
     get_fps2()
         # this if statement sets default output dir, may need to remove when add selector.
 
-    if 'outputdir' not in globals():
-        global outputdir
-        outputdir = (homedir+"/")
-    global timestwo2
+    
+    global timestwo3
     timestwo3 = Label(main_window,
                       font=("Arial", 11),
                       text=f"Finished 2X interpolation. Generated temp.mp4.",
                       fg="blue")
     timestwo3.grid(column=3, row=9)
-    os.system("gnome-terminal -e")
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
