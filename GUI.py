@@ -234,7 +234,7 @@ def output():
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
-    if os.path.isfile(thisdir+"/temp") == False and isinstance(outputdir, str) == True:
+    if os.path.isfile(thisdir+"/temp") == False and isinstance(outputdir, str) == True and len(outputdir) > 2:
         os.mknod(thisdir+"/temp")
         with open(thisdir+"/temp", "w") as f:
             f.write(outputdir)
