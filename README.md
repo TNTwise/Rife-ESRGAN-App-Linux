@@ -22,7 +22,7 @@ To run this program, you can just click on "Start" or run "python start.py" in y
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm
+sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm python3-pil python3-pil.imagetk
 ```
 On Arch/Arch based Distros <br />
 ```
