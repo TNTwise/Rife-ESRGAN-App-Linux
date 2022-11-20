@@ -79,7 +79,7 @@ def settings_window():
                         text = "Select default output folder",
                         command = sel_default_output_folder)
     
-    button_select_default_output.grid(column=0, row=0)
+    button_select_default_output.grid(column=0, row=0) # lays out the menu
     
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
@@ -174,19 +174,139 @@ def progressBar2x():
     progressbar["maximum"]=100
     while i == 2:
         frames_processed = len(list(Path('output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) * 4
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
         e = frames_processed/amount_of_output_files
         e*= 100
         e = int(e)
-        progressbar['value'] = e * 2
+        progressbar['value'] = e
         progressbar.update()
+def progressBar4xSecond(): # makes second progressbar in 4x
+    i = 4
+    amount_of_input_files_1 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files_1 = amount_of_input_files_1 * 2
+    global progressbar_1 # creates new progressbar
+    progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=100)
+    progressbar_1.grid(column=3, row=20)
+    # Add progressbar updater
+    progressbar_1["maximum"]=200
+    sleep(1) # wont update unless we sleep for 1 second?????????
+    while i == 4:
+        
+        frames_processed_1 = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files_1 = len(list(Path('input_frames/').glob('*'))) *2
+        e_1 = frames_processed_1/amount_of_output_files_1
+        e_1*= 100
+        e_1 = int(e_1) + 100 # Has to add 100 to make progress bar work
+        progressbar_1['value'] = e_1
+        progressbar_1.update()
+            
 # work on this later, it will change the progressbar based on the amount of interpolation.
+def progressBar4x(): # makes first progressbar in 4x 
+    
+    i = 2
+    
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar.grid(column=3, row=20)
+    
+    # Add progressbar updater
+    progressbar["maximum"]=200
+    while i == 2:
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if os.path.isfile(thisdir+"/temp.mp4") == True:
+            i = 3
 
 
-#Calls respective function
+def progressBar8xThird(): # this is called third, makes 3rd progressbar
+    p = 5
+    amount_of_input_files_5 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files_5 = amount_of_input_files_5 * 2
+    global progressbar_5 # creates new progressbar
+    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=200)
+    progressbar_5.grid(column=3, row=20)
+    # Add progressbar updater
+    progressbar_5["maximum"]=300
+    sleep(1) # wont update unless we sleep for 1 second?????????
+    while p == 5:
+        
+        frames_processed_5 = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files_5 = len(list(Path('input_frames/').glob('*'))) *2
+        e_5 = frames_processed_5/amount_of_output_files_5
+        e_5*= 100
+        e_5 = int(e_5) + 200 # has to add 200 to the value because the progress bar only updates with the current files interpolated
+        progressbar_5['value'] = e_5
+        progressbar_5.update()
+
+def progressBar8xSecond(): # calls this second, this is called by onclick3
+    
+    p = 4
+    amount_of_input_files_2 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files_2 = amount_of_input_files_2 * 2
+    global progressbar_2 # creates new progressbar
+    progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=100)
+    progressbar_2.grid(column=3, row=20)
+    # Add progressbar updater
+    progressbar_2["maximum"]=300
+    sleep(1) # wont update unless we sleep for 1 second?????????
+    while p == 4:
+        
+        frames_processed_2 = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files_2 = len(list(Path('input_frames/').glob('*'))) *2
+        e_2 = frames_processed_2/amount_of_output_files_2
+        e_2*= 100
+        e_2 = int(e_2) + 100
+        progressbar_2['value'] = e_2
+        progressbar_2.update()
+def progressBar8x(): # this is called first.
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar.grid(column=3, row=20)
+    
+    # Add progressbar updater
+    progressbar["maximum"]=300
+    while i == 2:
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        
+    
+        
+
+
+#Calls respective function, creates new thread for progressbar and other things, will only execute if called.
 def pbthread2x():
     # Call work function
     t1 = Thread(target=progressBar2x)
+    t1.start()
+def pbthread4x():
+    t1 = Thread(target=progressBar4x)
+    t1.start()
+def pb4x2():
+    t1 = Thread(target=progressBar4xSecond)
+    t1.start()
+def pbthread8x():
+    t1 = Thread(target=progressBar8x)
+    t1.start()
+def pb8x2():
+    t1 = Thread(target=progressBar8xSecond)
+    t1.start()
+def pb8x3():
+    t1 = Thread(target=progressBar8xThird)
     t1.start()
 def threading():
     # Call work function
@@ -220,12 +340,14 @@ def browseFiles():
     extension = (pathlib.Path(f'{filename}/{mp4name}').suffix)
 
 
-def output():
+def output(): # this function gets the output directory and writes outputdir to temp if the file doest exist, and if other conditions are met. 
+    #This is only used if the Select Output folder is selected, otherwise it will use the default folder set in the settings menu
 
     global outputdir
     outputdir = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
-    if os.path.isfile(thisdir+"/temp") == False and isinstance(outputdir, str) == True and len(outputdir) > 0:
+    if os.path.isfile(thisdir+"/temp") == False and isinstance(outputdir, str) == True and len(outputdir) > 0: # checks if requirements are ment to write the temp file, 
+        #and if the temp file exists, the program will use the temp file for the output directory.
         os.mknod(thisdir+"/temp")
         with open(thisdir+"/temp", "w") as f:
             f.write(outputdir)
@@ -340,7 +462,7 @@ button_explore = Button(main_window,
 button_output = Button(main_window,
                         text = "Output Folder",
                         command = output)
-def exi11():
+def exi11(): # this funtion kills the program.
     os.system('pkill -f GUI.py')
 
 button_exit = Button(main_window,
@@ -426,9 +548,9 @@ def times4(rifever):
         for row in f:
             outputdir = row
         outputdir = outputdir[0]
-    
-    on_click2(rifever)
 
+     
+    on_click2(rifever)
     global timestwo
     timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -443,9 +565,11 @@ def times4(rifever):
     os.system(f'ffprobe "{thisdir}/temp.mp4"')
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+    pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
-    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+           # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
@@ -469,11 +593,56 @@ def on_click2(rifever):
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    pbthread4x() # calls the first 4x progressbar.
+            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
 
+def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
+    get_fps()
+    
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{filename}"')
+    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+    extraction.grid(column=3,row=9)
+    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+    extraction.after(0, extraction.destroy())
+    Interpolation.grid(column=3,row=9)
+    pbthread8x() #Set this to 8x, this is the first of 3 progressbars
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
+    Interpolation.destroy()
+
+def on_click3(rifever):
+    get_fps2()
+        # this if statement sets default output dir, may need to remove when add selector.
+    
+
+    
+    global timestwo3
+    timestwo3 = Label(main_window,
+                      font=("Arial", 11),
+                      text=f"Finished 2X interpolation. Generated temp.mp4.",
+                      fg="blue")
+    timestwo3.grid(column=3, row=9)
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{thisdir}/temp.mp4"')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
+    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+    timestwo3.after(0, timestwo3.destroy())
+    Interpolation2.grid(column=3, row=9)
+    pb8x2()            # This calls it for the second time, initiates second progressbar 
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
+    Interpolation2.after(0, Interpolation2.destroy())
+    os.system(fr'rm -rf "{thisdir}/temp.mp4"')
 def times8(rifever):
     
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
@@ -492,7 +661,7 @@ def times8(rifever):
             outputdir = row
         outputdir = outputdir[0]
 
-    on_click2(rifever)
+    on_click2_8(rifever)
     on_click3(rifever)
     global timestwo2
     timestwo2 = Label(main_window,
@@ -509,8 +678,10 @@ def times8(rifever):
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" -vn -acodec copy audio.m4a -y')
     timestwo2.after(0, timestwo2.destroy())
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
+    pb8x3() # should be called after ffmpeg extracts the frames
+
     Interpolation3.grid(column=3,row=9)
-    pbthread2x()        # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
@@ -520,31 +691,8 @@ def times8(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
     os.system("rm -rf "+thisdir+"/temp")
-def on_click3(rifever):
-    get_fps2()
-        # this if statement sets default output dir, may need to remove when add selector.
 
-    
-    global timestwo3
-    timestwo3 = Label(main_window,
-                      font=("Arial", 11),
-                      text=f"Finished 2X interpolation. Generated temp.mp4.",
-                      fg="blue")
-    timestwo3.grid(column=3, row=9)
-    os.system('rm -rf input_frames')
-    os.system('rm -rf output_frames ')
-    os.system('mkdir input_frames')
-    os.system('mkdir output_frames')
-    os.system(f'ffprobe "{thisdir}/temp.mp4"')
-    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
-    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
-    timestwo3.after(0, timestwo3.destroy())
-    Interpolation2.grid(column=3, row=9)
-    pbthread2x()            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
-    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
-    Interpolation2.after(0, Interpolation2.destroy())
-    os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+
 
 main_window.geometry("700x500")
 main_window.title('rife-ncnn-vulkan')
