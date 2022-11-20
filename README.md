@@ -7,7 +7,6 @@ Xterm
 #TODO 
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
-Create a settings menu with a selector for a default output folder. <br />
 Add default folder selector. <br />
 Fix Progress bar on different interpolation modes. <br />
 Use default terminal instead of xterm. <br />
