@@ -3,7 +3,7 @@ Dependencies:
 OpenCV
 Tkinter
 Xterm
-
+PIL
 #TODO 
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
@@ -25,5 +25,5 @@ sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm python3-p
 ```
 On Arch/Arch based Distros <br />
 ```
-sudo pacman -S tk opencv xterm ffmpeg python-pip
+sudo pacman -S tk opencv xterm ffmpeg python-pip python-pillow
 ```
