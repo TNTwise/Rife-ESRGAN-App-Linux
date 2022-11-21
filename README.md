@@ -3,7 +3,7 @@ Dependencies:
 OpenCV
 Tkinter
 Xterm
-PIL
+PIL <br />
 #TODO 
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
