@@ -5,6 +5,7 @@ Tkinter
 Xterm
 PIL <br />
 #TODO 
+Change name of interpolated file instead of overwriting (-y option in the ffmpeg line)  <br />
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
 Add default folder selector. <br />

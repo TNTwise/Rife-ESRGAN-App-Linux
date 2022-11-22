@@ -574,7 +574,7 @@ def times4(rifever):
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
-    done2.grid(column=3, row=9)
+    done2.grid(column=3, row=9)# maybe change done label location in code, edit what row it shows up on
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
