@@ -373,11 +373,7 @@ def get_fps():
     cap=cv2.VideoCapture(fr'{filename}')
     global fps
     fps = cap.get(cv2.CAP_PROP_FPS)
-    global done
-    done = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
-                 font=("Arial", 11),
-                 fg="green")
+    # putting these here so it can get referenced every time an interpolation runs.
     global Interpolation
     Interpolation = Label(main_window,
                           text=f"Interpolation Started!",
@@ -388,11 +384,6 @@ def get_fps():
                        text=f"Extracting Frames",
                        font=("Arial", 11),
                        fg="yellow")
-
-
-
-
-
 
 def get_fps2():
     if os.path.isfile(thisdir+"/temp") == False:
@@ -407,17 +398,14 @@ def get_fps2():
     global fps2
 
     fps2 = cap.get(cv2.CAP_PROP_FPS)
-    done.destroy()
-    global done2
-    done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
-                 font=("Arial", 11),
-                 fg="green")
+    # putting these here so it can get referenced every time an interpolation runs.
+    
     global Interpolation2
     Interpolation2 = Label(main_window,
                            text=f"Interpolation 4X Started!",
                            font=("Arial", 11),
                            fg="yellow")
+    
 def get_fps3():
     if os.path.isfile(thisdir+"/temp") == False:
         outputdir = get_output_dir()
@@ -430,18 +418,13 @@ def get_fps3():
     cap=cv2.VideoCapture(fr'{thisdir}/temp2.mp4')
     global fps3
     fps3 = cap.get(cv2.CAP_PROP_FPS)
-    done.destroy()
-    done2.destroy()
-    global done3
-    done3 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
-                 font=("Arial", 11),
-                 fg="green")
+    # putting these here so it can get referenced every time an interpolation runs.
     global Interpolation3
     Interpolation3 = Label(main_window,
                            text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
                            fg="yellow")
+    
 
 
 
@@ -449,10 +432,8 @@ def get_fps3():
 label_file_explorer = Label(main_window,
                             text = "",
                             fg = "yellow")
-
-
 rife_vulkan = Label (main_window,
-                            text = "               rife-ncnn-vulkan by nihui                    "
+                            text = "Rife Vulkan GUI"
                                                            ,
                             font=("Arial", 25),
                             fg = "blue")
@@ -469,7 +450,8 @@ button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER )
-
+centering_label = Label(main_window, text="                                                                                                                                                                ")
+centering_label.grid(column=3,row=1)
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
@@ -477,6 +459,7 @@ label_file_explorer.grid(column = 3, row = 8, columnspan = 4)
 button_exit.grid(column=3, row=7)
 listbox.grid(column = 3, row = 6)
 rife_vulkan.grid(column=3, row=0)
+rife_vulkan.config(anchor=CENTER)
 #rifelist.grid(column=3,row=5)
 
 
@@ -512,10 +495,23 @@ def on_click(rifever):
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
-    pbthread2x()        # will fix progressbar soon, this calls the 2x version of the progressbar
-    
+    pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+    global done
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
+        done = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps(1){extension}",
+                 font=("Arial", 7),
+                 fg="green")
+    else:
+        done = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
+                 font=("Arial", 7),
+                 fg="green")
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps*2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps*2}fps{extension}" -y')# -y overwrites the file if it exists, delete this and check if file exists. If it does, add (1) to the file.
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps * 2}fps(1).{extension}" -y')
+    else:
+        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps * 2}fps.{extension}" -y')
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
     # these re-enable the start, input, and output buttons
@@ -569,12 +565,27 @@ def times4(rifever):
 
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
-           # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    global done2
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
+        done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps(1){extension}",
+                 font=("Arial", 7),
+                 fg="green")
+    else:
+        done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
+                 font=("Arial", 7),
+                 fg="green")
+    
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps(1).{extension}" -y')
+    else:
+        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3, row=9)# maybe change done label location in code, edit what row it shows up on
+    
     start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
@@ -681,9 +692,25 @@ def times8(rifever):
     pb8x3() # should be called after ffmpeg extracts the frames
 
     Interpolation3.grid(column=3,row=9)
-            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    global done3
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
+        done3 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps(1){extension}",
+                 font=("Arial", 7),
+                 fg="green")
+    else:
+        done3 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
+                 font=("Arial", 7),
+                 fg="green")
+
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps(1).{extension}" -y')
+    else:
+        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
+    
+    
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
     done3.grid(column=3, row=9)
@@ -691,6 +718,11 @@ def times8(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
     os.system("rm -rf "+thisdir+"/temp")
+
+
+
+
+
 
 
 

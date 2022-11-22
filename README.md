@@ -5,7 +5,8 @@ Tkinter
 Xterm
 PIL <br />
 #TODO 
-Change name of interpolated file instead of overwriting (-y option in the ffmpeg line)  <br />
+Clean up GUI, Maybe switch to .pack instead of .grid? <br />
+Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
 Add default folder selector. <br />
