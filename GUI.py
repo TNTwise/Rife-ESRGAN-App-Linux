@@ -53,9 +53,18 @@ def check_for_updates():
     os.chdir(f"{thisdir}/temp/")
     os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
     os.chdir(f"{thisdir}")
-    diff = os.system(f"diff {thisdir}/temp/GUI.py {thisdir}/GUI.py")
-    print(diff)
-    os.system(f"rm -rf {thisdir}/temp/")
+    file1 = open(f"{thisdir}/temp/GUI.py")
+    file2 = open(f"{thisdir}/GUI.py")
+    file1_lines = file1.readlines()
+    file2_lines = file2.readlines()
+    for i in range(len(file1_lines)):
+        if file1_lines[i] != file2_lines[i]:
+            os.system(f"rm -rf {thisdir}/GUI.py")
+            os.system(f"mv {thisdir}/temp/GUI.py {thisdir}/")
+            os.system(f"rm -rf {thisdir}/temp/")
+            return 1
+
+
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
     f = open(thisdir+"/theme", "r")
@@ -138,19 +147,28 @@ def settings_window():
             theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
     theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
     spacer_label = Label(settings_window,text="            ",bg=bg)
-
+    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
      # lays out the menu
+    
     spacer_label.grid(column=1,row=0)
     button_select_default_output.grid(column=0, row=0)
     default_output_label.grid(column=0, row=1)
     theme_label.grid(column=2,row=0)
     theme_button.grid(column=2, row=1)
-    
+    check_updates_button.grid(column=2,row=2)
     settings_window.geometry("600x200")
     settings_window.title('Settings')
     settings_window.resizable(False, False) 
     settings_window.mainloop()
 
+def start_update_check():
+    global update_check_label
+    
+    if check_for_updates() == 1:
+        update_check_label = Label(text="Updated, restart to apply.",bg=bg,fg=fg)
+    if check_for_updates() != 1:
+        update_check_label = Label(text="No Updates",bg=bg,fg=fg)
+    update_check_label.grid(column=2,row=3)
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program. 
 def restart_window(message):
     restart_window = Tk()
