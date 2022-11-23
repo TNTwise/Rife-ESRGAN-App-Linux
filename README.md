@@ -1,6 +1,7 @@
+
 <p align=center>
-<a><img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg"></a>
-</p>
+  <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg">
+  </p>
 # A simple GUI for Rife Vulkan on Linux
 Dependencies:
 OpenCV
