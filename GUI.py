@@ -44,7 +44,6 @@ import pathlib
 import cv2
 import csv
 from tkinter import *
-from PIL import Image, ImageTk
 main_window = Tk()
 
 cmd = 'ls -l'
@@ -111,10 +110,7 @@ def sel_default_output_folder():
     default_output_label_1 = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
     default_output_label_1.grid(column=0, row=1)
     
-settings_icon = Image.open(thisdir+"/icons/settings_icon.webp") # sets settings_icon to the gear icon in the icons folder 
-resize_image = settings_icon.resize((32, 32))
-settings_icon = ImageTk.PhotoImage(resize_image)
-#and resizes it
+settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 settings_menu_button = Button(main_window,
