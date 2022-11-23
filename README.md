@@ -8,7 +8,7 @@ Dependencies:
 OpenCV
 Tkinter
 Xterm <br />
-#TODO 
+#TODO <br />
 Make a check for updates script that will be accessable from GUI <br />
 Make theme selector in settings <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
