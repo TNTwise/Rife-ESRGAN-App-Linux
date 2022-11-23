@@ -63,6 +63,7 @@ def check_for_updates():
             os.system(f"mv {thisdir}/temp/GUI.py {thisdir}/")
             os.system(f"rm -rf {thisdir}/temp/")
             return 1
+    os.system(f"rm -rf {thisdir}/temp/")
 
 
 def check_theme():
@@ -166,7 +167,7 @@ def start_update_check():
     
     if check_for_updates() == 1:
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
-    else:
+    if check_for_updates() != 1:
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=2,row=3)
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program. 
