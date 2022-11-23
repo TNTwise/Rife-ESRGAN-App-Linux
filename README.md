@@ -1,6 +1,6 @@
 
 <p align=center>
-  <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg" width = "50%">
+  <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg" width = "25%">
   </p>
 # A simple GUI for Rife Vulkan on Linux
 Dependencies:
