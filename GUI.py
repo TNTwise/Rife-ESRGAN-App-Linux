@@ -56,7 +56,6 @@ def check_for_updates():
     diff = os.system(f"diff {thisdir}/temp/GUI.py {thisdir}/GUI.py")
     print(diff)
     os.system(f"rm -rf {thisdir}/temp/")
-check_for_updates()
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
     f = open(thisdir+"/theme", "r")
