@@ -9,6 +9,7 @@ OpenCV
 Tkinter
 Xterm <br />
 #TODO 
+Make a check for updates script that will be accessable from GUI <br />
 Make theme selector in settings <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
