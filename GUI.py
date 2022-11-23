@@ -805,7 +805,7 @@ def times8(rifever):
 
 
 main_window.geometry("700x500")
-main_window.title('rife-ncnn-vulkan')
+main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
