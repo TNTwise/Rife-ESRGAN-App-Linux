@@ -10,7 +10,7 @@ Tkinter
 Xterm <br />
 #TODO <br />
 Make a check for updates script that will be accessable from GUI <br />
-Make theme selector in settings <br />
+Theme selector works, but is a really bad implementation. I'm to tired to fix this shit. <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
