@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os
 global thisdir
-homedir = os.path.expanduser(r"~")
 thisdir = os.getcwd()
+homedir = os.path.expanduser(r"~")
 
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
@@ -46,6 +46,25 @@ import csv
 from tkinter import *
 main_window = Tk()
 
+def check_theme():
+    # This code reads the theme file and stores its data in a theme variable
+    f = open(thisdir+"/theme", "r")
+    global theme
+    for row in f:
+        theme = row
+    
+    return theme
+# set theme on launch, this sets bg and bg_background, this is set throughout the entire script
+if check_theme() == "Light":
+    main_window.config(bg="white")
+    bg="white"
+    bg_button="white"
+if check_theme() == "Dark":
+    main_window.config(bg="gray")
+    bg="gray"
+    bg_button="gray"
+
+
 cmd = 'ls -l'
 
 
@@ -57,8 +76,7 @@ listbox = Listbox(main_window, height=7,
                   bg="grey",
                   activestyle='dotbox',
                   font="Helvetica",
-                  selectmode=MULTIPLE,
-                  fg="blue")
+                  selectmode=MULTIPLE)
 
 
 
@@ -66,19 +84,25 @@ listbox = Listbox(main_window, height=7,
 # index and names.
 OPTIONS = ["2X","4X","8X","Rife-2","Rife-3","Rife-4","Rife-Anime"]
 listbox.insert('end', *OPTIONS)
-
-
 # Insert settings menu here
+
+
 def settings_window():
     global settings_window
     settings_window = Tk()
-    # Dumb problems require dumb solutions
-    
+    if check_theme() == "Light":
+
+        settings_window.config(bg="white")
+
+    if check_theme() == "Dark":
+
+        settings_window.config(bg="gray")
+
     button_select_default_output = Button(settings_window,
                         text = "Select default output folder",
-                        command = sel_default_output_folder)
+                        command = sel_default_output_folder, bg=bg_button)
     
-    button_select_default_output.grid(column=0, row=0) # lays out the menu
+    
     
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
@@ -86,14 +110,63 @@ def settings_window():
         current_default_output_folder = row
     #displays current default output folder
     global default_output_label
-    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
+    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0],bg=bg_button)
+    # This code just creates the theme file if it doesnt txist
+    if os.path.isfile(thisdir+"/theme") == False:
+        os.mknod(thisdir+"/theme")
+        with open(thisdir+"/theme", "w") as f:
+            f.write("Light")
+    # creates theme button and calls check_theme which returns the theme that is currently on
+    global theme_button
+    theme = check_theme()
+    if theme == "Light":
+            theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white")
+    if theme == "Dark":
+            theme_button = Button(settings_window,text="Light",command=lightTheme,bg="gray")
+    button_select_default_output.grid(column=0, row=0) # lays out the menu
     default_output_label.grid(column=0, row=1)
-
+    theme_button.grid(column = 0, row = 2)
+    
     settings_window.geometry("600x200")
     settings_window.title('Settings')
     settings_window.resizable(False, False) 
     settings_window.mainloop()
 
+
+# Switches themes for tkinter
+def darkTheme():
+    with open(thisdir+"/theme", "w") as f:
+        f.write("Dark")
+    main_window.config(bg="gray")
+    settings_window.config(bg="gray")
+    global bg
+    global bg_button
+    bg="gray"
+    bg_button="gray"
+    main_window.update()
+    settings_window.update()
+    main_window.update_idletasks()    
+    global theme_button
+    theme_button.destroy()
+    theme_button = Button(settings_window,text="Light",command=lightTheme,bg="gray")
+    theme_button.grid(column = 0, row = 2)
+def lightTheme():
+    with open(thisdir+"/theme", "w") as f:
+        f.write("Light")
+    main_window.config(bg="white")
+    settings_window.config(bg="white")
+    global bg
+    global bg_button
+    bg="white"
+    bg_button="white"
+    main_window.update()
+    settings_window.update()
+    main_window.update_idletasks()    
+    global theme_button
+    theme_button.destroy()
+    theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white")
+    theme_button.grid(column = 0, row = 2)
+    
 def sel_default_output_folder():
     global select_default_output_folder
     select_default_output_folder = filedialog.askdirectory(initialdir = fr"{homedir}",
@@ -113,11 +186,7 @@ def sel_default_output_folder():
 settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
-settings_menu_button = Button(main_window,
-                        image=settings_icon, # sets settings icon image for button
-                        command = settings_window)
-# Sets the grid location of the settings menu button                        
-settings_menu_button.grid(column=2, row=0)
+
 
 def show():
     # These 2 variables are the defaults, will need to remove when make default selector.
@@ -427,27 +496,38 @@ def get_fps3():
 #create labels
 label_file_explorer = Label(main_window,
                             text = "",
-                            fg = "yellow")
+                            fg = "yellow",
+                            bg= bg)
 rife_vulkan = Label (main_window,
                             text = "Rife Vulkan GUI"
                                                            ,
                             font=("Arial", 25),
-                            fg = "blue")
+                            fg = "blue",
+                            bg=bg)
 button_explore = Button(main_window,
                         text = "Input Video",
-                        command = browseFiles)
+                        command = browseFiles, bg=bg_button)
 button_output = Button(main_window,
                         text = "Output Folder",
-                        command = output)
+                        command = output, bg=bg_button)
 def exi11(): # this funtion kills the program.
     os.system('pkill -f GUI.py')
 
 button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
-                        justify=CENTER )
-centering_label = Label(main_window, text="                                                                                                                                                                ")
+                        justify=CENTER,bg=bg_button)
+centering_label = Label(main_window, text="                                                                                                                                                                ",
+                        bg=bg)
+settings_menu_button = Button(main_window,
+                        image=settings_icon, # sets settings icon image for button
+                        command = settings_window,bg=bg_button)
+start_button = Button(main_window, text="Start!", command=threading,bg=bg_button).grid(row = 2, column = 3)
+
+# Sets the grid location of the settings menu button                        
+settings_menu_button.grid(column=2, row=0)
 centering_label.grid(column=3,row=1)
+
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
@@ -518,7 +598,6 @@ def on_click(rifever):
 
 
 
-start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
 
 
 
@@ -723,7 +802,7 @@ def times8(rifever):
 
 
 main_window.geometry("700x500")
-main_window.title('')
+main_window.title('rife-ncnn-vulkan')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
