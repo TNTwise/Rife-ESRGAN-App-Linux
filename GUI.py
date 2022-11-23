@@ -60,12 +60,14 @@ def check_theme():
 # set theme on launch, this sets bg and bg_background, this is set throughout the entire script
 if check_theme() == "Light":
     main_window.config(bg="white")
+    fg="black"
     bg="white"
     bg_button="white"
 if check_theme() == "Dark":
-    main_window.config(bg="gray")
-    bg="gray"
-    bg_button="gray"
+    main_window.config(bg="#4C4E52")
+    fg="white"
+    bg="#4C4E52"
+    bg_button="#4C4E52"
 
 
 cmd = 'ls -l'
@@ -93,17 +95,18 @@ listbox.insert('end', *OPTIONS)
 def settings_window():
     global settings_window
     settings_window = Tk()
+    # sets colors for window
     if check_theme() == "Light":
 
         settings_window.config(bg="white")
 
     if check_theme() == "Dark":
 
-        settings_window.config(bg="gray")
+        settings_window.config(bg="#4C4E52")
 
     button_select_default_output = Button(settings_window,
                         text = "Select default output folder",
-                        command = sel_default_output_folder, bg=bg_button)
+                        command = sel_default_output_folder, bg=bg_button,fg=fg)
     
     
     
@@ -113,7 +116,7 @@ def settings_window():
         current_default_output_folder = row
     #displays current default output folder
     global default_output_label
-    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0],bg=bg_button)
+    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0],bg=bg,fg=fg)
     # This code just creates the theme file if it doesnt txist
     if os.path.isfile(thisdir+"/theme") == False:
         os.mknod(thisdir+"/theme")
@@ -123,52 +126,74 @@ def settings_window():
     global theme_button
     theme = check_theme()
     if theme == "Light":
-            theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white")
+            theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white",fg=fg)
     if theme == "Dark":
-            theme_button = Button(settings_window,text="Light",command=lightTheme,bg="gray")
-    button_select_default_output.grid(column=0, row=0) # lays out the menu
+            theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
+    theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
+    spacer_label = Label(settings_window,text="            ",bg=bg)
+
+     # lays out the menu
+    spacer_label.grid(column=1,row=0)
+    button_select_default_output.grid(column=0, row=0)
     default_output_label.grid(column=0, row=1)
-    theme_button.grid(column = 0, row = 2)
+    theme_label.grid(column=2,row=0)
+    theme_button.grid(column=2, row=1)
     
     settings_window.geometry("600x200")
     settings_window.title('Settings')
     settings_window.resizable(False, False) 
     settings_window.mainloop()
 
+# restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program. 
+def restart_window(message):
+    restart_window = Tk()
+    centering_label = Label(restart_window, text="                                                                         ")
+    restart_label = Label(restart_window, text=message, justify=CENTER)
+    restart_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
 
+    # lays out restart window 
+    centering_label.grid(column=0,row=0)
+    restart_button.grid(column=0,row=1)
+    restart_label.grid(column=0,row=2)
+    # sets window values
+    restart_window.title("")
+    restart_window.geometry("300x200")
+    restart_window.resizable(False, False)
+    restart_window.mainloop()
 # Switches themes for tkinter
+
 def darkTheme():
     with open(thisdir+"/theme", "w") as f:
         f.write("Dark")
-    main_window.config(bg="gray")
-    settings_window.config(bg="gray")
     global bg
     global bg_button
-    bg="gray"
-    bg_button="gray"
-    main_window.update()
-    settings_window.update()
-    main_window.update_idletasks()    
+    global fg
+    bg="#4C4E52"
+    fg="white"
+    bg_button="#4C4E52"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Light",command=lightTheme,bg="gray")
-    theme_button.grid(column = 0, row = 2)
+    theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
+    theme_button.grid(column = 1, row = 1)
+    restart_window("Changing theme requires restart.")
+    
+
 def lightTheme():
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
-    main_window.config(bg="white")
-    settings_window.config(bg="white")
+    
     global bg
     global bg_button
+    global fg
     bg="white"
-    bg_button="white"
-    main_window.update()
-    settings_window.update()
-    main_window.update_idletasks()    
+    bg_button="white" 
+    fg="black"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white")
-    theme_button.grid(column = 0, row = 2)
+    theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white",fg=fg)
+    theme_button.grid(column = 1, row = 1)
+    restart_window("Changing theme requires restart.")
+    
     
 def sel_default_output_folder():
     global select_default_output_folder
@@ -298,10 +323,12 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     amount_of_input_files_5 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_5 = amount_of_input_files_5 * 2
     global progressbar_5 # creates new progressbar
-    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=200)
+   
+    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=180)
     progressbar_5.grid(column=3, row=20)
-    # Add progressbar updater
     progressbar_5["maximum"]=300
+    # Add progressbar updater
+    
     sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 5:
         
@@ -401,9 +428,6 @@ def browseFiles():
     global mp4name
     mp4name = ntpath.basename(filename)
     #change label contents
-    label_file_explorer.configure(text="File Opened: " + mp4name,
-                                  font=("Arial", 10)
-                                 )
     global extension
     extension = (pathlib.Path(f'{filename}/{mp4name}').suffix)
 
@@ -446,12 +470,12 @@ def get_fps():
     Interpolation = Label(main_window,
                           text=f"Interpolation Started!",
                           font=("Arial", 11),
-                          fg="yellow")
+                          fg=fg,bg=bg)
     global extraction
     extraction = Label(main_window,
                        text=f"Extracting Frames",
                        font=("Arial", 11),
-                       fg="yellow")
+                       fg=fg,bg=bg)
 
 def get_fps2():
     if os.path.isfile(thisdir+"/temp") == False:
@@ -472,7 +496,7 @@ def get_fps2():
     Interpolation2 = Label(main_window,
                            text=f"Interpolation 4X Started!",
                            font=("Arial", 11),
-                           fg="yellow")
+                           fg=fg,bg=bg)
     
 def get_fps3():
     if os.path.isfile(thisdir+"/temp") == False:
@@ -491,41 +515,37 @@ def get_fps3():
     Interpolation3 = Label(main_window,
                            text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
-                           fg="yellow")
+                           fg=fg,bg=bg)
     
 
 
 
 #create labels
-label_file_explorer = Label(main_window,
-                            text = "",
-                            fg = "yellow",
-                            bg= bg)
+
 rife_vulkan = Label (main_window,
                             text = "Rife Vulkan GUI"
                                                            ,
                             font=("Arial", 25),
-                            fg = "blue",
-                            bg=bg)
+                            bg=bg,fg=fg)
 button_explore = Button(main_window,
                         text = "Input Video",
-                        command = browseFiles, bg=bg_button)
+                        command = browseFiles, bg=bg_button,fg=fg)
 button_output = Button(main_window,
                         text = "Output Folder",
-                        command = output, bg=bg_button)
+                        command = output, bg=bg_button,fg=fg)
 def exi11(): # this funtion kills the program.
     os.system('pkill -f GUI.py')
 
 button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
-                        justify=CENTER,bg=bg_button)
+                        justify=CENTER,bg=bg_button,fg=fg)
 centering_label = Label(main_window, text="                                                                                                                                                                ",
-                        bg=bg)
+                        bg=bg,fg=fg)
 settings_menu_button = Button(main_window,
                         image=settings_icon, # sets settings icon image for button
                         command = settings_window,bg=bg_button)
-start_button = Button(main_window, text="Start!", command=threading,bg=bg_button).grid(row = 2, column = 3)
+start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg).grid(row = 2, column = 3)
 
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=2, row=0)
@@ -534,7 +554,6 @@ centering_label.grid(column=3,row=1)
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
-label_file_explorer.grid(column = 3, row = 8, columnspan = 4)
 button_exit.grid(column=3, row=7)
 listbox.grid(column = 3, row = 6)
 rife_vulkan.grid(column=3, row=0)
@@ -544,7 +563,9 @@ rife_vulkan.config(anchor=CENTER)
 
 # different modes of interpolation
 def on_click(rifever):
-    
+    global done
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done.grid(column=3, row=9)
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -575,17 +596,17 @@ def on_click(rifever):
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=9)
     pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
-    global done
+    
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
         done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps(1){extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
     else:
         done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps * 2}fps(1).{extension}" -y')
@@ -594,9 +615,9 @@ def on_click(rifever):
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
     # these re-enable the start, input, and output buttons
-    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
-    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    start_button = Button(main_window, text="Start!", command=threading,bg=bg,fg=fg).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
     os.system("rm -rf "+thisdir+"/temp") # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
 
 
@@ -606,7 +627,9 @@ def on_click(rifever):
 
 
 def times4(rifever):
-    
+    global done
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done.grid(column=3, row=9)
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -629,7 +652,7 @@ def times4(rifever):
     timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
-                     fg="blue")
+                     fg=fg,bg=bg)
     timestwo.grid(column=3,row=9)
     get_fps2()
     os.system('rm -rf input_frames')
@@ -648,12 +671,12 @@ def times4(rifever):
         done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps(1){extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
     else:
         done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
@@ -664,9 +687,9 @@ def times4(rifever):
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3, row=9)# maybe change done label location in code, edit what row it shows up on
     
-    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
-    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    start_button = Button(main_window, text="Start!", command=threading, bg=bg_button,fg=fg).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
     os.system("rm -rf "+thisdir+"/temp")
 
 def on_click2(rifever):
@@ -716,7 +739,7 @@ def on_click3(rifever):
     timestwo3 = Label(main_window,
                       font=("Arial", 11),
                       text=f"Finished 2X interpolation. Generated temp.mp4.",
-                      fg="blue")
+                      fg=fg,bg=bg)
     timestwo3.grid(column=3, row=9)
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
@@ -732,8 +755,11 @@ def on_click3(rifever):
     os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
     Interpolation2.after(0, Interpolation2.destroy())
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+
 def times8(rifever):
-    
+    global done
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done.grid(column=3, row=9)
     start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
@@ -756,7 +782,8 @@ def times8(rifever):
     timestwo2 = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 4X interpolation. Generated temp.mp4.",
-                     fg="blue")
+                     bg=bg,
+                     fg=fg)
     timestwo2.grid(column=3,row=9)
     get_fps3()
     os.system('rm -rf input_frames')
@@ -775,12 +802,12 @@ def times8(rifever):
         done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps(1){extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
     else:
         done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
                  font=("Arial", 7),
-                 fg="green")
+                 fg=fg,bg=bg)
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
@@ -792,9 +819,9 @@ def times8(rifever):
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
     done3.grid(column=3, row=9)
-    start_button = Button(main_window, text="Start!", command=threading).grid(row = 2, column = 3)
-    button_output = Button(main_window,text = "Output Folder",command = output).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles).grid(column = 3, row = 3)
+    start_button = Button(main_window, text="Start!", command=threading, bg=bg_button,fg=fg).grid(row = 2, column = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
     os.system("rm -rf "+thisdir+"/temp")
 
 
