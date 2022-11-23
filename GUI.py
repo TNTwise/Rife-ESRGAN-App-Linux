@@ -165,9 +165,9 @@ def start_update_check():
     global update_check_label
     
     if check_for_updates() == 1:
-        update_check_label = Label(text="Updated, restart to apply.",bg=bg,fg=fg)
+        update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
     if check_for_updates() != 1:
-        update_check_label = Label(text="No Updates",bg=bg,fg=fg)
+        update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=2,row=3)
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program. 
 def restart_window(message):
