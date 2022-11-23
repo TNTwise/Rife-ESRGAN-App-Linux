@@ -2,8 +2,7 @@
 Dependencies:
 OpenCV
 Tkinter
-Xterm
-PIL <br />
+Xterm <br />
 #TODO 
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
@@ -23,9 +22,9 @@ To run this program, you can just click on "Start" or run "python start.py" in y
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm python3-pil python3-pil.imagetk
+sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm 
 ```
 On Arch/Arch based Distros <br />
 ```
-sudo pacman -S tk opencv xterm ffmpeg python-pip python-pillow
+sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
