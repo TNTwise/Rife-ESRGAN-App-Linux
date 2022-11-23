@@ -48,7 +48,13 @@ import cv2
 import csv
 from tkinter import *
 main_window = Tk()
-
+def check_for_updates():
+    os.system(f"mkdir {thisdir}/temp/")
+    os.chdir(f"{thisdir}/temp/")
+    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
+    os.chdir(f"{thisdir}")
+    os.system(f"diff {thisdir}/temp/GUI.py {thisdir}/GUI.py")
+    os.system(f"rm -rf {thisdir}/temp/")
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
     f = open(thisdir+"/theme", "r")
