@@ -1,4 +1,6 @@
- # A simple GUI for Rife Vulkan on Linux
+![alt text](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg?raw=true)
+
+# A simple GUI for Rife Vulkan on Linux
 Dependencies:
 OpenCV
 Tkinter
