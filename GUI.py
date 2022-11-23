@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os
 global thisdir
-thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
+thisdir = os.getcwd()
 
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
@@ -723,7 +723,7 @@ def times8(rifever):
 
 
 main_window.geometry("700x500")
-main_window.title('rife-ncnn-vulkan')
+main_window.title('')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
