@@ -11,6 +11,7 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('pip install opencv-python')
     os.system('pip install tk')
     os.system('pip install pillow')
+    os.system('pip install wget')
     os.system('rm get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
@@ -54,7 +55,7 @@ main_window = Tk()
 def check_for_updates():
     os.system(f"mkdir {thisdir}/temp/")
     os.chdir(f"{thisdir}/temp/")
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
+    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
     os.chdir(f"{thisdir}")
     file1 = open(f"{thisdir}/temp/GUI.py")
     file2 = open(f"{thisdir}/GUI.py")
