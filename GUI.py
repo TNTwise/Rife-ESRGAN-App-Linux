@@ -175,9 +175,9 @@ def start_update_check():
     update_check_label.grid(column=2,row=3)
 # restarts the program
 def restart():
-    os.system("pkill GUI.py && python3 start.py")
+    os.system("pkill -f GUI.py && python3 start.py")
 def restart_thread():
-    t1 = Thread(target=restart)
+    t1 = Thread(target=restart_window)
     t1.start()
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.   
 def restart_window(message):
