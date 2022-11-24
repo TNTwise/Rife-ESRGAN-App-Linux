@@ -49,7 +49,7 @@ import cv2
 import csv
 from tkinter import *
 main_window = Tk()
-
+# test
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
