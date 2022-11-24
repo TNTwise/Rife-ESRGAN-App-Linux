@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os
+import os 
 global thisdir
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
