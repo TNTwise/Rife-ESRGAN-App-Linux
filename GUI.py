@@ -250,7 +250,7 @@ def sel_default_output_folder():
     #displays current default output folder
     default_output_label.destroy()
     default_output_label_1 = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
-    default_output_label_1.grid(column=0, row=1)
+    default_output_label_1.grid(column=1, row=1)
     
 settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
