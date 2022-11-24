@@ -48,6 +48,9 @@ import cv2
 import csv
 from tkinter import *
 main_window = Tk()
+# this checks for updates
+# it makes a temp folder, and gets the latest GUI.py from github
+# It compares the files, and if the files are different, replaces the old GUI.py with the one from github
 def check_for_updates():
     os.system(f"mkdir {thisdir}/temp/")
     os.chdir(f"{thisdir}/temp/")
