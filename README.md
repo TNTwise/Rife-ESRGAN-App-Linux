@@ -6,7 +6,9 @@
 # A simple GUI for Rife Vulkan on Linux
 # Note: This program still requires testing on many different distros
  I am currently working on maintaining Arch and Ubuntu support. <br />
- 
+ It should work fine on all distros, but I would still like to do more testing. <br />
+ Usually if an error occurs, it's with Rife itself, and not the GUI, <br />
+ but I am working on a better implementation of showing errors to the user, instead of launching the GUI through Xterm. <br />
 Dependencies:
 OpenCV
 Tkinter
