@@ -151,15 +151,18 @@ def settings_window():
             theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
     theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
     spacer_label = Label(settings_window,text="            ",bg=bg)
+    spacer_label1 = Label(settings_window,text="            ",bg=bg)
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
      # lays out the menu
     
     spacer_label.grid(column=1,row=0)
+    
     button_select_default_output.grid(column=0, row=0)
     default_output_label.grid(column=0, row=1)
     theme_label.grid(column=2,row=0)
     theme_button.grid(column=2, row=1)
-    check_updates_button.grid(column=2,row=2)
+    spacer_label1.grid(column=3,row=0)
+    check_updates_button.grid(column=4,row=0)
     settings_window.geometry("600x200")
     settings_window.title('Settings')
     settings_window.resizable(False, False) 
@@ -172,7 +175,7 @@ def start_update_check():
         restart_window("Updated, re-launch the program to apply.")
     else:
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
-    update_check_label.grid(column=2,row=3)
+    update_check_label.grid(column=4,row=1)
 # restarts the program
 def restart():
     os.system("pkill -f GUI.py && python3 start.py")
