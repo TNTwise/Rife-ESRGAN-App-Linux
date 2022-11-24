@@ -169,6 +169,7 @@ def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
+        restart_window("Updated, restart to apply.")
     else:
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=2,row=3)
