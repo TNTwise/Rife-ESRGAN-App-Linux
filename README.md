@@ -25,9 +25,6 @@ sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
 
 #TODO <br />
-Destroy done variable when finished, use global done to do this <br />
-Make a check for updates script that will be accessable from GUI, use diff command <br />
-Theme selector works, but is a really bad implementation. I'm to tired to fix this shit. <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
