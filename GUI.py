@@ -179,17 +179,17 @@ def restart():
 def restart_thread():
     t1 = Thread(target=restart)
     t1.start()
-# restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.  
+# restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.   
 def restart_window(message):
     restart_window = Tk()
     centering_label = Label(restart_window, text="                                                                         ")
     restart_label = Label(restart_window, text=message, justify=CENTER)
     exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
-    restart_button = Button(restart_window, text="Exit", command=restart_thread,justify=CENTER)
+    restart_button = Button(restart_window, text="Restart", command=restart_thread,justify=CENTER)
     # lays out restart window 
     centering_label.grid(column=0,row=0)
     restart_button.grid(column=0,row=1)
-    exit_button.grid(column=0,row=1)
+    #exit_button.grid(column=0,row=1)
     restart_label.grid(column=0,row=2)
     # sets window values
     restart_window.title("")
