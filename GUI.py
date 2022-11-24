@@ -639,19 +639,19 @@ def on_click(rifever):
     
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
         done = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps(1){extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps * 2}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps * 2}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
     Interpolation.after(0, Interpolation.destroy())
     done.grid(column=3, row=9)
     # these re-enable the start, input, and output buttons
@@ -709,20 +709,20 @@ def times4(rifever):
     global done2
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
         done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps(1){extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps(1){extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3, row=9)# maybe change done label location in code, edit what row it shows up on
@@ -840,20 +840,20 @@ def times8(rifever):
     global done3
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
         done3 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps(1){extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps(1){extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done3 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps{extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
     
     
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
