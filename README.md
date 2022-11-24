@@ -25,6 +25,7 @@ sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
 
 #TODO <br />
+Add an install button that installs application to OS, for this to work, needs to implement dialog box for password.
 Make the listbox menu a dropdown menu <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
