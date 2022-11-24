@@ -169,7 +169,7 @@ def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
-        restart_window("Updated, restart to apply.")
+        restart_window("Updated, re-launch the program to apply.")
     else:
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=2,row=3)
@@ -184,12 +184,12 @@ def restart_window(message):
     restart_window = Tk()
     centering_label = Label(restart_window, text="                                                                         ")
     restart_label = Label(restart_window, text=message, justify=CENTER)
-    #exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
-    restart_button = Button(restart_window, text="Restart", command=restart_thread,justify=CENTER)
+    exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
+    #restart_button = Button(restart_window, text="Restart", command=restart_thread,justify=CENTER)
     # lays out restart window 
     centering_label.grid(column=0,row=0)
-    restart_button.grid(column=0,row=1)
-    #exit_button.grid(column=0,row=1)
+    #restart_button.grid(column=0,row=1)
+    exit_button.grid(column=0,row=1)
     restart_label.grid(column=0,row=2)
     # sets window values
     restart_window.title("")
