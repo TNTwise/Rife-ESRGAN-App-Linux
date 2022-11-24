@@ -169,7 +169,7 @@ def start_update_check():
     else:
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=2,row=3)
-# restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program. 
+# restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.  
 def restart_window(message):
     restart_window = Tk()
     centering_label = Label(restart_window, text="                                                                         ")
