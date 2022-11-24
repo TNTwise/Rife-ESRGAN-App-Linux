@@ -4,6 +4,9 @@
 </p>
 
 # A simple GUI for Rife Vulkan on Linux
+# Note: This program still requires testing on many different distros
+ I am currently working on maintaining Arch and Ubuntu support. <br />
+ 
 Dependencies:
 OpenCV
 Tkinter
