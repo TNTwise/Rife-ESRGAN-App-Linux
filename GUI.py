@@ -184,7 +184,7 @@ def restart_window(message):
     restart_window = Tk()
     centering_label = Label(restart_window, text="                                                                         ")
     restart_label = Label(restart_window, text=message, justify=CENTER)
-    exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
+    #exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
     restart_button = Button(restart_window, text="Restart", command=restart_thread,justify=CENTER)
     # lays out restart window 
     centering_label.grid(column=0,row=0)
