@@ -25,6 +25,7 @@ sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
 
 #TODO <br />
+Make the listbox menu a dropdown menu <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
