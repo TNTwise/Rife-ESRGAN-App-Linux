@@ -7,6 +7,7 @@
 Dependencies:
 OpenCV
 Tkinter
+Wget
 Xterm <br />
 ```
 To run this program, you can just click on "Start" or run "python start.py" in your terminal.
