@@ -136,7 +136,7 @@ def settings_window():
         current_default_output_folder = row
     #displays current default output folder
     global default_output_label
-    default_output_label = Label(settings_window, text="Default output folder: " + current_default_output_folder[0],bg=bg,fg=fg)
+    default_output_label = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     # This code just creates the theme file if it doesnt txist
     if os.path.isfile(thisdir+"/theme") == False:
         os.mknod(thisdir+"/theme")
@@ -247,7 +247,7 @@ def sel_default_output_folder():
         current_default_output_folder = row
     #displays current default output folder
     default_output_label.destroy()
-    default_output_label_1 = Label(settings_window, text="Default output folder: " + current_default_output_folder[0])
+    default_output_label_1 = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     default_output_label_1.grid(column=0, row=1)
     
 settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
@@ -639,12 +639,12 @@ def on_click(rifever):
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
         done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps(1){extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 2}fps{extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
@@ -709,12 +709,12 @@ def times4(rifever):
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
         done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps(1){extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 4}fps{extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
@@ -840,12 +840,12 @@ def times8(rifever):
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
         done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps(1){extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
     else:
         done3 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{fps * 8}fps{extension}",
-                 font=("Arial", 7),
+                 font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
