@@ -49,11 +49,12 @@ import cv2
 import csv
 from tkinter import *
 main_window = Tk()
+
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
 def check_for_updates():
-    os.system(f"mkdir {thisdir}/temp/")
+    os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
     os.chdir(f"{thisdir}")
@@ -63,11 +64,11 @@ def check_for_updates():
     file2_lines = file2.readlines()
     for i in range(len(file1_lines)):
         if file1_lines[i] != file2_lines[i]:
-            os.system(f"rm -rf {thisdir}/GUI.py")
-            os.system(f"mv {thisdir}/temp/GUI.py {thisdir}/")
-            os.system(f"rm -rf {thisdir}/temp/")
+            os.system(f'rm -rf "{thisdir}/GUI.py"')
+            os.system(f'mv "{thisdir}/temp/GUI.py" "{thisdir}/"')
+            os.system(f'rm -rf "{thisdir}/temp/"')
             return 1
-    os.system(f"rm -rf {thisdir}/temp/")
+    os.system(f'rm -rf "{thisdir}/temp/"')
 
 
 def check_theme():
@@ -214,7 +215,7 @@ def darkTheme():
     global theme_button
     theme_button.destroy()
     theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
-    theme_button.grid(column = 1, row = 1)
+    theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
 
@@ -231,7 +232,7 @@ def lightTheme():
     global theme_button
     theme_button.destroy()
     theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white",fg=fg)
-    theme_button.grid(column = 1, row = 1)
+    theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
     
