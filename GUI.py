@@ -54,6 +54,7 @@ main_window = Tk()
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
+# Ive changed it to the Stable branch which created, this helps prevent unintended bugs from getting in the updates 
 def check_for_updates():
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
@@ -73,6 +74,7 @@ def check_for_updates():
             os.system(f'mv "{thisdir}/temp/start.py" "{thisdir}/"')
             os.system(f'rm -rf "{thisdir}/Start"')
             os.system(f'mv "{thisdir}/temp/Start" "{thisdir}/"')
+            os.system(f'chmod +x "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
             return 1
     os.system(f'rm -rf "{thisdir}/temp/"')
