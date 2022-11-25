@@ -116,7 +116,7 @@ def check_for_updates():
             os.system(f'chmod +x "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
             break
-        
+    os.system(f'rm -rf "{thisdir}/temp/"')
             
     
         
