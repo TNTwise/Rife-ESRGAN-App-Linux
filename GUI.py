@@ -249,8 +249,9 @@ def sel_default_output_folder():
     global select_default_output_folder
     select_default_output_folder = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
-    with open(thisdir+"/programstate", "w") as f:
-        f.write(select_default_output_folder)
+    if isinstance(select_default_output_folder, str) == True and len(select_default_output_folder) > 0:
+        with open(thisdir+"/programstate", "w") as f:
+            f.write(select_default_output_folder)
 
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
