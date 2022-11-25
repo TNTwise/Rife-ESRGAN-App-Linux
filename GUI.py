@@ -50,6 +50,10 @@ import pathlib
 import cv2
 import csv
 from tkinter import *
+from functools import partial
+import getpass
+
+
 main_window = Tk()
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
@@ -103,7 +107,67 @@ if check_theme() == "Dark":
 
 cmd = 'ls -l'
 
+def pass_dialog_box():
+    
+    global pass_window
+    pass_window = Tk()
+    global pass_box
+    pass_box = Entry(pass_window, width = 25,show='*')
+    pass_label = Label(pass_window, text="Enter your password:")
+    pass_button = Button(pass_window, text="Enter",command=install)
 
+    pass_label.grid(column=0,row=0)
+    pass_box.grid(column=0,row=1)
+    pass_button.grid(column=0,row=2)
+    pass_window.geometry("200x100")
+    pass_window.resizable(False, False)
+    
+    pass_window.mainloop()
+
+def pass_dialog_box_err():
+    global pass_window1
+    pass_window1 = Tk()
+    global pass_box1
+    pass_box1 = Entry(pass_window1, width = 25,show='*')
+    pass_label1 = Label(pass_window1, text="Enter your password:")
+    pass_button1 = Button(pass_window1, text="Enter",command=install1)
+    err_lbl = Label(pass_window1, text="Wrong password", fg="red")
+    pass_label1.grid(column=0,row=0)
+    pass_box1.grid(column=0,row=1)
+    pass_button1.grid(column=0,row=2)
+    err_lbl.grid(column=0,row=3)
+    pass_window1.geometry("200x100")
+    pass_window1.resizable(False, False)
+    
+def install():
+    passwd = pass_box.get()
+    pass_window.destroy()
+    
+    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p.communicate()
+    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
+    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":# Add different pop up window here and in other install function that says it completed successfully
+        pass_dialog_box_err()
+    passwd=""
+    os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+    os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+    os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+    os.chdir(f"{thisdir}")
+def install1():
+    passwd = pass_box1.get()
+    pass_window1.destroy()
+    
+    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p.communicate()
+    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
+    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":
+        pass_dialog_box_err()
+    passwd=""
+    os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+    os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+    os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+    os.chdir(f"{thisdir}")
+    
 # use threading
 # create listbox object
 
@@ -165,10 +229,12 @@ def settings_window():
     spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
     spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
+    install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
+    install_button.grid(column=1,row=2)
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=3,row=0)
     theme_button.grid(column=3, row=1)
@@ -249,8 +315,9 @@ def sel_default_output_folder():
     global select_default_output_folder
     select_default_output_folder = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
-    with open(thisdir+"/programstate", "w") as f:
-        f.write(select_default_output_folder)
+    if isinstance(select_default_output_folder, str) == True and len(select_default_output_folder) > 0:
+        with open(thisdir+"/programstate", "w") as f:
+            f.write(select_default_output_folder)
 
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
