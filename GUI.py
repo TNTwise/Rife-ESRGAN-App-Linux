@@ -7,6 +7,9 @@ thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 
 if(os.path.isfile(thisdir+"/programstate")) == False:
+    if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
+        os.mkdir(f"{thisdir}/files/")
+        os.mknod(f"{thisdir}/files/isInstalled")
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
     os.system('python3 get-pip.py')
@@ -19,6 +22,8 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
         f.write(homedir)
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
 import os
 import glob
 import pathlib
@@ -50,7 +55,36 @@ import pathlib
 import cv2
 import csv
 from tkinter import *
+from functools import partial
+import getpass
+import requests
+import re
+from zipfile import ZipFile
 main_window = Tk()
+
+def latest():
+    # this code gets the latest versaion of rife vulkan
+            
+
+            latest = requests.get('https://github.com/nihui/rife-ncnn-vulkan/releases/latest/') 
+            latest = latest.url
+            latest = re.findall(r'[\d]*$', latest)
+            latest = latest[0]
+            if os.path.isfile(f"{thisdir}/files/version") == False:
+                os.mknod(f"{thisdir}/files/version")
+                with open(f'{thisdir}/files/version', 'w') as f:
+                    f.write("20220728")
+                current = "20220728"
+            else:
+                f = open(f"{thisdir}/files/version")
+                f = csv.reader(f)
+                for row in f:
+                    current = row
+                current = current[0]
+                with open(f"{thisdir}/files/version", 'w') as f:
+                    f.write(latest)
+            return(latest,current)
+
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
@@ -66,6 +100,9 @@ def check_for_updates():
     file2 = open(f"{thisdir}/GUI.py")
     file1_lines = file1.readlines()
     file2_lines = file2.readlines()
+    version = latest() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+    latest_ver = version[0]
+    current = version[1]
     for i in range(len(file1_lines)):
         if file1_lines[i] != file2_lines[i]:
             os.system(f'rm -rf "{thisdir}/GUI.py"')
@@ -76,8 +113,39 @@ def check_for_updates():
             os.system(f'mv "{thisdir}/temp/Start" "{thisdir}/"')
             os.system(f'chmod +x "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
-            return 1
+            break
+        
+            
+    
+        
+            
+    if latest_ver > current:
+                os.chdir(f"{thisdir}/files/")
+                os.system(f"python3 -m wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
+                with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
+                    f.extractall()
+                os.chdir(f"{thisdir}")
+                os.system(f'mv "rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
+                os.system(f'rm -rf "{thisdir}/rife-anime/"')
+                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-anime/" "{thisdir}/"')
+                os.system(f'rm -rf "{thisdir}/rife-v2.4/"')
+                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v2.4/" "{thisdir}/"')
+                os.system(f'rm -rf "{thisdir}/rife-v3.1/"')
+                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v3.1/" "{thisdir}/"')
+                os.system(f'rm -rf "{thisdir}/rife-v4.6/"')
+                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v4.6/" "{thisdir}/"')
+                with open(f"{thisdir}/files/version", 'w') as f:
+                    f.write(latest_ver)
+                os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
+                os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
+                return 1
+    else:
+        return 1
+                
+                
+                
     os.system(f'rm -rf "{thisdir}/temp/"')
+
 
 
 def check_theme():
@@ -103,7 +171,78 @@ if check_theme() == "Dark":
 
 cmd = 'ls -l'
 
+def pass_dialog_box():
+    
+    global pass_window
+    pass_window = Tk()
+    global pass_box
+    pass_box = Entry(pass_window, width = 25,show='*')
+    pass_label = Label(pass_window, text="Enter your password:")
+    pass_button = Button(pass_window, text="Enter",command=install)
 
+    pass_label.grid(column=0,row=0)
+    pass_box.grid(column=0,row=1)
+    pass_button.grid(column=0,row=2)
+    pass_window.geometry("200x100")
+    pass_window.resizable(False, False)
+    
+    pass_window.mainloop()
+
+def pass_dialog_box_err():
+    global pass_window1
+    pass_window1 = Tk()
+    global pass_box1
+    pass_box1 = Entry(pass_window1, width = 25,show='*')
+    pass_label1 = Label(pass_window1, text="Enter your password:")
+    pass_button1 = Button(pass_window1, text="Enter",command=install1)
+    err_lbl = Label(pass_window1, text="Wrong password", fg="red")
+    pass_label1.grid(column=0,row=0)
+    pass_box1.grid(column=0,row=1)
+    pass_button1.grid(column=0,row=2)
+    err_lbl.grid(column=0,row=3)
+    pass_window1.geometry("200x100")
+    pass_window1.resizable(False, False)
+    
+def install():
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
+    passwd = pass_box.get()
+    pass_window.destroy()
+    
+    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p.communicate()
+    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
+    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":# Add different pop up window here and in other install function that says it completed successfully
+        pass_dialog_box_err()
+    else:
+        passwd=""
+        with open(f"{thisdir}/files/isInstalled", "w") as f:
+            f.write("True")
+        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.chdir(f"{thisdir}")
+        
+def install1():
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
+    passwd = pass_box1.get()
+    pass_window1.destroy()
+    
+    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p.communicate()
+    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
+    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":
+        pass_dialog_box_err()
+    else:
+        passwd=""
+        with open(f"{thisdir}/files/isInstalled", "w") as f:
+            f.write("True")
+        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.chdir(f"{thisdir}")
+    
 # use threading
 # create listbox object
 
@@ -165,10 +304,19 @@ def settings_window():
     spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
     spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
+    install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
+    # gets the state of isIstalled
+    with open(f"{thisdir}/files/isInstalled", "r") as f:
+        f = csv.reader(f)
+        for row in f:
+            is_installed = row
+    is_installed = is_installed[0]
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
+    if is_installed == "False":
+        install_button.grid(column=1,row=2)
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=3,row=0)
     theme_button.grid(column=3, row=1)
