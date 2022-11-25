@@ -90,6 +90,7 @@ def latest():
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
 # Ive changed it to the Stable branch which created, this helps prevent unintended bugs from getting in the updates 
 def check_for_updates():
+    is_updated = 0
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
@@ -105,6 +106,7 @@ def check_for_updates():
     current = version[1]
     for i in range(len(file1_lines)):
         if file1_lines[i] != file2_lines[i]:
+            is_updated = 1
             os.system(f'rm -rf "{thisdir}/GUI.py"')
             os.system(f'mv "{thisdir}/temp/GUI.py" "{thisdir}/"')
             os.system(f'rm -rf "{thisdir}/start.py"')
@@ -120,6 +122,7 @@ def check_for_updates():
         
             
     if latest_ver > current:
+                is_updated = 1
                 os.chdir(f"{thisdir}/files/")
                 os.system(f"python3 -m wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
@@ -138,9 +141,11 @@ def check_for_updates():
                     f.write(latest_ver)
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-                return 1
-    else:
+                
+    if is_updated == 1:
         return 1
+    else:
+        return
                 
                 
                 
