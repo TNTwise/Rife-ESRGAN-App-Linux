@@ -5,11 +5,10 @@ import os
 global thisdir
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
-
-if(os.path.isfile(thisdir+"/programstate")) == False:
-    if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
+if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
         os.mkdir(f"{thisdir}/files/")
         os.mknod(f"{thisdir}/files/isInstalled")
+if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
     os.system('python3 get-pip.py')
@@ -218,9 +217,11 @@ def install():
         passwd=""
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("True")
-        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S mv {thisdir}/.git/ /home/$USER/Rife-Vulkan-GUI/")
+        os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S rm -rf /home/$USER/Rife-Vulkan-GUI/.git/")
         os.chdir(f"{thisdir}")
         
 def install1():
@@ -238,9 +239,11 @@ def install1():
         passwd=""
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("True")
-        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S mv {thisdir}/.git/ /home/$USER/Rife-Vulkan-GUI/")
+        os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S rm -rf /home/$USER/Rife-Vulkan-GUI/.git/")
         os.chdir(f"{thisdir}")
     
 # use threading
