@@ -8,6 +8,8 @@ homedir = os.path.expanduser(r"~")
 if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
         os.mkdir(f"{thisdir}/files/")
         os.mknod(f"{thisdir}/files/isInstalled")
+        with open(f"{thisdir}/files/isInstalled", "w") as f:
+            f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
@@ -21,8 +23,7 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
         f.write(homedir)
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
-    with open(f"{thisdir}/files/isInstalled", "w") as f:
-        f.write("False")
+    
 import os
 import glob
 import pathlib
