@@ -7,6 +7,9 @@ thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 
 if(os.path.isfile(thisdir+"/programstate")) == False:
+    if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
+        os.mkdir(f"{thisdir}/files/")
+        os.mknod(f"{thisdir}/files/isInstalled")
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
     os.system('python3 get-pip.py')
@@ -19,6 +22,8 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
         f.write(homedir)
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
 import os
 import glob
 import pathlib
@@ -66,8 +71,6 @@ def latest():
             latest = re.findall(r'[\d]*$', latest)
             latest = latest[0]
             if os.path.isfile(f"{thisdir}/files/version") == False:
-                
-                os.mkdir(f"{thisdir}/files/")
                 os.mknod(f"{thisdir}/files/version")
                 with open(f'{thisdir}/files/version', 'w') as f:
                     f.write("20220728")
@@ -201,6 +204,8 @@ def pass_dialog_box_err():
     pass_window1.resizable(False, False)
     
 def install():
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
     passwd = pass_box.get()
     pass_window.destroy()
     
@@ -209,12 +214,18 @@ def install():
     os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
     if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":# Add different pop up window here and in other install function that says it completed successfully
         pass_dialog_box_err()
-    passwd=""
-    os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
-    os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-    os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
-    os.chdir(f"{thisdir}")
+    else:
+        passwd=""
+        with open(f"{thisdir}/files/isInstalled", "w") as f:
+            f.write("True")
+        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.chdir(f"{thisdir}")
+        
 def install1():
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
     passwd = pass_box1.get()
     pass_window1.destroy()
     
@@ -223,11 +234,14 @@ def install1():
     os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
     if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":
         pass_dialog_box_err()
-    passwd=""
-    os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
-    os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-    os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
-    os.chdir(f"{thisdir}")
+    else:
+        passwd=""
+        with open(f"{thisdir}/files/isInstalled", "w") as f:
+            f.write("True")
+        os.system("cp Rife-Vulkan-GUI.desktop /home/$USER/.local/share/applications/")
+        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
+        os.system(f"echo {passwd} | sudo -S cp -r ../* /home/$USER/Rife-Vulkan-GUI")
+        os.chdir(f"{thisdir}")
     
 # use threading
 # create listbox object
@@ -291,11 +305,18 @@ def settings_window():
     spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
     install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
+    # gets the state of isIstalled
+    with open(f"{thisdir}/files/isInstalled", "r") as f:
+        f = csv.reader(f)
+        for row in f:
+            is_installed = row
+    is_installed = is_installed[0]
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
-    install_button.grid(column=1,row=2)
+    if is_installed == "False":
+        install_button.grid(column=1,row=2)
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=3,row=0)
     theme_button.grid(column=3, row=1)
