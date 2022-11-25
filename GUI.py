@@ -74,6 +74,7 @@ def check_for_updates():
             os.system(f'mv "{thisdir}/temp/start.py" "{thisdir}/"')
             os.system(f'rm -rf "{thisdir}/Start"')
             os.system(f'mv "{thisdir}/temp/Start" "{thisdir}/"')
+            os.system(f'chmod "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
             return 1
     os.system(f'rm -rf "{thisdir}/temp/"')
