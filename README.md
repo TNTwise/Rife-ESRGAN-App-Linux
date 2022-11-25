@@ -30,6 +30,8 @@ sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
 
 #TODO <br />
+Add progressbar for update <br />
+Fix pop up showing wrong password, even when password is right (only happens if window is re-launched from install button.) <br />
 Fix check for updates still getting update even if you are on latest from main branch, maybe write time of update, and check with if statement? <br />
 Make the listbox menu a dropdown menu <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
