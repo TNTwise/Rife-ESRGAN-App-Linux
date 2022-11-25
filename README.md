@@ -4,11 +4,6 @@
 </p>
 
 # A simple GUI for Rife Vulkan on Linux
-# Note: This program still requires testing on many different distros
- I am currently working on maintaining Arch and Ubuntu support. <br />
- It should work fine on all distros, but I would still like to do more testing. <br />
- Usually if an error occurs, it's with Rife itself, and not the GUI, <br />
- but I am working on a better implementation of showing errors to the user, instead of launching the GUI through Xterm. <br />
 Dependencies:
 OpenCV
 Tkinter
@@ -30,8 +25,9 @@ sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
 
 #TODO <br />
-Add an install button that installs application to OS, for this to work, needs to implement dialog box for password.
-Make the listbox menu a dropdown menu <br />
+Destroy done variable when finished, use global done to do this <br />
+Make a check for updates script that will be accessable from GUI, use diff command <br />
+Theme selector works, but is a really bad implementation. I'm to tired to fix this shit. <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
 Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
@@ -41,5 +37,6 @@ Fix Progress bar on different interpolation modes. <br />
 Use default terminal instead of xterm. <br />
 Add longer dependencies section. <br />
 Add a limit of 2 selections in each times interpolation and rife version menu. <br />
+Round fps for a video name. <br />
 Maybe package as appimage? <br />
 Show errors on GUI itself, so i can remove the xterm dependency. <br />
