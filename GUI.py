@@ -8,8 +8,6 @@ homedir = os.path.expanduser(r"~")
 if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
         os.mkdir(f"{thisdir}/files/")
         os.mknod(f"{thisdir}/files/isInstalled")
-        with open(f"{thisdir}/files/isInstalled", "w") as f:
-            f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
@@ -23,7 +21,8 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
         f.write(homedir)
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
-    
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
 import os
 import glob
 import pathlib
@@ -90,7 +89,6 @@ def latest():
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
 # Ive changed it to the Stable branch which created, this helps prevent unintended bugs from getting in the updates 
 def check_for_updates():
-    is_updated = 0
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
@@ -106,7 +104,6 @@ def check_for_updates():
     current = version[1]
     for i in range(len(file1_lines)):
         if file1_lines[i] != file2_lines[i]:
-            is_updated = 1
             os.system(f'rm -rf "{thisdir}/GUI.py"')
             os.system(f'mv "{thisdir}/temp/GUI.py" "{thisdir}/"')
             os.system(f'rm -rf "{thisdir}/start.py"')
@@ -116,13 +113,12 @@ def check_for_updates():
             os.system(f'chmod +x "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
             break
-    os.system(f'rm -rf "{thisdir}/temp/"')
+        
             
     
         
             
     if latest_ver > current:
-                is_updated = 1
                 os.chdir(f"{thisdir}/files/")
                 os.system(f"python3 -m wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
@@ -141,11 +137,9 @@ def check_for_updates():
                     f.write(latest_ver)
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-                
-    if is_updated == 1:
-        return 1
+                return 1
     else:
-        return
+        return 1
                 
                 
                 
@@ -225,9 +219,9 @@ def install():
             f.write("True")
         os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S mv {thisdir}/.git/ /home/$USER/Rife-Vulkan-GUI/")
+        os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
         os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S rm -rf /home/$USER/Rife-Vulkan-GUI/.git/")
+        
         os.chdir(f"{thisdir}")
         
 def install1():
@@ -247,9 +241,8 @@ def install1():
             f.write("True")
         os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S mv {thisdir}/.git/ /home/$USER/Rife-Vulkan-GUI/")
+        os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
         os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S rm -rf /home/$USER/Rife-Vulkan-GUI/.git/")
         os.chdir(f"{thisdir}")
     
 # use threading
