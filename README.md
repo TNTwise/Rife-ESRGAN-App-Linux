@@ -14,7 +14,7 @@ OpenCV
 Tkinter
 Xterm <br />
 ```
-To run this program, you can just click on "Start" or run "python start.py" in your terminal.
+To run this program, you can just click on "Start".
 ```
 There is a new install.sh script in the install directory that you can run that will install it to your system. <br />
 You can either search for Rife in your destop enfironment, or can run rife-gui from your terminal. <br />
