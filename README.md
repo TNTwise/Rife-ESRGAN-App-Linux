@@ -32,6 +32,7 @@ On SteamOS/Steam Deck <br />
 ```
 python GUI.py
 ```
+Fix issues on arch? <br />
 Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
 #TODO <br />
 Clean up files <br />
