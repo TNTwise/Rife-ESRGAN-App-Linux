@@ -22,11 +22,11 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install xterm ffmpeg python3-tk
+sudo apt install ffmpeg python3-tk stterm
 ```
 On Arch/Arch based Distros <br />
 ```
-sudo pacman -S tk opencv xterm ffmpeg python-pip
+sudo pacman -S tk opencv konsole ffmpeg python-pip
 ```
 On SteamOS/Steam Deck <br />
 ```
