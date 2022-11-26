@@ -34,7 +34,6 @@ python GUI.py
 ```
 Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
 #TODO <br />
-Fix issues on arch? <br />
 Clean up files <br />
 Add progressbar for update (Note: Will have to make update function run in a new thread to have progressbar update.) <br />
 Fix pop up showing wrong password, even when password is right (only happens if window is re-launched from install button.) <br />
