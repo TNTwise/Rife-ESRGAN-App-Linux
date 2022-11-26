@@ -22,7 +22,7 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install libutempter-dev ffmpeg
+sudo apt install xterm ffmpeg python3-tkinter
 ```
 On Arch/Arch based Distros <br />
 ```
