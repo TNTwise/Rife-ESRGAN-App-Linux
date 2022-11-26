@@ -63,7 +63,11 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
+import distro
+
 main_window = Tk()
+
+
 
 def latest():
     # this code gets the latest versaion of rife vulkan
@@ -154,7 +158,10 @@ def check_for_updates():
                 
     os.system(f'rm -rf "{thisdir}/temp/"')
 
-
+def get_distro():
+    global distro
+    distro = distro.id()
+    return distro
 
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
@@ -749,7 +756,12 @@ button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
-centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg,font=("Ariel", "12"))
+if get_distro() != "ubuntu":
+    centering_label = Label(main_window, text="                                                                                                                                                                "
+    ,bg=bg,fg=fg,font=("Ariel", "12"))
+else:
+    centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg)
+
 settings_menu_button = Button(main_window,
                         image=settings_icon, # sets settings icon image for button
                         command = settings_window,bg=bg_button)
