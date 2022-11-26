@@ -5,10 +5,12 @@ import os
 global thisdir
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
+if os.path.exists(f"{thisdir}/files/") == False:
+    os.mkdir(f"{thisdir}/files/")
 if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
-        os.mknod(f"{thisdir}/files/isInstalled")
-        with open(f"{thisdir}/files/isInstalled", "w") as f:
-            f.write("False")
+    os.mknod(f"{thisdir}/files/isInstalled")
+    with open(f"{thisdir}/files/isInstalled", "w") as f:
+        f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.system('python3 files/get-pip.py install')
