@@ -13,12 +13,12 @@ if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
     os.mknod(thisdir+"/theme")
-    os.system('python3 get-pip.py install')
+    os.system('python3 files/get-pip.py install')
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
     os.system('python3 -m pip install requests')
     os.system('python3 -m pip install wget')
-    os.system('rm get-pip.py')
+    os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
     with open(thisdir+"/theme", "w") as f:
