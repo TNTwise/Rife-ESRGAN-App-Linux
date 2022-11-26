@@ -22,7 +22,7 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-tk stterm
+sudo apt install ffmpeg python3-tk konsole
 ```
 On Arch/Arch based Distros <br />
 ```
