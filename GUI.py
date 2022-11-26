@@ -11,7 +11,6 @@ if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
             f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
-    os.mknod(thisdir+"/theme")
     os.system('python3 files/get-pip.py install')
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
@@ -20,9 +19,12 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
+    
+    
+if(os.path.isfile(thisdir+"/theme")) == False:
+    os.mknod(thisdir+"/theme")
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
-    
 import os
 import glob
 import pathlib
