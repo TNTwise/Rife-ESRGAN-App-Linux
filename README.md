@@ -14,7 +14,7 @@ OpenCV
 Tkinter
 Xterm <br />
 ```
-To run this program, you can just click on "Start" or run "python start.py" in your terminal.
+To run this program, you can just click on "Start".
 ```
 There is a new install.sh script in the install directory that you can run that will install it to your system. <br />
 You can either search for Rife in your destop enfironment, or can run rife-gui from your terminal. <br />
@@ -22,15 +22,20 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm 
+sudo apt install xterm ffmpeg python3-tk
 ```
 On Arch/Arch based Distros <br />
 ```
 sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
-
+On SteamOS/Steam Deck <br />
+```
+python GUI.py
+```
+Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
 #TODO <br />
-Add progressbar for update <br />
+Clean up files <br />
+Add progressbar for update (Note: Will have to make update function run in a new thread to have progressbar update.) <br />
 Fix pop up showing wrong password, even when password is right (only happens if window is re-launched from install button.) <br />
 Fix check for updates still getting update even if you are on latest from main branch, maybe write time of update, and check with if statement? <br />
 Make the listbox menu a dropdown menu <br />

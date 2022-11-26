@@ -6,24 +6,25 @@ global thisdir
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
-        os.mkdir(f"{thisdir}/files/")
         os.mknod(f"{thisdir}/files/isInstalled")
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
     os.mknod(thisdir+"/programstate")
-    os.mknod(thisdir+"/theme")
-    os.system('python3 get-pip.py')
-    os.system('pip install opencv-python')
-    os.system('pip install tk')
-    os.system('pip install pillow')
-    os.system('pip install wget')
-    os.system('rm get-pip.py')
+    os.system('python3 files/get-pip.py install')
+    os.system('python3 -m pip install opencv-python')
+    os.system('python3 -m pip install tk')
+    os.system('python3 -m pip install requests')
+    os.system('python3 -m pip install wget')
+    os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
+    
+    
+if(os.path.isfile(thisdir+"/theme")) == False:
+    os.mknod(thisdir+"/theme")
     with open(thisdir+"/theme", "w") as f:
         f.write("Light")
-    
 import os
 import glob
 import pathlib
@@ -94,7 +95,7 @@ def check_for_updates():
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
-    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/start.py")
+    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
     os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
     os.chdir(f"{thisdir}")
     file1 = open(f"{thisdir}/temp/GUI.py")
@@ -110,7 +111,7 @@ def check_for_updates():
             os.system(f'rm -rf "{thisdir}/GUI.py"')
             os.system(f'mv "{thisdir}/temp/GUI.py" "{thisdir}/"')
             os.system(f'rm -rf "{thisdir}/start.py"')
-            os.system(f'mv "{thisdir}/temp/start.py" "{thisdir}/"')
+            os.system(f'mv "{thisdir}/temp/start.py" "{thisdir}/files/"')
             os.system(f'rm -rf "{thisdir}/Start"')
             os.system(f'mv "{thisdir}/temp/Start" "{thisdir}/"')
             os.system(f'chmod +x "{thisdir}/Start"')
