@@ -6,7 +6,6 @@ global thisdir
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
-        os.mkdir(f"{thisdir}/files/")
         os.mknod(f"{thisdir}/files/isInstalled")
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("False")
