@@ -22,7 +22,7 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install libutempter ffmpeg
+sudo apt install libutempter-dev ffmpeg
 ```
 On Arch/Arch based Distros <br />
 ```
