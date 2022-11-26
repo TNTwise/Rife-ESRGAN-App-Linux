@@ -28,7 +28,11 @@ On Arch/Arch based Distros <br />
 ```
 sudo pacman -S tk opencv xterm ffmpeg python-pip
 ```
-
+On SteamOS/Steam Deck <br />
+```
+python GUI.py
+```
+Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
 #TODO <br />
 Clean up files <br />
 Add progressbar for update (Note: Will have to make update function run in a new thread to have progressbar update.) <br />
