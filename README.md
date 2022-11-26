@@ -22,7 +22,7 @@ This install method will copy everything to the home folder, and execute from th
 # Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install ffmpeg python3-opencv python3-tk tk python3-pip xterm 
+sudo apt install libutempter ffmpeg
 ```
 On Arch/Arch based Distros <br />
 ```
