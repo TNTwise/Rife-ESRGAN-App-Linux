@@ -10,9 +10,8 @@
  Usually if an error occurs, it's with Rife itself, and not the GUI, <br />
  but I am working on a better implementation of showing errors to the user, instead of launching the GUI through Xterm. <br />
 Dependencies:
-OpenCV
 Tkinter
-Xterm <br />
+Konsole <br />
 ```
 To run this program, you can just click on "Start".
 ```
