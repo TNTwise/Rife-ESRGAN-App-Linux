@@ -17,7 +17,7 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
     os.system('python3 -m pip install requests')
-    os.system('python3 -m pip install wget')
+    os.system('python3 -m pip install distro')
     os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
@@ -100,9 +100,9 @@ def check_for_updates():
     is_updated = 0
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
-    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
-    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
-    os.system(f"python3 -m wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
+    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
+    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
+    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
     os.chdir(f"{thisdir}")
     file1 = open(f"{thisdir}/temp/GUI.py")
     file2 = open(f"{thisdir}/GUI.py")
@@ -131,7 +131,7 @@ def check_for_updates():
     if latest_ver > current:
                 is_updated = 1
                 os.chdir(f"{thisdir}/files/")
-                os.system(f"python3 -m wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
+                os.system(f"wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
                     f.extractall()
                 os.chdir(f"{thisdir}")
