@@ -9,9 +9,9 @@
  It should work fine on all distros, but I would still like to do more testing. <br />
  Usually if an error occurs, it's with Rife itself, and not the GUI, <br />
  but I am working on a better implementation of showing errors to the user, instead of launching the GUI through Xterm. <br />
-Dependencies:
-OpenCV
-Tkinter
+## Dependencies: 
+OpenCV <br />
+Tkinter<br />
 Xterm <br />
 ```
 To run this program, you can just click on "Start".
@@ -32,6 +32,9 @@ On SteamOS/Steam Deck <br />
 ```
 python GUI.py
 ```
+## Errors
+vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
+
 Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
 #TODO <br />
 Support Dain Vulkan <br />
