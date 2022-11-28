@@ -3,8 +3,8 @@
   <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/Icon.svg" width = "25%">
 </p>
 
-# A simple GUI for Rife Vulkan on Linux
-# Note: This program still requires testing on many different distros
+## A simple GUI for Rife Vulkan on Linux
+## Note: This program still requires testing on many different distros
  I am currently working on maintaining Arch and Ubuntu support. <br />
  It should work fine on all distros, but I would still like to do more testing. <br />
  Usually if an error occurs, it's with Rife itself, and not the GUI, <br />
@@ -19,7 +19,7 @@ To run this program, you can just click on "Start".
 There is a new install.sh script in the install directory that you can run that will install it to your system. <br />
 You can either search for Rife in your destop enfironment, or can run rife-gui from your terminal. <br />
 This install method will copy everything to the home folder, and execute from there. <br />
-# Installing Dependencies
+## Installing Dependencies
 On Ubuntu <br />
 ```
 sudo apt install ffmpeg python3-tk konsole wget
@@ -32,11 +32,13 @@ On SteamOS/Steam Deck <br />
 ```
 python GUI.py
 ```
+Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
+
 ## Errors
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
-Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
-#TODO <br />
+##TODO
+
 Support Dain Vulkan <br />
 Clean up files <br />
 Add progressbar for update (Note: Will have to make update function run in a new thread to have progressbar update.) <br />
