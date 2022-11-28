@@ -244,7 +244,7 @@ def install1():
         f.write("False")
     passwd = pass_box1.get()
     pass_window1.destroy()
-    
+    os.system(f'chmod +x "{thisdir}/install/rife-gui"')
     p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, error = p.communicate()
     os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
