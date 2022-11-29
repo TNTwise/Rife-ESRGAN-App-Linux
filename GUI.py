@@ -471,7 +471,12 @@ def show():
             times8(rifever)
     
 
-
+# The 8x and 4x progressbars are split into sections
+# The 2x portion of the 4x takes up 1/3 of the progressbar, while the 4x takes up the rest 2/3s.
+# the 8x portion is split into 7ths.
+# the 2x portion is 0/7 - 1/7
+# The 4x portion is 1/7-3/7
+# the 8x protion is 3/7-7/7
 def progressBar2x():
     i = 2
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
@@ -483,7 +488,7 @@ def progressBar2x():
     progressbar["maximum"]=100
     while i == 2:
         frames_processed = len(list(Path('output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) * 2
         e = frames_processed/amount_of_output_files
         e*= 100
         e = int(e)
@@ -494,10 +499,9 @@ def progressBar4xSecond(): # makes second progressbar in 4x
     amount_of_input_files_1 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_1 = amount_of_input_files_1 * 2
     global progressbar_1 # creates new progressbar
-    progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=100)
+    progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=50,maximum=150)
     progressbar_1.grid(column=3, row=20)
     # Add progressbar updater
-    progressbar_1["maximum"]=200
     sleep(1) # wont update unless we sleep for 1 second?????????
     while i == 4:
         
@@ -505,7 +509,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
         amount_of_output_files_1 = len(list(Path('input_frames/').glob('*'))) *2
         e_1 = frames_processed_1/amount_of_output_files_1
         e_1*= 100
-        e_1 = int(e_1) + 100 # Has to add 100 to make progress bar work
+        e_1 = int(e_1) + 50 # Has to add 100 to make progress bar work
         progressbar_1['value'] = e_1
         progressbar_1.update()
             
@@ -517,11 +521,10 @@ def progressBar4x(): # makes first progressbar in 4x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",maximum=300)
     progressbar.grid(column=3, row=20)
-    
+    sleep(1)
     # Add progressbar updater
-    progressbar["maximum"]=200
     while i == 2:
         frames_processed = len(list(Path('output_frames/').glob('*')))
         amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
@@ -540,11 +543,10 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     amount_of_output_files_5 = amount_of_input_files_5 * 2
     global progressbar_5 # creates new progressbar
    
-    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=180)
+    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=73,maximum=170)
+    progressbar_5.update()
     progressbar_5.grid(column=3, row=20)
-    progressbar_5["maximum"]=300
     # Add progressbar updater
-    
     sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 5:
         
@@ -552,7 +554,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
         amount_of_output_files_5 = len(list(Path('input_frames/').glob('*'))) *2
         e_5 = frames_processed_5/amount_of_output_files_5
         e_5*= 100
-        e_5 = int(e_5) + 200 # has to add 200 to the value because the progress bar only updates with the current files interpolated
+        e_5 = int(e_5) + 73 # has to add 43 to the value because the progress bar only updates with the current files interpolated
         progressbar_5['value'] = e_5
         progressbar_5.update()
 
@@ -562,31 +564,34 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     amount_of_input_files_2 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_2 = amount_of_input_files_2 * 2
     global progressbar_2 # creates new progressbar
-    progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=100)
+    progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate", value=43, maximum=300)
     progressbar_2.grid(column=3, row=20)
     # Add progressbar updater
-    progressbar_2["maximum"]=300
+    #progressbar_2["maximum"]= 800
     sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 4:
         
         frames_processed_2 = len(list(Path('output_frames/').glob('*')))
         amount_of_output_files_2 = len(list(Path('input_frames/').glob('*'))) *2
         e_2 = frames_processed_2/amount_of_output_files_2
-        e_2*= 100
-        e_2 = int(e_2) + 100
-        progressbar_2['value'] = e_2
+        e_2*= 100 
+        e_2 = int(e_2) +43
+        e_2 = e_2 * 0.9
+        progressbar_2['value'] = e_2 # this times it by .9 so that the progressbar goes up to 3/7 of 300 which is 128.7
         progressbar_2.update()
+        if progressbar_2 ['value'] == 128:
+            progressbar_2 ['value'] = 128
+            break
 def progressBar8x(): # this is called first.
     i = 2
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate")
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",maximum=700)
     progressbar.grid(column=3, row=20)
     
     # Add progressbar updater
-    progressbar["maximum"]=300
-    while i == 2:
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
         frames_processed = len(list(Path('output_frames/').glob('*')))
         amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
         e = frames_processed/amount_of_output_files
@@ -594,6 +599,7 @@ def progressBar8x(): # this is called first.
         e = int(e) # converts e to integer
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
+        
         
     
         
