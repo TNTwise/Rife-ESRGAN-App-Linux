@@ -91,7 +91,6 @@ def latest():
                 with open(f"{thisdir}/files/version", 'w') as f:
                     f.write(latest)
             return(latest,current)
-
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
 # It compares the files, and if the files are different, replaces the old GUI.py with the one from github
@@ -100,10 +99,25 @@ def check_for_updates():
     is_updated = 0
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
-    os.chdir(f"{thisdir}")
+    # just writes 'stable' to file repository to be able to change where the program is taken from
+    if os.path.isfile(f"{thisdir}/files/repository") == False:
+        os.mknod(f"{thisdir}/files/repository")
+        with open(f"{thisdir}/files/repository", "w") as f:
+            f.write("stable")
+    with open(f"{thisdir}/files/repository", 'r') as f:
+        f = csv.reader(f)
+        for row in f:
+            repo = row
+    repo[0] = repo
+    if repo =="stable":
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
+    if repo =="testing":
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/files/start.py")
+        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
+        os.chdir(f"{thisdir}")
     file1 = open(f"{thisdir}/temp/GUI.py")
     file2 = open(f"{thisdir}/GUI.py")
     file1_lines = file1.readlines()
@@ -322,6 +336,12 @@ def settings_window():
     spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
     install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
+    global  update_spacer_label
+    update_spacer_label = Label(settings_window,text = " ", bg=bg)
+    repo_options = ['Testing', 'Stable']
+    clicked = StringVar()
+    clicked.set("Stable")
+    change_repo_dropdown = OptionMenu(settings_window, clicked, *repo_options)
     # gets the state of isIstalled
     with open(f"{thisdir}/files/isInstalled", "r") as f:
         f = csv.reader(f)
@@ -339,10 +359,14 @@ def settings_window():
     theme_button.grid(column=3, row=1)
     spacer_label1.grid(column=4,row=0)
     check_updates_button.grid(column=5,row=0)
+    update_spacer_label.grid(column=5,row=1)
+    change_repo_dropdown.grid(column=5,row=2)
     settings_window.geometry("600x200")
     settings_window.title('             Settings')
     settings_window.resizable(False, False) 
     settings_window.mainloop()
+
+
 # this will show if updates exist
 def start_update_check():
     global update_check_label
@@ -350,14 +374,20 @@ def start_update_check():
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
         restart_window("Updated, re-launch the program to apply.")
     else:
+        update_spacer_label.destroy()
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
     update_check_label.grid(column=5,row=1)
 # restarts the program
+
+
 def restart():
     os.system("pkill -f GUI.py && python3 start.py")
 def restart_thread():
     t1 = Thread(target=restart_window)
     t1.start()
+
+
+
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.   
 def restart_window(message):
     restart_window = Tk()
