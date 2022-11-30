@@ -99,11 +99,7 @@ def check_for_updates():
     is_updated = 0
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
-    # just writes 'stable' to file repository to be able to change where the program is taken from
-    if os.path.isfile(f"{thisdir}/files/repository") == False:
-        os.mknod(f"{thisdir}/files/repository")
-        with open(f"{thisdir}/files/repository", "w") as f:
-            f.write("stable")
+    
     with open(f"{thisdir}/files/repository", 'r') as f:
         f = csv.reader(f)
         for row in f:
@@ -309,7 +305,11 @@ def settings_window():
                         text = "Select default output folder",
                         command = sel_default_output_folder, bg=bg_button,fg=fg)
     
-    
+    # just writes 'stable' to file repository to be able to change where the program is taken from
+    if os.path.isfile(f"{thisdir}/files/repository") == False:
+        os.mknod(f"{thisdir}/files/repository")
+        with open(f"{thisdir}/files/repository", "w") as f:
+            f.write("stable")
     
     f = open(thisdir+"/programstate", "r")
     f = csv.reader(f)
@@ -324,6 +324,15 @@ def settings_window():
         with open(thisdir+"/theme", "w") as f:
             f.write("Light")
     # creates theme button and calls check_theme which returns the theme that is currently on
+    with open(f"{thisdir}/files/repository", 'r') as f: # gets the repo stored in repository file
+        f = csv.reader(f)
+        for row in f:
+            repo = row
+    repo = repo[0]
+    if repo == "stable": # capitolizes repo first char
+        repo = "Stable"
+    if repo == "testing":
+        repo = "Testing"
     global theme_button
     theme = check_theme()
     if theme == "Light":
@@ -339,9 +348,11 @@ def settings_window():
     global  update_spacer_label
     update_spacer_label = Label(settings_window,text = " ", bg=bg)
     repo_options = ['Testing', 'Stable']
-    clicked = StringVar()
-    clicked.set("Stable")
+    clicked = StringVar(settings_window)
+    clicked.set(repo)
     change_repo_dropdown = OptionMenu(settings_window, clicked, *repo_options)
+    change_repo_dropdown.config(bg = bg)
+    change_repo_dropdown.config(fg = fg)
     # gets the state of isIstalled
     with open(f"{thisdir}/files/isInstalled", "r") as f:
         f = csv.reader(f)
