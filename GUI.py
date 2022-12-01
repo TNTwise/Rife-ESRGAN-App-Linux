@@ -64,7 +64,7 @@ import requests
 import re
 from zipfile import ZipFile
 import distro
-
+filename = ""
 main_window = Tk()
 
 
@@ -543,7 +543,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
     progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=50,maximum=150)
     progressbar_1.grid(column=3, row=20)
     # Add progressbar updater
-    sleep(1) # wont update unless we sleep for 1 second?????????
+    #sleep(1) # wont update unless we sleep for 1 second?????????
     while i == 4:
         
         frames_processed_1 = len(list(Path('output_frames/').glob('*')))
@@ -564,7 +564,7 @@ def progressBar4x(): # makes first progressbar in 4x
     
     progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",maximum=300)
     progressbar.grid(column=3, row=20)
-    sleep(1)
+    #sleep(1)
     # Add progressbar updater
     while i == 2:
         frames_processed = len(list(Path('output_frames/').glob('*')))
@@ -588,7 +588,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     progressbar_5.update()
     progressbar_5.grid(column=3, row=20)
     # Add progressbar updater
-    sleep(1) # wont update unless we sleep for 1 second?????????
+    #sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 5:
         
         frames_processed_5 = len(list(Path('output_frames/').glob('*')))
@@ -609,7 +609,7 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     progressbar_2.grid(column=3, row=20)
     # Add progressbar updater
     #progressbar_2["maximum"]= 800
-    sleep(1) # wont update unless we sleep for 1 second?????????
+    #sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 4:
         
         frames_processed_2 = len(list(Path('output_frames/').glob('*')))
@@ -830,62 +830,63 @@ rife_vulkan.config(anchor=CENTER)
 
 # different modes of interpolation
 def on_click(rifever):
-    global done
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3, row=9)
-    start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
-    # this if statement sets default output dir, may need to remove when add selector.
-    # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
-    # This is for all modes of interpolation
-    if os.path.isfile(thisdir+"/temp") == False:
-        outputdir = get_output_dir()
+    if filename != "":
+        global done
+        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        done.grid(column=3, row=9)
+        start_button = Button(main_window, text="Start!", command=threading, state=DISABLED).grid(row = 2, column = 3)
+        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+        # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
+        # This is for all modes of interpolation
+        if os.path.isfile(thisdir+"/temp") == False:
+            outputdir = get_output_dir()
     
-    else:
-        f = open(thisdir+"/temp")
-        f = csv.reader(f)
-        for row in f:
-            outputdir = row
-        outputdir = outputdir[0]
+        else:
+            f = open(thisdir+"/temp")
+            f = csv.reader(f)
+            for row in f:
+                outputdir = row
+            outputdir = outputdir[0]
     
-    # Calls get_fps function
-    get_fps()
-    #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-    os.system('rm -rf input_frames')
-    os.system('rm -rf output_frames ')
-    os.system('mkdir input_frames')
-    os.system('mkdir output_frames')
-    os.system(f'ffprobe "{filename}"')
-    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
-    extraction.grid(column=3,row=9)
-    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
-    extraction.after(0, extraction.destroy())
-    Interpolation.grid(column=3,row=9)
-    pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+        # Calls get_fps function
+        get_fps()
+        #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
+        os.system('mkdir input_frames')
+        os.system('mkdir output_frames')
+        os.system(f'ffprobe "{filename}"')
+        os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+        extraction.grid(column=3,row=9)
+        os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+        extraction.after(0, extraction.destroy())
+        Interpolation.grid(column=3,row=9)
+        pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
     
-    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
-        done = Label(main_window,
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
+            done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
-    else:
-        done = Label(main_window,
+        else:
+           done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=80, anchor="w",
                  fg=fg,bg=bg)
-    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
+        os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
-    else:
-        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
-    Interpolation.after(0, Interpolation.destroy())
-    done.grid(column=3, row=9)
-    # these re-enable the start, input, and output buttons
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg,fg=fg).grid(row = 2, column = 3)
-    button_output = Button(main_window,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
-    os.system('rm -rf "'+thisdir+'/temp"') # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
+        else:
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.png" -i audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+        Interpolation.after(0, Interpolation.destroy())
+        done.grid(column=3, row=9)
+        # these re-enable the start, input, and output buttons
+        start_button = Button(main_window, text="Start!", command=threading,bg=bg,fg=fg).grid(row = 2, column = 3)
+        button_output = Button(main_window,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
+        os.system('rm -rf "'+thisdir+'/temp"') # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
 
 
 
@@ -934,7 +935,7 @@ def times4(rifever):
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
     global done2
-    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
+    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
         done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps(1){extension}",
                  font=("Arial", 11), width=80, anchor="w",
