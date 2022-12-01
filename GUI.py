@@ -12,6 +12,9 @@ if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
     with open(f"{thisdir}/files/isInstalled", "w") as f:
         f.write("False")
 if(os.path.isfile(thisdir+"/programstate")) == False:
+    os.chdir(f"{thisdir}/files")
+    os.system("wget https://bootstrap.pypa.io/get-pip.py")
+    os.chdir(f"{thisdir}")
     os.mknod(thisdir+"/programstate")
     os.system('python3 files/get-pip.py install')
     os.system('python3 -m pip install opencv-python')
