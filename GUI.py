@@ -370,8 +370,8 @@ def settings_window():
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
-        update_branch_label.grid(column=5,row=2)
-        opt.grid(column=5,row=3)
+        update_branch_label.grid(column=5,row=0)
+        opt.grid(column=5,row=1)
         def callback(*args):
             with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
                 f.write(variable.get())
@@ -394,8 +394,8 @@ def settings_window():
     theme_label.grid(column=3,row=0)
     theme_button.grid(column=3, row=1)
     spacer_label1.grid(column=4,row=0)
-    check_updates_button.grid(column=5,row=0)
-    update_spacer_label.grid(column=5,row=1)
+    check_updates_button.grid(column=5,row=3)
+    update_spacer_label.grid(column=5,row=2)
     #change_repo_dropdown.grid(column=5,row=2)
     settings_window.geometry("600x200")
     settings_window.title('             Settings')
@@ -408,12 +408,12 @@ def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
-        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=0)
+        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
         restart_window("Updated, re-launch the program to apply.")
     else:
         update_spacer_label.destroy()
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
-        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=0)
+        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
     update_check_label.grid(column=5,row=1)
 # restarts the program
 
@@ -456,7 +456,7 @@ def darkTheme():
     bg_button="#4C4E52"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
+    theme_button = Button(settings_window,text="Dark",command=lightTheme,bg=bg,fg=fg)
     theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
@@ -473,7 +473,7 @@ def lightTheme():
     fg="black"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white",fg=fg)
+    theme_button = Button(settings_window,text="Light",command=darkTheme,bg="white",fg=fg)
     theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
@@ -700,7 +700,7 @@ def threading():
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
     t1.start()
-    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=0)
+    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=2)
 
 
 def exit_thread():
