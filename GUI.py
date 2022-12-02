@@ -354,7 +354,8 @@ def settings_window():
     spacer_label = Label(settings_window,text="            ",bg=bg) # This spaces the middle
     spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
     spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
-    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check, bg=bg,fg=fg)
+    global check_updates_button
+    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
     install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
     global  update_spacer_label
     update_spacer_label = Label(settings_window,text = " ", bg=bg)
@@ -701,7 +702,12 @@ def threading():
     # Call work function
     t1 = Thread(target=show)
     t1.start()
-    
+def start_update_check_thread():
+    t1 = Thread(target=start_update_check)
+    t1.start()
+    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=0)
+
+
 def exit_thread():
     # Call work function
     t1 = Thread(target=exi11)
