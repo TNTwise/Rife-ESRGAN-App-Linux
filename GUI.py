@@ -347,9 +347,9 @@ def settings_window():
     global theme_button
     theme = check_theme()
     if theme == "Light":
-            theme_button = Button(settings_window,text="Dark",command=darkTheme,bg="white",fg=fg)
+            theme_button = Button(settings_window,text="Light",command=darkTheme,bg="white",fg=fg)
     if theme == "Dark":
-            theme_button = Button(settings_window,text="Light",command=lightTheme,bg=bg,fg=fg)
+            theme_button = Button(settings_window,text="Dark",command=lightTheme,bg=bg,fg=fg)
     theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
     spacer_label = Label(settings_window,text="            ",bg=bg) # This spaces the middle
     spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
