@@ -114,11 +114,11 @@ def check_for_updates():
         for row in f:
             repo = row
     repo[0] = repo
-    if repo =="stable":
+    if repo =="Stable":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
-    if repo =="testing":
+    if repo =="Sesting":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/files/start.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
@@ -334,6 +334,7 @@ def settings_window():
         with open(thisdir+"/theme", "w") as f:
             f.write("Light")
     # creates theme button and calls check_theme which returns the theme that is currently on
+    global repo
     with open(f"{thisdir}/files/repository", 'r') as f: # gets the repo stored in repository file
         f = csv.reader(f)
         for row in f:
@@ -357,18 +358,38 @@ def settings_window():
     install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
     global  update_spacer_label
     update_spacer_label = Label(settings_window,text = " ", bg=bg)
-    repo_options = ['Testing', 'Stable']
-    clicked = StringVar(settings_window)
-    clicked.set(repo)
-    change_repo_dropdown = OptionMenu(settings_window, clicked, *repo_options)
-    change_repo_dropdown.config(bg = bg)
-    change_repo_dropdown.config(fg = fg)
+    
+    #clicked = StringVar(settings_window)
+    #clicked.set(repo)
+    #change_repo_dropdown = OptionMenu(settings_window, clicked, *repo_options)
+    #change_repo_dropdown.config(bg = bg)
+    #change_repo_dropdown.config(fg = fg)
     # gets the state of isIstalled
+    def show_dropdown():
+        variable = StringVar(settings_window)
+        repo_options = ['Testing', 'Stable']
+        variable.set(repo)
+        opt = OptionMenu(settings_window, variable, *repo_options)
+        opt.config(width=9, font=('Helvetica', 12))
+        opt.config(bg=bg)
+        opt.config(fg=fg)
+        opt.grid(column=5,row=2)
+        #Label
+        #labelTest = Label(text="", font=('Helvetica', 12), fg='red')
+        #labelTest.grid(column=5,row=3)
+        #Function
+        def callback(*args):
+            with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
+                f.write(variable.get())
+                
+        variable.trace("w", callback)
+
     with open(f"{thisdir}/files/isInstalled", "r") as f:
         f = csv.reader(f)
         for row in f:
             is_installed = row
     is_installed = is_installed[0]
+    show_dropdown()
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     button_select_default_output.grid(column=1, row=0)
@@ -381,7 +402,7 @@ def settings_window():
     spacer_label1.grid(column=4,row=0)
     check_updates_button.grid(column=5,row=0)
     update_spacer_label.grid(column=5,row=1)
-    change_repo_dropdown.grid(column=5,row=2)
+    #change_repo_dropdown.grid(column=5,row=2)
     settings_window.geometry("600x200")
     settings_window.title('             Settings')
     settings_window.resizable(False, False) 
