@@ -325,7 +325,7 @@ def settings_window():
     for row in f:
         current_default_output_folder = row
     #displays current default output folder
-    Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
+    
     global default_output_label
     default_output_label = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     # This code just creates the theme file if it doesnt txist
@@ -360,13 +360,9 @@ def settings_window():
     global  update_spacer_label
     update_spacer_label = Label(settings_window,text = " ", bg=bg)
     
-    #clicked = StringVar(settings_window)
-    #clicked.set(repo)
-    #change_repo_dropdown = OptionMenu(settings_window, clicked, *repo_options)
-    #change_repo_dropdown.config(bg = bg)
-    #change_repo_dropdown.config(fg = fg)
-    # gets the state of isIstalled
     def show_dropdown():
+        update_branch_label = Label(settings_window,text="Update channel:",bg=bg,fg=fg)
+        
         variable = StringVar(settings_window)
         repo_options = ['Testing', 'Stable']
         variable.set(repo)
@@ -374,11 +370,8 @@ def settings_window():
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
-        opt.grid(column=5,row=2)
-        #Label
-        #labelTest = Label(text="", font=('Helvetica', 12), fg='red')
-        #labelTest.grid(column=5,row=3)
-        #Function
+        update_branch_label.grid(column=5,row=2)
+        opt.grid(column=5,row=3)
         def callback(*args):
             with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
                 f.write(variable.get())
