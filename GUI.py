@@ -415,10 +415,12 @@ def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
         update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
+        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=0)
         restart_window("Updated, re-launch the program to apply.")
     else:
         update_spacer_label.destroy()
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
+        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=0)
     update_check_label.grid(column=5,row=1)
 # restarts the program
 
