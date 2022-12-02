@@ -70,7 +70,13 @@ import distro
 filename = ""
 main_window = Tk()
 
-
+f = open(thisdir+"/programstate", "r")
+f = csv.reader(f)
+for row in f:
+    current_default_output_folder = row
+if os.path.exists(current_default_output_folder[0]) == False:
+    with open(thisdir+"/programstate", 'w') as f:
+        f.write(homedir)
 
 def latest():
     # this code gets the latest versaion of rife vulkan
@@ -319,6 +325,7 @@ def settings_window():
     for row in f:
         current_default_output_folder = row
     #displays current default output folder
+    Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     global default_output_label
     default_output_label = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     # This code just creates the theme file if it doesnt txist
@@ -845,7 +852,7 @@ def on_click(rifever):
         # This is for all modes of interpolation
         if os.path.isfile(thisdir+"/temp") == False:
             outputdir = get_output_dir()
-    
+            
         else:
             f = open(thisdir+"/temp")
             f = csv.reader(f)
@@ -867,7 +874,8 @@ def on_click(rifever):
         extraction.after(0, extraction.destroy())
         Interpolation.grid(column=3,row=9)
         pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
-    
+        if os.path.exists(outputdir) == False:
+            outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
             done = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
@@ -934,7 +942,8 @@ def times4(rifever):
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
     os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-
+    if os.path.exists(outputdir) == False:
+            outputdir = homedir
     timestwo.after(0, timestwo.destroy())
     Interpolation2.grid(column=3,row=9)
     global done2
@@ -1066,7 +1075,8 @@ def times8(rifever):
     timestwo2.after(0, timestwo2.destroy())
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
     pb8x3() # should be called after ffmpeg extracts the frames
-
+    if os.path.exists(outputdir) == False:
+            outputdir = homedir
     Interpolation3.grid(column=3,row=9)
     global done3
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
