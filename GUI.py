@@ -113,7 +113,7 @@ def check_for_updates():
         f = csv.reader(f)
         for row in f:
             repo = row
-    repo[0] = repo
+    repo = repo[0]
     if repo =="Stable":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
