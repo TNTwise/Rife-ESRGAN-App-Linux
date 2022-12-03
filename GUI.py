@@ -835,14 +835,13 @@ button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
-distro = get_distro()
-if distro != "ubuntu" or distro != "steamos":
-    print(str(distro))
-    centering_label = Label(main_window, text="                                                                                                                                                                "
-    ,bg=bg,fg=fg,font=("Ariel", "12"))
+#distro = get_distro()
+#if distro != "ubuntu" or distro != "steamos":
+centering_label = Label(main_window, text="                                                                                                                                                                                                                    "
+    ,bg=bg,fg=fg)
     
-else:
-    centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg)
+#else:
+#    centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg)
 settings_menu_button = Button(main_window,
                         image=settings_icon, # sets settings icon image for button
                         command = settings_window,bg=bg_button)
