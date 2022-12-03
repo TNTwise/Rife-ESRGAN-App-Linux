@@ -815,7 +815,7 @@ rife_vulkan = Label (main_window,
                             text = "Rife Vulkan GUI"
                                                            ,
                             font=("Arial", 25),
-                            bg=bg,fg=fg)
+                            bg=bg,fg=fg,padx=200)
 button_explore = Button(main_window,
                         text = "Input Video",
                         command = browseFiles, bg=bg_button,fg=fg)
@@ -831,8 +831,8 @@ button_exit = Button(main_window,
                         justify=CENTER,bg=bg_button,fg=fg)
 #distro = get_distro()
 #if distro != "ubuntu" or distro != "steamos":
-centering_label = Label(main_window, text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    ,bg=bg,fg=bg,font=("Helvetica", "7"))
+#centering_label = Label(main_window, text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+#    ,bg=bg,fg=bg,font=("Helvetica", "7"))
     
 #else:
 #    centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg)
@@ -843,7 +843,7 @@ start_button = Button(main_window, text="Start!", command=threading,bg=bg_button
 
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=2, row=0)
-centering_label.grid(column=3,row=1)
+#centering_label.grid(column=3,row=1)
 
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
