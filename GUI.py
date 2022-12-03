@@ -20,7 +20,6 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
     os.system('python3 -m pip install requests')
-    os.system('python3 -m pip install distro')
     os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
@@ -66,7 +65,6 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
-import distro
 filename = ""
 main_window = Tk()
 
@@ -177,10 +175,6 @@ def check_for_updates():
                 
     os.system(f'rm -rf "{thisdir}/temp/"')
 
-def get_distro():
-    global distro
-    distro = distro.id()
-    return distro
 
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
@@ -837,8 +831,8 @@ button_exit = Button(main_window,
                         justify=CENTER,bg=bg_button,fg=fg)
 #distro = get_distro()
 #if distro != "ubuntu" or distro != "steamos":
-centering_label = Label(main_window, text="                                                                                                                                                                                                                    "
-    ,bg=bg,fg=fg)
+centering_label = Label(main_window, text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ,bg=bg,fg=bg,font=("Helvetica", "7"))
     
 #else:
 #    centering_label = Label(main_window, text="                                                                                                                                                                ",bg=bg,fg=fg)
