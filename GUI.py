@@ -68,6 +68,8 @@ from zipfile import ZipFile
 filename = ""
 main_window = Tk()
 
+# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
+
 f = open(thisdir+"/programstate", "r")
 f = csv.reader(f)
 for row in f:
