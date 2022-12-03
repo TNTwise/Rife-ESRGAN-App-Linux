@@ -414,7 +414,7 @@ def start_update_check():
         update_spacer_label.destroy()
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
         check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
-    update_check_label.grid(column=5,row=1)
+    update_check_label.grid(column=5,row=5)
 # restarts the program
 
 
@@ -700,7 +700,7 @@ def threading():
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
     t1.start()
-    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=2)
+    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=3)
 
 
 def exit_thread():
