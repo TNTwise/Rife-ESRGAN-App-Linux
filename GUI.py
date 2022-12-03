@@ -835,7 +835,7 @@ button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
-if get_distro() != "ubuntu" or distro != "steamos":
+if get_distro() != "ubuntu" or distro == "steamos":
     print(str(distro))
     centering_label = Label(main_window, text="                                                                                                                                                                "
     ,bg=bg,fg=fg,font=("Ariel", "12"))
