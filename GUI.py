@@ -835,7 +835,7 @@ button_exit = Button(main_window,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
-if get_distro() != "ubuntu":
+if get_distro() != "ubuntu" or get_distro() != "SteamOS":
     centering_label = Label(main_window, text="                                                                                                                                                                "
     ,bg=bg,fg=fg,font=("Ariel", "12"))
 else:
@@ -1138,6 +1138,7 @@ main_window.geometry("700x500")
 main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
+
 
 
 
