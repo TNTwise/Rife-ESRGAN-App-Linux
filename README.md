@@ -38,7 +38,7 @@ Run this in your terminal in the directory where Rife GUI is installed, may add 
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
-Fix wget not working on SteamOS<br />
+Fix start executable not working on SteamOS<br />
 Add more models, add drop downs for selecting different rife variations (cuda, vulkan, standard) add DAIN and CAIN too. <br />
 Add selector for default directory to process frames, this could help people with low disk space. <br />
 Make rife version and interpolation multiplier dropdown menus <br />
