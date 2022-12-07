@@ -288,8 +288,7 @@ listbox = Listbox(main_window, height=7,
 
 # insert elements by their
 # index and names.
-OPTIONS = ["2X","4X","8X","Rife-2","Rife-3","Rife-4","Rife-Anime"]
-listbox.insert('end', *OPTIONS)
+
 # Insert settings menu here
 
 
@@ -494,45 +493,102 @@ settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 
-
 def show():
     # These 2 variables are the defaults, will need to remove when make default selector.
-    i = 1
-    p = 3
-    rifever=""
-    for idx in listbox.curselection():
-        
-        if OPTIONS[idx] == "2X":
-            i = 1
-        elif OPTIONS[idx] == "4X":
-            i = 2
-        elif OPTIONS[idx] == "8X":
-            i = 3
-
-        if OPTIONS[idx] == "Rife-2":
-            p = 1
-        elif OPTIONS[idx] == "Rife-3":
-            p = 2
-        elif OPTIONS[idx] == "Rife-4":
-            p = 3
-        elif OPTIONS[idx] == "Rife-Anime":
-            p = 4
+    rifever = ""
     
-    if p == 1:
+    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == True:
+            with open(f"{thisdir}/files/temp_interp_opt" , 'r') as f:
+                f = csv.reader(f)
+                for row in f:
+                    interpolation_option = row
+            interpolation_option = interpolation_option[0]
+    if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False:
+        rifever1 = "4.6"
+    else: 
+            with open(f"{thisdir}/files/temp_rife_ver" , 'r') as f:
+                f = csv.reader(f)
+                for row in f:
+                    rifever1 = row
+            rifever1 = rifever1[0]
+    
+    #print(rifever1)
+    print(interpolation_option)
+    if rifever1 == "2.4":
             rifever = "-m rife-v2.4"
-    if p == 2:
+    if rifever1 == "3.1":
             rifever = "-m rife-v3.1"
-    if p == 3:
+    if rifever1 == "4.6":
             rifever = "-m rife-v4.6"
-    if p == 4:
+    if rifever1 == "Anime":
             rifever = "-m rife-anime"
-    if i == 1:
+    if interpolation_option == "2X":
             on_click(rifever)
-    if i == 2:
+    if interpolation_option == "4X":
             times4(rifever)
-    if i == 3:
+    if interpolation_option == "8X":
             times8(rifever)
+
+# This code allows for the dropdown selector for the rife versions and interpolation option.  
+# This was a very desprate debugging technique i used, apologize for the mess.
+# The solution was me not being an idiot
+def show_interp_opt():
+    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+       os.mknod(f"{thisdir}/files/temp_interp_opt")
+    with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+        f.write("2X")
+    variable1 = StringVar(main_window)
+    interpolation_options = ['2X', '4X', '8X']
+    variable1.set('2X')
+    global opt1
+    opt1 = OptionMenu(main_window, variable1, *interpolation_options)
+    opt1.config(width=2, font=('Helvetica', 12))
+    opt1.config(bg=bg)
+    opt1.config(fg=fg)
+    opt1.grid(column=3,row=6)
+    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+            os.mknod(f"{thisdir}/files/temp_interp_opt")
+    def callback(*args):
+        if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+            os.mknod(f"{thisdir}/files/temp_interp_opt")
+        with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+            f.write(variable1.get())
+                
+    variable1.trace("w", callback)
+show_interp_opt()
+
+def show_rife_ver():
+    if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
+       os.mknod(f"{thisdir}/files/temp_rife_ver")
+    with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+        f.write("2X")
+    variable = StringVar(main_window)
+    interpolation_options = ['Rife Anime', 'Rife 2.4', 'Rife 3.1', 'Rife 4.6']
+    variable.set('Rife 4.6')
+    opt = OptionMenu(main_window, variable, *interpolation_options)
+    opt.config(width=10, font=('Helvetica', 12))
+    opt.config(bg=bg)
+    opt.config(fg=fg)
+    opt.grid(column=3,row=7)
     
+    def callback(*args):
+        if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
+            os.mknod(f"{thisdir}/files/temp_rife_ver")
+        with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+            if variable.get() == "Rife Anime":
+                f.write("Anime")
+            if variable.get() == "Rife 4.6":
+                f.write("4.6")
+            if variable.get() == "Rife 2.4":
+                f.write("2.4")
+            if variable.get() == "Rife 3.1":
+                f.write("3.1")
+            if variable.get() == "Rife 4.6":
+                f.write("4.6")
+            
+                
+    variable.trace("w", callback)
+show_rife_ver()
 
 # The 8x and 4x progressbars are split into sections
 # The 2x portion of the 4x takes up 1/3 of the progressbar, while the 4x takes up the rest 2/3s.
@@ -849,8 +905,8 @@ settings_menu_button.grid(column=2, row=0)
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
-button_exit.grid(column=3, row=7)
-listbox.grid(column = 3, row = 6)
+button_exit.grid(column=3, row=8)
+#listbox.grid(column = 3, row = 6)
 rife_vulkan.grid(column=3, row=0)
 rife_vulkan.config(anchor=CENTER)
 #rifelist.grid(column=3,row=5)
