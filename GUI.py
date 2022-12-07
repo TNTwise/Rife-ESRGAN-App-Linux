@@ -244,6 +244,7 @@ def install():
     if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":# Add different pop up window here and in other install function that says it completed successfully
         pass_dialog_box_err()
     else:
+        os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
         passwd=""
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("True")
@@ -265,6 +266,7 @@ def install1():
     if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":
         pass_dialog_box_err()
     else:
+        os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
         passwd=""
         with open(f"{thisdir}/files/isInstalled", "w") as f:
             f.write("True")
