@@ -561,10 +561,10 @@ def show_rife_ver():
     if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
        os.mknod(f"{thisdir}/files/temp_rife_ver")
     with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-        f.write("2X")
+        f.write("3.1")
     variable = StringVar(main_window)
     interpolation_options = ['Rife Anime', 'Rife 2.4', 'Rife 3.1', 'Rife 4.6']
-    variable.set('Rife 4.6')
+    variable.set('Rife 3.1')
     opt = OptionMenu(main_window, variable, *interpolation_options)
     opt.config(width=10, font=('Helvetica', 12))
     opt.config(bg=bg)
