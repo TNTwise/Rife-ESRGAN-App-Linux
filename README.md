@@ -51,16 +51,8 @@ Support Dain Vulkan <br />
 Clean up files <br />
 Add progressbar for update (Note: Will have to make update function run in a new thread to have progressbar update.) <br />
 Fix pop up showing wrong password, even when password is right (only happens if window is re-launched from install button.) <br />
-Fix check for updates still getting update even if you are on latest from main branch, maybe write time of update, and check with if statement? <br />
-Make the listbox menu a dropdown menu <br />
 Clean up GUI, Maybe switch to .pack instead of .grid? <br />
-Make progressbar more accurate  <br />
 Add a default rife version selector. <br />
 Add a default interpolation option selector <br />
-Add default folder selector. <br />
-Fix Progress bar on different interpolation modes. <br />
-Use default terminal instead of xterm. <br />
 Add longer dependencies section. <br />
-Add a limit of 2 selections in each times interpolation and rife version menu. <br />
-Maybe package as appimage? <br />
 Show errors on GUI itself, so i can remove the xterm dependency. <br />
