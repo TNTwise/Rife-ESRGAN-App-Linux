@@ -1,14 +1,4 @@
 #!/usr/bin/python3
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
-# USE PADX AND PADY TO CENTER THINGS, NOT LABELS IDIOT
 # have to edit GUI.py for everything to update
 import os 
 global thisdir
@@ -139,8 +129,8 @@ def check_for_updates():
     version = latest() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
     latest_ver = version[0]
     current = version[1]
-    for i in range(len(file1_lines)):
-        if file1_lines[i] != file2_lines[i]:
+    
+    if len(file1_lines) != len(file2_lines):
             is_updated = 1
             os.system(f'rm -rf "{thisdir}/GUI.py"')
             os.system(f'mv "{thisdir}/temp/GUI.py" "{thisdir}/"')
@@ -150,7 +140,7 @@ def check_for_updates():
             os.system(f'mv "{thisdir}/temp/Start" "{thisdir}/"')
             os.system(f'chmod +x "{thisdir}/Start"')
             os.system(f'rm -rf "{thisdir}/temp/"')
-            break
+            
     os.system(f'rm -rf "{thisdir}/temp/"')
             
     
@@ -358,7 +348,7 @@ def settings_window():
     theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
     spacer_label = Label(settings_window,text="            ",bg=bg) # This spaces the middle
     spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
-    spacer_label2 = Label(settings_window,text="        ",bg=bg) # this is at the start of the gui
+    spacer_label2 = Label(settings_window,text="",bg=bg) # this is at the start of the gui
     global check_updates_button
     check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
     install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
@@ -391,6 +381,7 @@ def settings_window():
     show_dropdown()
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
+    spacer_label2.config(padx=30)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
     if is_installed == "False":
@@ -416,7 +407,6 @@ def start_update_check():
         check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
         restart_window("Updated, re-launch the program to apply.")
     else:
-        update_spacer_label.destroy()
         update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
         check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
     update_check_label.grid(column=5,row=5)
