@@ -153,19 +153,13 @@ def check_for_updates():
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
                     f.extractall()
                 os.chdir(f"{thisdir}")
-                os.system(f'mv "rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
-                os.system(f'rm -rf "{thisdir}/rife-anime/"')
-                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-anime/" "{thisdir}/"')
-                os.system(f'rm -rf "{thisdir}/rife-v2.4/"')
-                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v2.4/" "{thisdir}/"')
-                os.system(f'rm -rf "{thisdir}/rife-v3.1/"')
-                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v3.1/" "{thisdir}/"')
-                os.system(f'rm -rf "{thisdir}/rife-v4.6/"')
-                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/rife-v4.6/" "{thisdir}/"')
+                os.system(f'rm -rf "{thisdir}/rife-ncnn-vulkan"')
+                os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
+                os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/"')
                 with open(f"{thisdir}/files/version", 'w') as f:
                     f.write(latest_ver)
-                os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
-                os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
+                #os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
+                #os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
                 
     if is_updated == 1:
         return 1
@@ -515,7 +509,21 @@ def show():
             rifever1 = rifever1[0]
     
     #print(rifever1)
-    print(interpolation_option)
+    print(rifever1)
+    if rifever1 == "Rife":
+            rifever = "-m rife"
+    if rifever1 == "HD":
+            rifever = "-m rife-HD"
+    if rifever1 == "UHD":
+            rifever = "-m rife-UHD"
+    if rifever1 == "2.0":
+            rifever = "-m rife-v2"
+    if rifever1 == "2.3":
+            rifever = "-m rife-v2.3"
+    if rifever1 == "3.0":
+            rifever = "-m rife-v3.0"
+    if rifever1 == "4.0":
+            rifever = "-m rife-v4"
     if rifever1 == "2.4":
             rifever = "-m rife-v2.4"
     if rifever1 == "3.1":
@@ -563,10 +571,10 @@ def show_rife_ver():
     if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
        os.mknod(f"{thisdir}/files/temp_rife_ver")
     with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-        f.write("3.1")
+        f.write("2.3")
     variable = StringVar(main_window)
-    interpolation_options = ['Rife Anime', 'Rife 2.4', 'Rife 3.1', 'Rife 4.6']
-    variable.set('Rife 3.1')
+    interpolation_options = ['Rife', 'Rife-HD','Rife-UHD','Rife Anime','Rife 2.0','Rife 2.3', 'Rife 2.4','Rife 3.0', 'Rife 3.1','Rife 4.0', 'Rife 4.6']
+    variable.set('Rife 2.3')
     opt = OptionMenu(main_window, variable, *interpolation_options)
     opt.config(width=10, font=('Helvetica', 12))
     opt.config(bg=bg)
@@ -577,17 +585,29 @@ def show_rife_ver():
         if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
             os.mknod(f"{thisdir}/files/temp_rife_ver")
         with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+            if variable.get() == "Rife":
+                f.write("Rife")
+            if variable.get() == "Rife-HD":
+                f.write("HD")
             if variable.get() == "Rife Anime":
                 f.write("Anime")
-            if variable.get() == "Rife 4.6":
-                f.write("4.6")
+            if variable.get() == "Rife-UHD":
+                f.write("UHD")
+            if variable.get() == "Rife 4.0":
+                f.write("4.0")
+            if variable.get() == "Rife 3.0":
+                f.write("3.0")
+            if variable.get() == "Rife 2.0":
+                f.write("2.0")
+            if variable.get() == "Rife 2.3":
+                f.write("2.3")
             if variable.get() == "Rife 2.4":
                 f.write("2.4")
             if variable.get() == "Rife 3.1":
                 f.write("3.1")
             if variable.get() == "Rife 4.6":
                 f.write("4.6")
-            
+            print(variable.get())
                 
     variable.trace("w", callback)
 show_rife_ver()
