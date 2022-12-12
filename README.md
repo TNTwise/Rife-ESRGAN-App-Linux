@@ -39,6 +39,7 @@ vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough
 
 ## TODO
 Make portable installer, that is just one file to install the program <br />
+Remodel the entire GUI <br />
 Fix start executable not working on SteamOS<br />
 Add more models, add drop downs for selecting different rife variations (cuda, vulkan, standard) add DAIN and CAIN too. <br />
 Add selector for default directory to process frames, this could help people with low disk space. <br />
