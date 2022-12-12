@@ -160,16 +160,32 @@ def check_for_updates():
                     f.write(latest_ver)
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-                
+
     if is_updated == 1:
         return 1
     else:
         return
-                
+
+def get_all_models():
+    if os.path.exists(f"{thisdir}/rife-HD/") != True:
+        version = latest() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+        latest_ver = version[0]
+        os.chdir(f"{thisdir}/files/")
+        os.system(f"wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
+        with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
+            f.extractall()
+        os.chdir(f"{thisdir}")
+        os.system(f'rm -rf "{thisdir}/rife-ncnn-vulkan"')
+        os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
+        os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/"')
+        with open(f"{thisdir}/files/version", 'w') as f:
+            f.write(latest_ver)
+        os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
+        os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
                 
                 
     os.system(f'rm -rf "{thisdir}/temp/"')
-
+get_all_models()
 
 def check_theme():
     # This code reads the theme file and stores its data in a theme variable
