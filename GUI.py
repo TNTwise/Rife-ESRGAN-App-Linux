@@ -184,7 +184,7 @@ def get_all_models():
             f.write(latest_ver)
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-                
+        os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
                 
     os.system(f'rm -rf "{thisdir}/temp/"')
 get_all_models()
