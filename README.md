@@ -38,6 +38,7 @@ Run this in your terminal in the directory where Rife GUI is installed, may add 
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
+Add in built terminal <br />
 Add stop button for interpolation <br />
 Make portable installer, that is just one file to install the program <br />
 Remodel the entire GUI <br />
