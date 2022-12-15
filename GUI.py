@@ -184,7 +184,7 @@ def get_all_models():
             f.write(latest_ver)
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-        os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
+                
                 
     os.system(f'rm -rf "{thisdir}/temp/"')
 get_all_models()
@@ -668,9 +668,13 @@ def progressBar4xSecond(): # makes second progressbar in 4x
         amount_of_output_files_1 = len(list(Path('input_frames/').glob('*'))) *2
         e_1 = frames_processed_1/amount_of_output_files_1
         e_1*= 100
-        e_1 = int(e_1) + 50 # Has to add 100 to make progress bar work
+        e_1 = int(e_1) + 50 # Has to add 50 to make progress bar save state from other end
         progressbar_1['value'] = e_1
         progressbar_1.update()
+        if progressbar_1['value'] == 150:
+            progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=150,maximum=150)
+            progressbar_1.grid(column=3, row=20)
+            break
             
 # work on this later, it will change the progressbar based on the amount of interpolation.
 def progressBar4x(): # makes first progressbar in 4x 
@@ -700,11 +704,13 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     p = 5
     amount_of_input_files_5 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_5 = amount_of_input_files_5 * 2
+    
     global progressbar_5 # creates new progressbar
    
     progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=73,maximum=170)
-    progressbar_5.update()
+    
     progressbar_5.grid(column=3, row=20)
+    progressbar_5.update()
     # Add progressbar updater
     #sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 5:
@@ -716,6 +722,10 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
         e_5 = int(e_5) + 73 # has to add 43 to the value because the progress bar only updates with the current files interpolated
         progressbar_5['value'] = e_5
         progressbar_5.update()
+        if progressbar_5['value'] == 170:
+            progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=700,maximum=700)
+            progressbar_5.grid(column=3, row=20)
+            break
 
 def progressBar8xSecond(): # calls this second, this is called by onclick3
     
@@ -729,7 +739,11 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     #progressbar_2["maximum"]= 800
     #sleep(1) # wont update unless we sleep for 1 second?????????
     while p == 4:
-        
+        if int(progressbar_2['value']) == 128:
+            
+            progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=128,maximum=300)
+            progressbar_2.grid(column=3, row=20)
+            break
         frames_processed_2 = len(list(Path('output_frames/').glob('*')))
         amount_of_output_files_2 = len(list(Path('input_frames/').glob('*'))) *2
         e_2 = frames_processed_2/amount_of_output_files_2
@@ -738,9 +752,8 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
         e_2 = e_2 * 0.9
         progressbar_2['value'] = e_2 # this times it by .9 so that the progressbar goes up to 3/7 of 300 which is 128.7
         progressbar_2.update()
-        if progressbar_2 ['value'] == 128:
-            progressbar_2 ['value'] = 128
-            break
+        
+        
 def progressBar8x(): # this is called first.
     i = 2
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
@@ -758,6 +771,10 @@ def progressBar8x(): # this is called first.
         e = int(e) # converts e to integer
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
+        if progressbar['value'] == 100:
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=300, mode="determinate",value=100,maximum=700)
+            progressbar.grid(column=3, row=20)
+            break
         
         
     
