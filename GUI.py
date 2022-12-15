@@ -1030,6 +1030,8 @@ def on_click(rifever):
         button_output = Button(main_window,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
         button_explore = Button(main_window,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
         os.system('rm -rf "'+thisdir+'/temp"') # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
         os.chdir(f"{thisdir}")
 
 
@@ -1104,6 +1106,8 @@ def times4(rifever):
     button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
     os.system('rm -rf "'+thisdir+'/temp"')
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')    
     os.chdir(f"{thisdir}")
 
 def on_click2(rifever):
@@ -1237,6 +1241,8 @@ def times8(rifever):
     start_button = Button(main_window, text="Start!", command=threading, bg=bg_button,fg=fg).grid(row = 2, column = 3)
     button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
     os.system('rm -rf "'+thisdir+'/temp"')
     os.chdir(f"{thisdir}")
 main_window.geometry("700x500")
