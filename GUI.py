@@ -1026,8 +1026,8 @@ def AnimeInterpolation():
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     done.grid(column=3,row=10)
     start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
     # this if statement sets default output dir, may need to remove when add selector.
@@ -1102,8 +1102,8 @@ def on_click(rifever):
         done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
         done.grid(column=3, row=10)
         start_button = Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
         # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
         # This is for all modes of interpolation
@@ -1170,8 +1170,8 @@ def times4(rifever):
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     done.grid(column=3,row=10)
     start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
     # this if statement sets default output dir, may need to remove when add selector.
@@ -1324,8 +1324,8 @@ def times8(rifever):
     done.grid(column=3,row=10)
     start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
 
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED).grid(column = 3, row = 3)
+    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
     # this if statement sets default output dir, may need to remove when add selector.
