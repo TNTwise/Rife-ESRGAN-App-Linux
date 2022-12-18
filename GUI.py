@@ -565,11 +565,12 @@ def show_interp_opt():
        os.mknod(f"{thisdir}/files/temp_interp_opt")
     with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
         f.write("2X")
-    variable1 = StringVar(main_window)
+        global iterp_opt_variable
+    iterp_opt_variable = StringVar(main_window)
     interpolation_options = ['2X', '4X', '8X']
-    variable1.set('2X')
+    iterp_opt_variable.set('2X')
     global interpOptDropDown
-    interpOptDropDown = OptionMenu(main_window, variable1, *interpolation_options)
+    interpOptDropDown = OptionMenu(main_window, iterp_opt_variable, *interpolation_options)
     interpOptDropDown.config(width=2, font=('Helvetica', 12))
     interpOptDropDown.config(bg=bg)
     interpOptDropDown.config(fg=fg)
@@ -580,9 +581,9 @@ def show_interp_opt():
         if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
             os.mknod(f"{thisdir}/files/temp_interp_opt")
         with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-            f.write(variable1.get())
+            f.write(iterp_opt_variable.get())
                 
-    variable1.trace("w", callback)
+    iterp_opt_variable.trace("w", callback)
 show_interp_opt()
 
 def show_rife_ver():
@@ -590,11 +591,12 @@ def show_rife_ver():
        os.mknod(f"{thisdir}/files/temp_rife_ver")
     with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
         f.write("2.3")
-    variable = StringVar(main_window)
+    global rife_ver_variable
+    rife_ver_variable = StringVar(main_window)
     interpolation_options = ['Rife', 'Rife-HD','Rife-UHD','Rife Anime','Rife 2.0','Rife 2.3', 'Rife 2.4','Rife 3.0', 'Rife 3.1','Rife 4.0', 'Rife 4.6']
-    variable.set('Rife 2.3')
+    rife_ver_variable.set('Rife 2.3')
     global rifeVerDropDown
-    rifeVerDropDown = OptionMenu(main_window, variable, *interpolation_options)
+    rifeVerDropDown = OptionMenu(main_window, rife_ver_variable, *interpolation_options)
     rifeVerDropDown.config(width=10, font=('Helvetica', 12))
     rifeVerDropDown.config(bg=bg)
     rifeVerDropDown.config(fg=fg)
@@ -604,31 +606,30 @@ def show_rife_ver():
         if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
             os.mknod(f"{thisdir}/files/temp_rife_ver")
         with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-            if variable.get() == "Rife":
+            if rife_ver_variable.get() == "Rife":
                 f.write("Rife")
-            if variable.get() == "Rife-HD":
+            if rife_ver_variable.get() == "Rife-HD":
                 f.write("HD")
-            if variable.get() == "Rife Anime":
+            if rife_ver_variable.get() == "Rife Anime":
                 f.write("Anime")
-            if variable.get() == "Rife-UHD":
+            if rife_ver_variable.get() == "Rife-UHD":
                 f.write("UHD")
-            if variable.get() == "Rife 4.0":
+            if rife_ver_variable.get() == "Rife 4.0":
                 f.write("4.0")
-            if variable.get() == "Rife 3.0":
+            if rife_ver_variable.get() == "Rife 3.0":
                 f.write("3.0")
-            if variable.get() == "Rife 2.0":
+            if rife_ver_variable.get() == "Rife 2.0":
                 f.write("2.0")
-            if variable.get() == "Rife 2.3":
+            if rife_ver_variable.get() == "Rife 2.3":
                 f.write("2.3")
-            if variable.get() == "Rife 2.4":
+            if rife_ver_variable.get() == "Rife 2.4":
                 f.write("2.4")
-            if variable.get() == "Rife 3.1":
+            if rife_ver_variable.get() == "Rife 3.1":
                 f.write("3.1")
-            if variable.get() == "Rife 4.6":
+            if rife_ver_variable.get() == "Rife 4.6":
                 f.write("4.6")
-            print(variable.get())
                 
-    variable.trace("w", callback)
+    rife_ver_variable.trace("w", callback)
 show_rife_ver()
 
 # The 8x and 4x progressbars are split into sections
@@ -954,10 +955,21 @@ def Anime():
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
             interpOptDropDown.config(state="normal")
+            if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
+                os.mknod(f"{thisdir}/files/temp_rife_ver")
+            with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+                f.write("2.3")
+            rife_ver_variable.set("Rife 2.3")
+            iterp_opt_variable.set("2X")
+            if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+                os.mknod(f"{thisdir}/files/temp_interp_opt")
+            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                f.write("2X")
         else:
             Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
-            
+            rife_ver_variable.set("Rife 2.3")
+            iterp_opt_variable.set("4X")
             interpOptDropDown.config(state=DISABLED)
             rifeVerDropDown.config(state=DISABLED)
             
