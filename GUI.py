@@ -525,37 +525,48 @@ def show():
                 for row in f:
                     rifever1 = row
             rifever1 = rifever1[0]
-    
+    if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
+                os.mknod(f"{thisdir}/files/isAnime")
+    with open(f"{thisdir}/files/isAnime", 'r') as f:
+            f = csv.reader(f)
+            for row in f:
+                isAnime = row
+    isAnime = isAnime[0]
+    #print(isAnime + "\n\n\n\n\n\n")
     #print(rifever1)
-    print(rifever1)
-    if rifever1 == "Rife":
+
+    #print(rifever1)
+    if isAnime != "True":
+        if rifever1 == "Rife":
             rifever = "-m rife"
-    if rifever1 == "HD":
+        if rifever1 == "HD":
             rifever = "-m rife-HD"
-    if rifever1 == "UHD":
+        if rifever1 == "UHD":
             rifever = "-m rife-UHD"
-    if rifever1 == "2.0":
+        if rifever1 == "2.0":
             rifever = "-m rife-v2"
-    if rifever1 == "2.3":
+        if rifever1 == "2.3":
             rifever = "-m rife-v2.3"
-    if rifever1 == "3.0":
+        if rifever1 == "3.0":
             rifever = "-m rife-v3.0"
-    if rifever1 == "4.0":
+        if rifever1 == "4.0":
             rifever = "-m rife-v4"
-    if rifever1 == "2.4":
+        if rifever1 == "2.4":
             rifever = "-m rife-v2.4"
-    if rifever1 == "3.1":
+        if rifever1 == "3.1":
             rifever = "-m rife-v3.1"
-    if rifever1 == "4.6":
+        if rifever1 == "4.6":
             rifever = "-m rife-v4.6"
-    if rifever1 == "Anime":
+        if rifever1 == "Anime":
             rifever = "-m rife-anime"
-    if interpolation_option == "2X":
+        if interpolation_option == "2X":
             on_click(rifever)
-    if interpolation_option == "4X":
+        if interpolation_option == "4X":
             times4(rifever)
-    if interpolation_option == "8X":
+        if interpolation_option == "8X":
             times8(rifever)
+    else:
+        AnimeInterpolation()
 
 # This code allows for the dropdown selector for the rife versions and interpolation option.  
 # This was a very desprate debugging technique i used, apologize for the mess.
@@ -965,6 +976,10 @@ def Anime():
                 os.mknod(f"{thisdir}/files/temp_interp_opt")
             with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
                 f.write("2X")
+            if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
+                os.mknod(f"{thisdir}/files/isAnime")
+            with open(f"{thisdir}/files/isAnime", 'w') as f:
+                f.write("False")
         else:
             Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
@@ -972,7 +987,11 @@ def Anime():
             iterp_opt_variable.set("4X")
             interpOptDropDown.config(state=DISABLED)
             rifeVerDropDown.config(state=DISABLED)
-            
+            if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
+                os.mknod(f"{thisdir}/files/isAnime")
+            with open(f"{thisdir}/files/isAnime", 'w') as f:
+                f.write("True")
+
     variable2.trace("w", callback)
 
 Anime()
@@ -1066,12 +1085,12 @@ def AnimeInterpolation():
     global done2
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
         done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps(1){extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
     else:
         done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
     
