@@ -153,9 +153,10 @@ def check_for_updates():
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
                     f.extractall()
                 os.chdir(f"{thisdir}")
-                os.system(f'rm -rf "{thisdir}/rife-ncnn-vulkan"')
+                os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan"')
                 os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
                 os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
+                os.system(f'chmod +x "{thisdir}/files/rife-ncnn-vulkan"')
                 with open(f"{thisdir}/files/version", 'w') as f:
                     f.write(latest_ver)
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
