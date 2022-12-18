@@ -38,7 +38,7 @@ Run this in your terminal in the directory where Rife GUI is installed, may add 
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
-fix animation setting not applying after a video has been interpolated before it<br />
+fix brogressbar not showing somtimes when animation profile is selected. <br />
 Use less temp files <br />
 Check if done file exists, and if not, throw error <br />
 Add in built terminal <br />
