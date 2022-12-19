@@ -986,16 +986,9 @@ def Anime():
                     os.mknod(f"{thisdir}/files/temp_interp_opt")
                 with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
                     f.write(iterp_opt_variable2.get())
-                if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
-                    os.mknod(f"{thisdir}/files/temp_rife_ver")
-                with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-                    f.write("2.3")
-                rife_ver_variable.set("Rife 2.3")
-                iterp_opt_variable2.set("2X")
-                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                    os.mknod(f"{thisdir}/files/temp_interp_opt")
-                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write("2X")
+
+                
+                
                 if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                     os.mknod(f"{thisdir}/files/isAnime")
                 with open(f"{thisdir}/files/isAnime", 'w') as f:
@@ -1252,7 +1245,7 @@ def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, 
     os.system(f'ffmpeg -i "{thisdir}/temp3.mp4" input_frames/frame_%08d.png')
     pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{thisdir}/temp4.mp4" -y')
+    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp4.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 20  {thisdir}/temp5.mp4 -y')
 def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
@@ -1273,7 +1266,7 @@ def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
     pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{thisdir}/temp3.mp4" -y')
+    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp3.mp4" -y')
     
 # different modes of interpolation
 def on_click(rifever):
@@ -1327,9 +1320,9 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=3,row=10)
         # these re-enable the start, input, and output buttons
@@ -1402,9 +1395,9 @@ def times4(rifever):
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -1433,7 +1426,7 @@ def on_click2(rifever):
     pbthread4x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
 def on_click2_anime():
     get_fps()
@@ -1451,7 +1444,7 @@ def on_click2_anime():
     pbthread4x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
 def on_click2_anime_8x():# generates temp2 file witch is 30fps
     get_fps()
@@ -1469,7 +1462,7 @@ def on_click2_anime_8x():# generates temp2 file witch is 30fps
     pbthread8x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp2.mp4 -y')
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
@@ -1487,7 +1480,7 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     Interpolation.grid(column=3,row=10)
     pbthread8x() #Set this to 8x, this is the first of 3 progressbars
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
 
 def on_click3(rifever):
@@ -1513,7 +1506,7 @@ def on_click3(rifever):
     Interpolation2.grid(column=3,row=10)
     pb8x2()            # This calls it for the second time, initiates second progressbar 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
+    os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp2.mp4" -y')
     Interpolation2.after(0, Interpolation2.destroy())
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
 
@@ -1575,9 +1568,9 @@ def times8(rifever):
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
     
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
