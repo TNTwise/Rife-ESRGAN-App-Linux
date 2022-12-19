@@ -1101,7 +1101,7 @@ def AnimeInterpolation():
      
         on_click2_anime()
         
-        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 18 -c:a copy {thisdir}/temp.mp4 -y')
         global timestwo
         timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1135,9 +1135,9 @@ def AnimeInterpolation():
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"   "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" "{outputdir}/{mp4name}_60fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
         os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -1211,9 +1211,9 @@ def AnimeInterpolation():
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
         #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         
         Interpolation2.after(0, Interpolation2.destroy())
@@ -1246,7 +1246,7 @@ def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, 
     pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp4.mp4" -y')
-    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 20  {thisdir}/temp5.mp4 -y')
+    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy  {thisdir}/temp5.mp4 -y')
 def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     done.grid(column=3,row=10)
@@ -1463,7 +1463,7 @@ def on_click2_anime_8x():# generates temp2 file witch is 30fps
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
-    os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp2.mp4 -y')
+    os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy {thisdir}/temp2.mp4 -y')
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
