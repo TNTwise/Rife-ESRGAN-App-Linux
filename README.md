@@ -986,16 +986,9 @@ def Anime():
                     os.mknod(f"{thisdir}/files/temp_interp_opt")
                 with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
                     f.write(iterp_opt_variable2.get())
-                if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
-                    os.mknod(f"{thisdir}/files/temp_rife_ver")
-                with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-                    f.write("2.3")
-                rife_ver_variable.set("Rife 2.3")
-                iterp_opt_variable2.set("2X")
-                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                    os.mknod(f"{thisdir}/files/temp_interp_opt")
-                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write("2X")
+
+                
+                
                 if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                     os.mknod(f"{thisdir}/files/isAnime")
                 with open(f"{thisdir}/files/isAnime", 'w') as f:
