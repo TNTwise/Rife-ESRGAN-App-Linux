@@ -577,7 +577,7 @@ def show_interp_opt():
        os.mknod(f"{thisdir}/files/temp_interp_opt")
     with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
         f.write("2X")
-        global iterp_opt_variable
+    global iterp_opt_variable
     iterp_opt_variable = StringVar(main_window)
     interpolation_options = ['2X', '4X', '8X']
     iterp_opt_variable.set('2X')
@@ -963,36 +963,74 @@ def Anime():
     def callback(*args):
         #print(variable2.get())
         if variable2.get() == 'Default':
-            Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
-            interpOptDropDown.config(state="normal")
-            if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
-                os.mknod(f"{thisdir}/files/temp_rife_ver")
-            with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-                f.write("2.3")
-            rife_ver_variable.set("Rife 2.3")
-            iterp_opt_variable.set("2X")
+            global iterp_opt_variable2
+            iterp_opt_variable2 = StringVar(main_window)
+            interpolation_options = ['2X','4X', '8X']
+            interpOptDropDown2 = OptionMenu(main_window, iterp_opt_variable2, *interpolation_options)
+            interpOptDropDown2.config(width=2, font=('Helvetica', 12))
+            iterp_opt_variable2.set('2X')
+            interpOptDropDown2.config(bg=bg)
+            interpOptDropDown2.config(fg=fg)
+            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                    f.write("2X")
+            with open(f"{thisdir}/files/isAnime", 'w') as f:
+                    f.write("False")
+            interpOptDropDown2.grid(column=3,row=6)
             if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
                 os.mknod(f"{thisdir}/files/temp_interp_opt")
-            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                f.write("2X")
-            if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
-                os.mknod(f"{thisdir}/files/isAnime")
-            with open(f"{thisdir}/files/isAnime", 'w') as f:
-                f.write("False")
+            def callback(*args):
+                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+                    os.mknod(f"{thisdir}/files/temp_interp_opt")
+                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                    f.write(iterp_opt_variable2.get())
+                if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
+                    os.mknod(f"{thisdir}/files/temp_rife_ver")
+                with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+                    f.write("2.3")
+                rife_ver_variable.set("Rife 2.3")
+                iterp_opt_variable2.set("2X")
+                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+                    os.mknod(f"{thisdir}/files/temp_interp_opt")
+                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                    f.write("2X")
+                if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
+                    os.mknod(f"{thisdir}/files/isAnime")
+                with open(f"{thisdir}/files/isAnime", 'w') as f:
+                    f.write("False")
+            iterp_opt_variable2.trace("w", callback)
         else:
             Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
-            iterp_opt_variable.set("4X")
-            interpOptDropDown.config(state=DISABLED)
+            
+            #interpOptDropDown.config(state=DISABLED)
             rifeVerDropDown.config(state=DISABLED)
             if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                 os.mknod(f"{thisdir}/files/isAnime")
             with open(f"{thisdir}/files/isAnime", 'w') as f:
                 f.write("True")
-
+            global iterp_opt_variable1
+            iterp_opt_variable1 = StringVar(main_window)
+            interpolation_options = ['4X', '8X']
+            iterp_opt_variable1.set('4X')
+            interpOptDropDown1 = OptionMenu(main_window, iterp_opt_variable1, *interpolation_options)
+            interpOptDropDown1.config(width=2, font=('Helvetica', 12))
+            interpOptDropDown1.config(bg=bg)
+            interpOptDropDown1.config(fg=fg)
+            interpOptDropDown1.grid(column=3,row=6)
+            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                    f.write("4X")
+            if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+                os.mknod(f"{thisdir}/files/temp_interp_opt")
+            def callback(*args):
+                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
+                    os.mknod(f"{thisdir}/files/temp_interp_opt")
+                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
+                    f.write(iterp_opt_variable1.get())
+            iterp_opt_variable1.trace("w", callback)
     variable2.trace("w", callback)
 
 Anime()
@@ -1041,30 +1079,164 @@ rife_vulkan.grid(column=3, row=0)
 rife_vulkan.config(anchor=CENTER)
 #rifelist.grid(column=3,row=5)
 def AnimeInterpolation():
-    os.chdir("rife-vulkan-models")
-    global done
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3,row=10)
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
-        # this if statement sets default output dir, may need to remove when add selector.
-
-    # this if statement sets default output dir, may need to remove when add selector.
-    if os.path.isfile(thisdir+"/temp") == False:
-        outputdir = get_output_dir()
-    
-    else:
-        f = open(thisdir+"/temp")
+    with open(f"{thisdir}/files/temp_interp_opt", 'r') as f:
         f = csv.reader(f)
         for row in f:
-            outputdir = row
-        outputdir = outputdir[0]
+            interp_opt = row
+    interp_opt = interp_opt[0]
+    if interp_opt == "4X":
+        os.chdir("rife-vulkan-models")
+        global done
+        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        done.grid(column=3,row=10)
+        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+
+        # this if statement sets default output dir, may need to remove when add selector.
+        if os.path.isfile(thisdir+"/temp") == False:
+            outputdir = get_output_dir()
+    
+        else:
+            f = open(thisdir+"/temp")
+            f = csv.reader(f)
+            for row in f:
+                outputdir = row
+            outputdir = outputdir[0]
 
      
-    on_click2_anime()
-    os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp.mp4 -y')
-    global timestwo
+        on_click2_anime()
+        
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp.mp4 -y')
+        global timestwo
+        timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 2X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
+        timestwo.grid(column=3,row=10)
+        get_fps2()
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
+        os.system('mkdir input_frames')
+        os.system('mkdir output_frames')
+        os.system(f'ffprobe "{thisdir}/temp.mp4"')
+    
+        os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+        pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        if os.path.exists(outputdir) == False:
+            outputdir = homedir
+        timestwo.after(0, timestwo.destroy())
+        Interpolation2.grid(column=3,row=10)
+        global done2
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
+            done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
+                 font=("Arial", 11), width=67, anchor="w",
+                 fg=fg,bg=bg)
+        else:
+            done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
+                 font=("Arial", 11), width=67, anchor="w",
+                 fg=fg,bg=bg)
+    
+        os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+        if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"   "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+        else:
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" "{outputdir}/{mp4name}_60fps.{extension}" -y')
+        os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+        Interpolation2.after(0, Interpolation2.destroy())
+        done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
+    
+        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+        os.system('rm -rf "'+thisdir+'/temp"')
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')    
+        os.chdir(f"{thisdir}")
+    if interp_opt == "8X":
+        os.chdir("rife-vulkan-models")
+        #global done
+        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        done.grid(column=3,row=10)
+        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+
+        # this if statement sets default output dir, may need to remove when add selector.
+        if os.path.isfile(thisdir+"/temp") == False:
+            outputdir = get_output_dir()
+    
+        else:
+            f = open(thisdir+"/temp")
+            f = csv.reader(f)
+            for row in f:
+                outputdir = row
+            outputdir = outputdir[0]
+
+     
+        on_click2_anime_8x() # 30fps file output
+        Interpolation.destroy()
+        on_click2_anime_8x2() # 4x interpolation from these 2 functions, generate 60fps temp3 file
+        on_click2_anime_8x3() # gets 8x interpolation done with a 30fps file called temp5
+        #global timestwo
+        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        done.grid(column=3,row=10)
+        timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 4X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
+        timestwo.grid(column=3,row=10)
+        get_fps2()
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
+        os.system('mkdir input_frames')
+        os.system('mkdir output_frames')
+        os.system(f'ffprobe "{thisdir}/temp5.mp4"')
+        
+        os.system(f'ffmpeg -i "{thisdir}/temp5.mp4" input_frames/frame_%08d.png')
+        
+        pb8x3() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        if os.path.exists(outputdir) == False:
+            outputdir = homedir
+        timestwo.after(0, timestwo.destroy())
+        Interpolation2.grid(column=3,row=10)
+        #global done2
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
+            done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
+                 font=("Arial", 11), width=67, anchor="w",
+                 fg=fg,bg=bg)
+        else:
+            done2 = Label(main_window,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
+                 font=("Arial", 11), width=67, anchor="w",
+                 fg=fg,bg=bg)
+    
+        os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+        if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+        else:
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
+        #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+        
+        Interpolation2.after(0, Interpolation2.destroy())
+        done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
+    
+        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+        os.system('rm -rf "'+thisdir+'/temp"')
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')    
+        os.chdir(f"{thisdir}")
+def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done.grid(column=3,row=10)
+    #global timestwo
     timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
@@ -1075,44 +1247,34 @@ def AnimeInterpolation():
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe "{thisdir}/temp.mp4"')
-    
-    os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
-    pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-    if os.path.exists(outputdir) == False:
-            outputdir = homedir
-    timestwo.after(0, timestwo.destroy())
-    Interpolation2.grid(column=3,row=10)
-    global done2
-    if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
-        done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
-                 fg=fg,bg=bg)
-    else:
-        done2 = Label(main_window,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
-                 fg=fg,bg=bg)
-    
+    os.system(f'ffprobe "{thisdir}/temp3.mp4"')
+
+    os.system(f'ffmpeg -i "{thisdir}/temp3.mp4" input_frames/frame_%08d.png')
+    pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"   "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
-    else:
-        os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" "{outputdir}/{mp4name}_60fps.{extension}" -y')
-    os.system(fr'rm -rf "{thisdir}/temp.mp4"')
-    Interpolation2.after(0, Interpolation2.destroy())
-    done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
+    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{thisdir}/temp4.mp4" -y')
+    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 20  {thisdir}/temp5.mp4 -y')
+def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done.grid(column=3,row=10)
+    #global timestwo
+    timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 2X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
+    timestwo.grid(column=3,row=10)
+    get_fps2()
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{thisdir}/temp2.mp4"')
+
+    os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
+    pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 20 -c:a copy "{thisdir}/temp3.mp4" -y')
     
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
-    os.system('rm -rf "'+thisdir+'/temp"')
-    #os.system('rm -rf input_frames')
-    #os.system('rm -rf output_frames ')    
-    os.chdir(f"{thisdir}")
-
-
 # different modes of interpolation
 def on_click(rifever):
     
@@ -1291,6 +1453,24 @@ def on_click2_anime():
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
+def on_click2_anime_8x():# generates temp2 file witch is 30fps
+    get_fps()
+    
+    os.system('rm -rf input_frames')
+    os.system('rm -rf output_frames ')
+    os.system('mkdir input_frames')
+    os.system('mkdir output_frames')
+    os.system(f'ffprobe "{filename}"')
+    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+    extraction.grid(column=3,row=10)
+    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+    extraction.after(0, extraction.destroy())
+    Interpolation.grid(column=3,row=10)
+    pbthread8x() # calls the first 4x progressbar.
+            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 20 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
+    os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  {thisdir}/temp2.mp4 -y')
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
