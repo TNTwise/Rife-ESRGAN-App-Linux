@@ -1007,7 +1007,7 @@ def Anime():
                 f.write("True")
             global iterp_opt_variable1
             iterp_opt_variable1 = StringVar(main_window)
-            interpolation_options = ['4X', '8X']
+            interpolation_options = ['4X', '8X', '16X']
             iterp_opt_variable1.set('4X')
             interpOptDropDown1 = OptionMenu(main_window, iterp_opt_variable1, *interpolation_options)
             interpOptDropDown1.config(width=2, font=('Helvetica', 12))
@@ -1078,6 +1078,14 @@ def AnimeInterpolation():
             interp_opt = row
     interp_opt = interp_opt[0]
     if interp_opt == "4X":
+        anime4X(False)
+
+    if interp_opt == "8X":
+        anime8X(False)
+    if interp_opt == "16X":
+        anime4X(True)
+        anime8X(True)
+def anime4X(is16x):
         os.chdir("rife-vulkan-models")
         global done
         done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
@@ -1134,11 +1142,17 @@ def AnimeInterpolation():
                  fg=fg,bg=bg)
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-        if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+        if is16x == False:
+            if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+            else:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+            os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
-        os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+            
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{thisdir}/temp.mp4" -y')
+                
+        
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
     
@@ -1149,7 +1163,7 @@ def AnimeInterpolation():
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
-    if interp_opt == "8X":
+def anime8X(is16x):
         os.chdir("rife-vulkan-models")
         #global done
         done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
@@ -1170,8 +1184,10 @@ def AnimeInterpolation():
                 outputdir = row
             outputdir = outputdir[0]
 
-     
-        on_click2_anime_8x() # 30fps file output
+        if is16x == False:
+            on_click2_anime_8x(False) # 30fps file output
+        if is16x == True:
+            on_click2_anime_8x(True) # 30fps file output
         Interpolation.destroy()
         on_click2_anime_8x2() # 4x interpolation from these 2 functions, generate 60fps temp3 file
         on_click2_anime_8x3() # gets 8x interpolation done with a 30fps file called temp5
@@ -1226,6 +1242,7 @@ def AnimeInterpolation():
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
+
 def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     done.grid(column=3,row=10)
@@ -1446,17 +1463,23 @@ def on_click2_anime():
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
-def on_click2_anime_8x():# generates temp2 file witch is 30fps
+def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
     get_fps()
     
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe "{filename}"')
-    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
-    extraction.grid(column=3,row=10)
-    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+    if is16x == False:
+        os.system(f'ffprobe "{filename}"')
+        os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+        extraction.grid(column=3,row=10)
+        os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+    else:
+        os.system(f'ffprobe "{thisdir}/temp.mp4"')
+        os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
+        extraction.grid(column=3,row=10)
+        os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=10)
     pbthread8x() # calls the first 4x progressbar.
