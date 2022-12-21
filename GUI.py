@@ -1159,7 +1159,8 @@ def anime4X(is16x):
         start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
         button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
         button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
-        os.system('rm -rf "'+thisdir+'/temp"')
+        if is16x == False:
+            os.system('rm -rf "'+thisdir+'/temp"')
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
@@ -1174,11 +1175,11 @@ def anime8X(is16x):
         # this if statement sets default output dir, may need to remove when add selector.
 
         # this if statement sets default output dir, may need to remove when add selector.
-        if os.path.isfile(thisdir+"/temp") == False:
+        if os.path.isfile(f"{thisdir}/temp") == False:
             outputdir = get_output_dir()
     
         else:
-            f = open(thisdir+"/temp")
+            f = open(f"{thisdir}/temp")
             f = csv.reader(f)
             for row in f:
                 outputdir = row
