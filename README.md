@@ -38,7 +38,6 @@ vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough
 
 ## TODO
 fix 16x progressbar on anime, because it is actually 32x <br />
-fix 8x progressbar on anime, because it is actually 16x <br />
 make anime 8x smoother? <br />
 fix brogressbar not showing somtimes when animation profile is selected. <br />
 Use less temp files <br />
