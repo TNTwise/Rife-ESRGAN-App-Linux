@@ -76,7 +76,8 @@ for row in f:
 if os.path.exists(current_default_output_folder[0]) == False:
     with open(thisdir+"/programstate", 'w') as f:
         f.write(homedir)
-
+with open(f"{thisdir}/files/isAnime", 'w') as f:
+                    f.write("False")
 def latest():
     # this code gets the latest versaion of rife vulkan
             
@@ -790,12 +791,112 @@ def progressBar8x(): # this is called first.
             progressbar.grid(column=3, row=22)
             break
         
-        
 
-        
+# anime progress bars
+def Anime8xPb4():
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 300 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 399:
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=700)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime8xPb3():# called 3nd 8x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 200 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 299:
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=700)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime8xPb2():# called 2nd 8x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 100 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 199:
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime8xPb1(): # called first 8x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=400)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 99:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar.grid(column=3, row=22)
+            break
 
 
 #Calls respective function, creates new thread for progressbar and other things, will only execute if called.
+def Anime8xPb1Thread():
+    # Call work function
+    t1 = Thread(target=Anime8xPb1)
+    t1.start()
+def Anime8xPb2Thread():
+    # Call work function
+    t1 = Thread(target=Anime8xPb2)
+    t1.start()
+def Anime8xPb3Thread():
+    # Call work function
+    t1 = Thread(target=Anime8xPb3)
+    t1.start()
+def Anime8xPb4Thread():
+    # Call work function
+    t1 = Thread(target=Anime8xPb4)
+    t1.start()
 def pbthread2x():
     # Call work function
     t1 = Thread(target=progressBar2x)
@@ -1088,8 +1189,8 @@ def AnimeInterpolation():
 def anime4X(is16x):
         os.chdir("rife-vulkan-models")
         global done
-        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-        done.grid(column=3,row=10)
+        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done.grid(column=3,row=10)
         start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
         button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
@@ -1124,7 +1225,9 @@ def anime4X(is16x):
         os.system(f'ffprobe "{thisdir}/temp.mp4"')
     
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
-        pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        if is16x == False:
+            pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
@@ -1167,8 +1270,8 @@ def anime4X(is16x):
 def anime8X(is16x):
         os.chdir("rife-vulkan-models")
         #global done
-        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-        done.grid(column=3,row=10)
+        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done.grid(column=3,row=10)
         start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
         button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
@@ -1192,9 +1295,9 @@ def anime8X(is16x):
         Interpolation.destroy()
         on_click2_anime_8x2() # 4x interpolation from these 2 functions, generate 60fps temp3 file
         on_click2_anime_8x3() # gets 8x interpolation done with a 30fps file called temp5
-        #global timestwo
-        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-        done.grid(column=3,row=10)
+        global timestwo
+        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done.grid(column=3,row=10)
         timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 4X interpolation. Generated temp.mp4.",
@@ -1209,7 +1312,7 @@ def anime8X(is16x):
         
         os.system(f'ffmpeg -i "{thisdir}/temp5.mp4" input_frames/frame_%08d.png')
         
-        pb8x3() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        Anime8xPb4Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
@@ -1246,7 +1349,7 @@ def anime8X(is16x):
 
 def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3,row=10)
+    #done.grid(column=3,row=10)
     #global timestwo
     timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1261,13 +1364,13 @@ def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, 
     os.system(f'ffprobe "{thisdir}/temp3.mp4"')
 
     os.system(f'ffmpeg -i "{thisdir}/temp3.mp4" input_frames/frame_%08d.png')
-    pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    Anime8xPb3Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp4.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy  {thisdir}/temp5.mp4 -y')
 def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3,row=10)
+    #done.grid(column=3,row=10)
     #global timestwo
     timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1282,7 +1385,7 @@ def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     os.system(f'ffprobe "{thisdir}/temp2.mp4"')
 
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
-    pb8x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    Anime8xPb2Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp3.mp4" -y')
     
@@ -1292,8 +1395,8 @@ def on_click(rifever):
     if filename != "":
         os.chdir("rife-vulkan-models")
         global done
-        done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-        done.grid(column=3, row=10)
+        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done.grid(column=3, row=10)
         start_button = Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
         button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
@@ -1360,8 +1463,8 @@ def on_click(rifever):
 def times4(rifever):
     os.chdir("rife-vulkan-models")
     global done
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3,row=10)
+    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done.grid(column=3,row=10)
     start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
     button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
@@ -1483,7 +1586,7 @@ def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=10)
-    pbthread8x() # calls the first 4x progressbar.
+    Anime8xPb1Thread() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
@@ -1537,8 +1640,8 @@ def on_click3(rifever):
 def times8(rifever):
     os.chdir("rife-vulkan-models")
     global done
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
-    done.grid(column=3,row=10)
+    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done.grid(column=3,row=10)
     start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
 
     button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
