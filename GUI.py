@@ -811,7 +811,7 @@ def Anime8xPb4():
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 399:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=700)
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb3():# called 3nd 8x
@@ -832,7 +832,7 @@ def Anime8xPb3():# called 3nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 299:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=700)
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb2():# called 2nd 8x
@@ -853,7 +853,7 @@ def Anime8xPb2():# called 2nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 199:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb1(): # called first 8x
@@ -875,12 +875,165 @@ def Anime8xPb1(): # called first 8x
         progressbar.update()
         if progressbar['value'] == 99:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb1(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 99:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=600)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb2(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 100 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 199:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=600)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb3(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 200 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 299:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=600)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb4(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 300 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 399:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=600)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb5(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 400 # converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 499:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=500,maximum=600)
+            progressbar.grid(column=3, row=22)
+            break
+def Anime16xPb6(): # called first 16x
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar.grid(column=3, row=22)
+    
+    # Add progressbar updater
+    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
+        e = frames_processed/amount_of_output_files
+        e*= 100 # converts e to percentage
+        e = int(e) + 500# converts e to integer
+        progressbar['value'] = e # sets the progressbar value to e
+        progressbar.update()
+        if progressbar['value'] == 599:
+            
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=600,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 
-
 #Calls respective function, creates new thread for progressbar and other things, will only execute if called.
+def Anime16xPb1Thread():
+    t1 = Thread(target=Anime16xPb1)
+    t1.start()
+def Anime16xPb2Thread():
+    t1 = Thread(target=Anime16xPb2)
+    t1.start()
+def Anime16xPb3Thread():
+    t1 = Thread(target=Anime16xPb3)
+    t1.start()
+def Anime16xPb4Thread():
+    t1 = Thread(target=Anime16xPb4)
+    t1.start()
+def Anime16xPb5Thread():
+    t1 = Thread(target=Anime16xPb5)
+    t1.start()
+def Anime16xPb6Thread():
+    t1 = Thread(target=Anime16xPb6)
+    t1.start()
+
+
+
+
 def Anime8xPb1Thread():
     # Call work function
     t1 = Thread(target=Anime8xPb1)
@@ -1208,7 +1361,7 @@ def anime4X(is16x):
             outputdir = outputdir[0]
 
      
-        on_click2_anime()
+        on_click2_anime(is16x)
         
         os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 18 -c:a copy {thisdir}/temp.mp4 -y')
         global timestwo
@@ -1227,7 +1380,8 @@ def anime4X(is16x):
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
         if is16x == False:
             pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-        
+        else:
+            Anime16xPb2Thread()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
@@ -1293,8 +1447,8 @@ def anime8X(is16x):
         if is16x == True:
             on_click2_anime_8x(True) # 30fps file output
         Interpolation.destroy()
-        on_click2_anime_8x2() # 4x interpolation from these 2 functions, generate 60fps temp3 file
-        on_click2_anime_8x3() # gets 8x interpolation done with a 30fps file called temp5
+        on_click2_anime_8x2(is16x) # 4x interpolation from these 2 functions, generate 60fps temp3 file
+        on_click2_anime_8x3(is16x) # gets 8x interpolation done with a 30fps file called temp5
         global timestwo
         #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
@@ -1311,8 +1465,10 @@ def anime8X(is16x):
         os.system(f'ffprobe "{thisdir}/temp5.mp4"')
         
         os.system(f'ffmpeg -i "{thisdir}/temp5.mp4" input_frames/frame_%08d.png')
-        
-        Anime8xPb4Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        if is16x == False:
+            Anime8xPb4Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+        else:
+            Anime16xPb6Thread()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
@@ -1347,7 +1503,7 @@ def anime8X(is16x):
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
 
-def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
+def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
@@ -1364,11 +1520,15 @@ def on_click2_anime_8x3(): # interpolated temp3 to 120fps, and lowers it to 30, 
     os.system(f'ffprobe "{thisdir}/temp3.mp4"')
 
     os.system(f'ffmpeg -i "{thisdir}/temp3.mp4" input_frames/frame_%08d.png')
-    Anime8xPb3Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    if is16x == False:
+        Anime8xPb3Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    else:
+        Anime16xPb5Thread()
+
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp4.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy  {thisdir}/temp5.mp4 -y')
-def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
+def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
@@ -1385,7 +1545,10 @@ def on_click2_anime_8x2(): # interpolates temp2 to 60fps.
     os.system(f'ffprobe "{thisdir}/temp2.mp4"')
 
     os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
-    Anime8xPb2Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    if is16x == False:
+        Anime8xPb2Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+    else:
+        Anime16xPb4Thread()
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp3.mp4" -y')
     
@@ -1549,7 +1712,7 @@ def on_click2(rifever):
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
-def on_click2_anime():
+def on_click2_anime(is16x):
     get_fps()
     
     os.system('rm -rf input_frames')
@@ -1562,7 +1725,10 @@ def on_click2_anime():
     os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=10)
-    pbthread4x() # calls the first 4x progressbar.
+    if is16x == False:
+        pbthread4x() # calls the first 4x progressbar.
+    else:
+        Anime16xPb1Thread()
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
@@ -1586,7 +1752,10 @@ def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=3,row=10)
-    Anime8xPb1Thread() # calls the first 4x progressbar.
+    if is16x == False:
+        Anime8xPb1Thread() # calls the first 4x progressbar.
+    else:
+        Anime16xPb3Thread() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     if is16x == False:
