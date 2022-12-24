@@ -1589,7 +1589,10 @@ def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
     Anime8xPb1Thread() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
+    if is16x == False:
+        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
+    else:
+        os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18 -c:v libx264 -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy {thisdir}/temp2.mp4 -y')
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
