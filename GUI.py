@@ -1441,31 +1441,20 @@ def anime8X(is16x):
             for row in f:
                 outputdir = row
             outputdir = outputdir[0]
-        global timestwo
+
         if is16x == False:
-            on_click2_anime_8x(False) # 30fps file output
-            on_click2_anime_8x2(False) # 4x interpolation from these 2 functions, generate 60fps temp3 file
             on_click2_anime_8x(False) # 30fps file output
         if is16x == True:
             on_click2_anime_8x(True) # 30fps file output
-            on_click2_anime_8x2(True) # 4x interpolation from these 2 functions, generate 60fps temp3 file
-            on_click2_anime_8x(True) # 30fps file output
         Interpolation.destroy()
-        
-        
-        
+        on_click2_anime_8x2(is16x) # 4x interpolation from these 2 functions, generate 60fps temp3 file
+        on_click2_anime_8x3(is16x) # gets 8x interpolation done with a 30fps file called temp5
+        global timestwo
         #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
-        if is16x == False:
-            timestwo = Label(main_window,
+        timestwo = Label(main_window,
                      font=("Arial", 11),
-                     text = f"Finished 6X interpolation. Generated temp.mp4.",
-                     fg=fg,bg=bg)
-        else:
-        
-            timestwo = Label(main_window,
-                     font=("Arial", 11),
-                     text = f"Finished 12X interpolation. Generated temp.mp4.",
+                     text = f"Finished 4X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
         timestwo.grid(column=3,row=10)
         get_fps2()
@@ -1482,7 +1471,9 @@ def anime8X(is16x):
             Anime16xPb6Thread()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
-        
+        timestwo.after(0, timestwo.destroy())
+        Interpolation2.grid(column=3,row=10)
+        #global done2
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
             done2 = Label(main_window,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
@@ -1499,8 +1490,9 @@ def anime8X(is16x):
             os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
         else:
             os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
+        #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         
-        timestwo.after(0, timestwo.destroy())
+        Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
     
         start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
@@ -1512,19 +1504,12 @@ def anime8X(is16x):
         os.chdir(f"{thisdir}")
 
 def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
-    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
-    if is16x == False:
-        timestwo = Label(main_window,
+    timestwo = Label(main_window,
                      font=("Arial", 11),
-                     text = f"Finished 4X interpolation. Generated temp3.mp4.",
-                     fg=fg,bg=bg)
-    else:
-        
-        timestwo = Label(main_window,
-                     font=("Arial", 11),
-                     text = f"Finished 8X interpolation. Generated temp.mp4.",
+                     text = f"Finished 2X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
     timestwo.grid(column=3,row=10)
     get_fps2()
@@ -1547,16 +1532,9 @@ def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
-    if is16x == False:
-        timestwo = Label(main_window,
+    timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
-                     fg=fg,bg=bg)
-    else:
-        
-        timestwo = Label(main_window,
-                     font=("Arial", 11),
-                     text = f"Finished 6X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
     timestwo.grid(column=3,row=10)
     get_fps2()
@@ -1770,13 +1748,12 @@ def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
     else:
         os.system(f'ffprobe "{thisdir}/temp.mp4"')
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
+        extraction.grid(column=3,row=10)
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
-    
-        
+    extraction.after(0, extraction.destroy())
+    Interpolation.grid(column=3,row=10)
     if is16x == False:
         Anime8xPb1Thread() # calls the first 4x progressbar.
-        extraction.after(0, extraction.destroy())
-        Interpolation.grid(column=3,row=10)
     else:
         Anime16xPb3Thread() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
