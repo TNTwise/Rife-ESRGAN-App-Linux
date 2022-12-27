@@ -1441,21 +1441,31 @@ def anime8X(is16x):
             for row in f:
                 outputdir = row
             outputdir = outputdir[0]
-
+        global timestwo
         if is16x == False:
+            on_click2_anime_8x(False) # 30fps file output
+            on_click2_anime_8x2(False) # 4x interpolation from these 2 functions, generate 60fps temp3 file
             on_click2_anime_8x(False) # 30fps file output
         if is16x == True:
             on_click2_anime_8x(True) # 30fps file output
+            on_click2_anime_8x2(True) # 4x interpolation from these 2 functions, generate 60fps temp3 file
+            on_click2_anime_8x(True) # 30fps file output
         Interpolation.destroy()
-        on_click2_anime_8x2(is16x) # 4x interpolation from these 2 functions, generate 60fps temp3 file
-        on_click2_anime_8x3(is16x) # gets 8x interpolation done with a 30fps file called temp5
-        global timestwo
+        
+        
+        
         #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
         if is16x == False:
             timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 6X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
+        else:
+        
+            timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 12X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
         timestwo.grid(column=3,row=10)
         get_fps2()
@@ -1510,6 +1520,12 @@ def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to
                      font=("Arial", 11),
                      text = f"Finished 4X interpolation. Generated temp3.mp4.",
                      fg=fg,bg=bg)
+    else:
+        
+        timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 8X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
     timestwo.grid(column=3,row=10)
     get_fps2()
     os.system('rm -rf input_frames')
@@ -1535,6 +1551,12 @@ def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
         timestwo = Label(main_window,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
+                     fg=fg,bg=bg)
+    else:
+        
+        timestwo = Label(main_window,
+                     font=("Arial", 11),
+                     text = f"Finished 6X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
     timestwo.grid(column=3,row=10)
     get_fps2()
