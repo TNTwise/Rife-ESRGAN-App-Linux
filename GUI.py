@@ -819,7 +819,7 @@ def Anime8xPb3():# called 3nd 8x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -853,7 +853,7 @@ def Anime8xPb2():# called 2nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 199:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
+            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb1(): # called first 8x
@@ -971,7 +971,7 @@ def Anime16xPb5(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=400, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
