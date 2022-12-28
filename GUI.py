@@ -971,7 +971,7 @@ def Anime16xPb5(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=400, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
