@@ -971,7 +971,7 @@ def Anime16xPb5(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=600)
+    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=400, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -1363,7 +1363,7 @@ def anime4X(is16x):
      
         on_click2_anime(is16x)
         
-        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 18 -vcodec libx264 -c:a copy -pix_fmt yuv420p {thisdir}/temp.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 18 -c:a copy {thisdir}/temp.mp4 -y')
         global timestwo
         timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1401,13 +1401,13 @@ def anime4X(is16x):
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if is16x == False:
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy  -pix_fmt yuv420p "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
             else:
-                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy -pix_fmt yuv420p "{outputdir}/{mp4name}_60fps{extension}" -y')
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
             os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         else:
             
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 18 -c:a copy "{thisdir}/temp.mp4" -y')
                 
         
         Interpolation2.after(0, Interpolation2.destroy())
@@ -1487,9 +1487,9 @@ def anime8X(is16x):
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy -c:v libx264 -pix_fmt yuv420p  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_60fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
         #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         
         Interpolation2.after(0, Interpolation2.destroy())
@@ -1526,8 +1526,8 @@ def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to
         Anime16xPb5Thread()
 
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy -pix_fmt yuv420p -c:v libx264 "{thisdir}/temp4.mp4" -y')
-    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy -pix_fmt yuv420p -c:v libx264  {thisdir}/temp5.mp4 -y')
+    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp4.mp4" -y')
+    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 18 -c:a copy  {thisdir}/temp5.mp4 -y')
 def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
@@ -1550,7 +1550,7 @@ def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     else:
         Anime16xPb4Thread()
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy -pix_fmt yuv420p -c:v libx264 "{thisdir}/temp3.mp4" -y')
+    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -crf 18 -c:a copy "{thisdir}/temp3.mp4" -y')
     
 # different modes of interpolation
 def on_click(rifever):
