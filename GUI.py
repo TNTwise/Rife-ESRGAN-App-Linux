@@ -1363,7 +1363,7 @@ def anime4X(is16x):
      
         on_click2_anime(is16x)
         
-        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec copy -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
         global timestwo
         timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1876,7 +1876,6 @@ def times8(rifever):
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
 
-        
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 5 -vcodec copy -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
