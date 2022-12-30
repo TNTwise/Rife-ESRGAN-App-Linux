@@ -67,7 +67,10 @@ from zipfile import ZipFile
 filename = ""
 main_window = Tk()
 
-
+if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
+    os.mknod(f"{thisdir}/files/videoQuality")
+    with open(f"{thisdir}/files/videoQuality", 'w') as f:
+        f.write("10")
 
 f = open(thisdir+"/programstate", "r")
 f = csv.reader(f)
@@ -78,6 +81,15 @@ if os.path.exists(current_default_output_folder[0]) == False:
         f.write(homedir)
 with open(f"{thisdir}/files/isAnime", 'w') as f:
                     f.write("False")
+def getVidQuality():
+    with open(f"{thisdir}/files/videoQuality", 'r') as f:
+            f = csv.reader(f)
+            for row in f:
+                vidQuality = row
+
+    vidQuality = vidQuality[0]
+    return vidQuality
+
 def latest():
     # this code gets the latest versaion of rife vulkan
             
@@ -395,23 +407,38 @@ def settings_window():
     is_installed = is_installed[0]
     show_dropdown()
     def video_quality_drop_down():
-        update_branch_label = Label(settings_window,text="Update channel:",bg=bg,fg=fg)
-        
+        vidQuality = getVidQuality()
+        if vidQuality == "30":
+            vidQuality = "Low"
+        if vidQuality == "18":
+            vidQuality = "Medium"
+        if vidQuality == "10":
+            vidQuality = "High"
+        if vidQuality == "3":
+            vidQuality = "Lossless"
         variable = StringVar(settings_window)
-        repo_options = ['Testing', 'Stable']
-        variable.set(repo)
+        repo_options = ['Lossless','High', 'Medium', 'Low']
+        variable.set(vidQuality)
         opt = OptionMenu(settings_window, variable, *repo_options)
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
-        update_branch_label.grid(column=5,row=0)
-        opt.grid(column=5,row=1)
+        
+        opt.grid(column=1,row=3)
         def callback(*args):
-            with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
-                f.write(variable.get())
+            with open(f"{thisdir}/files/videoQuality", 'w') as f: # gets the repo stored in repository file
+                # Converts these to cfv format
+                if variable.get() == "Low":
+                    f.write("30")
+                if variable.get() == "Medium":
+                    f.write("18")
+                if variable.get() == "High":
+                    f.write("10")
+                if variable.get() == "Lossless":
+                    f.write("3")
                 
         variable.trace("w", callback)
-
+    video_quality_drop_down()
     with open(f"{thisdir}/files/isInstalled", "r") as f:
         f = csv.reader(f)
         for row in f:
@@ -421,8 +448,12 @@ def settings_window():
     spacer_label2.config(padx=30)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
-    if is_installed == "False":
-        install_button.grid(column=1,row=2)
+    if os.path.exists(f"{homedir}/Rife-Vulkan-GUI/") == False:
+        is_installed = False
+    else:
+        is_installed = False
+    if is_installed == False:
+        install_button.grid(column=3,row=4)
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=3,row=0)
     theme_button.grid(column=3, row=1)
@@ -1362,6 +1393,7 @@ def AnimeInterpolation():
         anime4X(True)
         anime8X(True)
 def anime4X(is16x):
+        vidQuality = getVidQuality()
         os.chdir("rife-vulkan-models")
         global done
         #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
@@ -1423,9 +1455,9 @@ def anime4X(is16x):
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if is16x == False:
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf 10 -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
             else:
-                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf 10 -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
             os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         else:
             
@@ -1448,6 +1480,7 @@ def anime4X(is16x):
         os.chdir(f"{thisdir}")
 def anime8X(is16x):
         os.chdir("rife-vulkan-models")
+        vidQuality = getVidQuality()
         #global done
         #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
@@ -1512,9 +1545,9 @@ def anime8X(is16x):
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf 10 -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf 10 -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
         #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         
         Interpolation2.after(0, Interpolation2.destroy())
@@ -1587,7 +1620,7 @@ def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     
 # different modes of interpolation
 def on_click(rifever):
-    
+    vidQuality = getVidQuality()
     if filename != "":
         os.chdir("rife-vulkan-models")
         global done
@@ -1637,9 +1670,9 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 18  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=3,row=10)
         # these re-enable the start, input, and output buttons
@@ -1712,9 +1745,9 @@ def times4(rifever):
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 10  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 10  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -1900,9 +1933,9 @@ def times8(rifever):
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 10  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
     else:
-        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 10  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
+        os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
     
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
