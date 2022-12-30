@@ -1363,7 +1363,7 @@ def anime4X(is16x):
      
         on_click2_anime(is16x)
         
-        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec copy -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr  -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
         global timestwo
         timestwo = Label(main_window,
                      font=("Arial", 11),
