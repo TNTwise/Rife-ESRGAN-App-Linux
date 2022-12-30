@@ -1535,7 +1535,7 @@ def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to
     os.system('rm temp*')
     os.chdir("rife-vulkan-models")
     os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp4.mp4" -y')
-    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 0 -c:a copy -vcodec copy  {thisdir}/temp5.mp4 -y')
+    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vsync vfr -crf 0 -c:a copy  {thisdir}/temp5.mp4 -y')
 def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
     done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
