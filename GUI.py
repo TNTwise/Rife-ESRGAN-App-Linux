@@ -410,16 +410,16 @@ def settings_window():
         vid_quality_label = Label(settings_window,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = getVidQuality()
         if vidQuality == "30":
-            vidQuality = "Low"
+            vidQuality1 = "Low"
         if vidQuality == "18":
-            vidQuality = "Medium"
+            vidQuality1 = "Medium"
         if vidQuality == "10":
-            vidQuality = "High"
+            vidQuality1 = "High"
         if vidQuality == "3":
-            vidQuality = "Lossless"
+            vidQuality1 = "Lossless"
         variable = StringVar(settings_window)
         repo_options = ['Lossless','High', 'Medium', 'Low']
-        variable.set(vidQuality)
+        variable.set(vidQuality1)
         opt = OptionMenu(settings_window, variable, *repo_options)
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
@@ -452,7 +452,7 @@ def settings_window():
     if os.path.exists(f"{homedir}/Rife-Vulkan-GUI/") == False:
         is_installed = False
     else:
-        is_installed = False
+        is_installed = True
     if is_installed == False:
         install_button.grid(column=3,row=4)
     spacer_label.grid(column=2,row=0)
