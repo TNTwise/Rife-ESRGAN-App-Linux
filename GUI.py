@@ -407,6 +407,7 @@ def settings_window():
     is_installed = is_installed[0]
     show_dropdown()
     def video_quality_drop_down():
+        vid_quality_label = Label(settings_window,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = getVidQuality()
         if vidQuality == "30":
             vidQuality = "Low"
