@@ -37,10 +37,9 @@ Run this in your terminal in the directory where Rife GUI is installed, may add 
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
-Add options for compression <br />
-Fix compression with ffmpeg <br />
+Add realesrgan support to upscale video resolution, make app more general purpose<br />
 Set up queue system <br />
-Add scalability <br />
+Add scalability to GUI<br />
 fix 16x progressbar on anime, because it is actually 32x <br />
 fix brogressbar not showing somtimes when animation profile is selected. <br />
 Use less temp files <br />
