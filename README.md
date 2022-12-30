@@ -40,7 +40,6 @@ vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough
 Add realesrgan support to upscale video resolution, make app more general purpose<br />
 Set up queue system <br />
 Add scalability to GUI<br />
-fix 16x progressbar on anime, because it is actually 32x <br />
 fix brogressbar not showing somtimes when animation profile is selected. <br />
 Use less temp files <br />
 Check if done file exists, and if not, throw error <br />
