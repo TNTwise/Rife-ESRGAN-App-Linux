@@ -1419,6 +1419,9 @@ def anime4X(is16x):
         on_click2_anime(is16x)
         
         os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
+        os.chdir(f"{thisdir}")
+        os.system('rm temp1.mp4')
+        os.chdir("rife-vulkan-models")
         global timestwo
         timestwo = Label(main_window,
                      font=("Arial", 11),
@@ -1592,8 +1595,11 @@ def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to
     os.chdir("rife-vulkan-models")
     os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp4.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -vsync vfr -crf 0 -c:a copy  {thisdir}/temp5.mp4 -y')
+    os.chdir(f"{thisdir}")
+    os.system('rm temp4.mp4')
+    os.chdir("rife-vulkan-models")
 def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
     timestwo = Label(main_window,
@@ -1825,12 +1831,17 @@ def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
         Anime16xPb3Thread() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+    os.chdir(f"{thisdir}")
+    os.system('rm temp*')
+    os.chdir("rife-vulkan-models")
     if is16x == False:
         os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     else:
         os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp1.mp4" -y')
     os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -vsync vfr -crf 0 -c:a copy {thisdir}/temp2.mp4 -y')
-
+    os.chdir(f"{thisdir}")
+    os.system('rm temp1.mp4')
+    os.chdir("rife-vulkan-models")
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
     
