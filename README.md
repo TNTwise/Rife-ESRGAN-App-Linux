@@ -29,9 +29,9 @@ sudo pacman -S tk opencv konsole ffmpeg python-pip wget
 ```
 On SteamOS/Steam Deck <br />
 ```
-python GUI.py
+Run "Start"
 ```
-Run this in your terminal in the directory where Rife GUI is installed, may add konsole support later <br />
+As of latest SteamOs 3.4, it does not error out when launching it from "Start". <br />
 
 ## Errors
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
