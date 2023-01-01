@@ -411,11 +411,11 @@ def settings_window():
         vidQuality = getVidQuality()
         if vidQuality == "30":
             vidQuality1 = "Low"
-        if vidQuality == "18":
+        if vidQuality == "25":
             vidQuality1 = "Medium"
-        if vidQuality == "10":
+        if vidQuality == "16":
             vidQuality1 = "High"
-        if vidQuality == "3":
+        if vidQuality == "7":
             vidQuality1 = "Lossless"
         variable = StringVar(settings_window)
         repo_options = ['Lossless','High', 'Medium', 'Low']
