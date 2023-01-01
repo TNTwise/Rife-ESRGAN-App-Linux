@@ -70,7 +70,7 @@ main_window = Tk()
 if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
     os.mknod(f"{thisdir}/files/videoQuality")
     with open(f"{thisdir}/files/videoQuality", 'w') as f:
-        f.write("18")
+        f.write("16")
 
 f = open(thisdir+"/programstate", "r")
 f = csv.reader(f)
