@@ -70,7 +70,7 @@ main_window = Tk()
 if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
     os.mknod(f"{thisdir}/files/videoQuality")
     with open(f"{thisdir}/files/videoQuality", 'w') as f:
-        f.write("10")
+        f.write("18")
 
 f = open(thisdir+"/programstate", "r")
 f = csv.reader(f)
@@ -432,11 +432,11 @@ def settings_window():
                 if variable.get() == "Low":
                     f.write("30")
                 if variable.get() == "Medium":
-                    f.write("18")
+                    f.write("25")
                 if variable.get() == "High":
-                    f.write("10")
+                    f.write("16")
                 if variable.get() == "Lossless":
-                    f.write("3")
+                    f.write("7")
                 
         variable.trace("w", callback)
     video_quality_drop_down()
