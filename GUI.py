@@ -64,8 +64,48 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
+def check_theme():
+    
+    # This code reads the theme file and stores its data in a theme variable
+    f = open(thisdir+"/theme", "r")
+    global theme
+    for row in f:
+        theme = row
+    return theme
 filename = ""
 main_window = Tk()
+tabControl = ttk.Notebook(main_window)
+if check_theme() == "Light":
+    tab1 = ttk.Frame(tabControl)
+    tab2 = ttk.Frame(tabControl)
+    s = ttk.Style()
+# Create style used by default for all Frames
+    s.configure('TFrame', background='White')
+
+# Create style for the first frame
+    s.configure('Frame1.TFrame', background='red')
+if check_theme() == "Dark":
+    tab1 = ttk.Frame(tabControl)
+    tab2 = ttk.Frame(tabControl)
+    s = ttk.Style()
+# Create style used by default for all Frames
+    s.configure('TFrame', background='#4C4E52')
+
+# Create style for the first frame
+    s.configure('Frame1.TFrame', background='red')
+tabControl.add(tab1, text='Tab 1')
+tabControl.add(tab2, text='Tab 2')
+tabControl.grid(row=0,column=0)
+if check_theme() == "Light":
+    main_window.config(bg="white")
+    fg="black"
+    bg="White"
+    bg_button="white"
+if check_theme() == "Dark":
+    main_window.config(bg="#4C4E52")
+    fg="white"
+    
+    bg_button="#4C4E52"
 
 if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
     os.mknod(f"{thisdir}/files/videoQuality")
@@ -203,14 +243,8 @@ def get_all_models():
     os.system(f'rm -rf "{thisdir}/temp/"')
 get_all_models()
 
-def check_theme():
-    # This code reads the theme file and stores its data in a theme variable
-    f = open(thisdir+"/theme", "r")
-    global theme
-    for row in f:
-        theme = row
+
     
-    return theme
 # set theme on launch, this sets bg and bg_background, this is set throughout the entire script
 if check_theme() == "Light":
     main_window.config(bg="white")
@@ -305,7 +339,7 @@ def install1():
 # use threading
 # create listbox object
 
-listbox = Listbox(main_window, height=7,
+listbox = Listbox(tab1, height=7,
                   width=10,
                   bg="grey",
                   activestyle='dotbox',
@@ -633,11 +667,11 @@ def show_interp_opt():
     with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
         f.write("2X")
     global iterp_opt_variable
-    iterp_opt_variable = StringVar(main_window)
+    iterp_opt_variable = StringVar(tab1)
     interpolation_options = ['2X', '4X', '8X']
     iterp_opt_variable.set('2X')
     global interpOptDropDown
-    interpOptDropDown = OptionMenu(main_window, iterp_opt_variable, *interpolation_options)
+    interpOptDropDown = OptionMenu(tab1, iterp_opt_variable, *interpolation_options)
     interpOptDropDown.config(width=2, font=('Helvetica', 12))
     interpOptDropDown.config(bg=bg)
     interpOptDropDown.config(fg=fg)
@@ -659,11 +693,11 @@ def show_rife_ver():
     with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
         f.write("2.3")
     global rife_ver_variable
-    rife_ver_variable = StringVar(main_window)
+    rife_ver_variable = StringVar(tab1)
     interpolation_options = ['Rife', 'Rife-HD','Rife-UHD','Rife Anime','Rife 2.0','Rife 2.3', 'Rife 2.4','Rife 3.0', 'Rife 3.1','Rife 4.0', 'Rife 4.6']
     rife_ver_variable.set('Rife 2.3')
     global rifeVerDropDown
-    rifeVerDropDown = OptionMenu(main_window, rife_ver_variable, *interpolation_options)
+    rifeVerDropDown = OptionMenu(tab1, rife_ver_variable, *interpolation_options)
     rifeVerDropDown.config(width=10, font=('Helvetica', 12))
     rifeVerDropDown.config(bg=bg)
     rifeVerDropDown.config(fg=fg)
@@ -710,7 +744,7 @@ def progressBar2x():
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate")
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate")
     progressbar.grid(column=3, row=22)
     # Add progressbar updater
     progressbar["maximum"]=100
@@ -727,7 +761,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
     amount_of_input_files_1 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_1 = amount_of_input_files_1 * 2
     global progressbar_1 # creates new progressbar
-    progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=50,maximum=150)
+    progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=50,maximum=150)
     progressbar_1.grid(column=3, row=22)
     # Add progressbar updater
     #sleep(1) # wont update unless we sleep for 1 second?????????
@@ -741,7 +775,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
         progressbar_1['value'] = e_1
         progressbar_1.update()
         if progressbar_1['value'] == 150:
-            progressbar_1 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=150,maximum=150)
+            progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=150,maximum=150)
             progressbar_1.grid(column=3, row=22)
             break
             
@@ -753,7 +787,7 @@ def progressBar4x(): # makes first progressbar in 4x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=300)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=300)
     progressbar.grid(column=3, row=22)
     #sleep(1)
     # Add progressbar updater
@@ -776,7 +810,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     
     global progressbar_5 # creates new progressbar
    
-    progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=73,maximum=170)
+    progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=73,maximum=170)
     
     progressbar_5.grid(column=3, row=22)
     progressbar_5.update()
@@ -792,7 +826,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
         progressbar_5['value'] = e_5
         progressbar_5.update()
         if progressbar_5['value'] == 170:
-            progressbar_5 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=700,maximum=700)
+            progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=700,maximum=700)
             progressbar_5.grid(column=3, row=22)
             break
 
@@ -802,7 +836,7 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     amount_of_input_files_2 = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_2 = amount_of_input_files_2 * 2
     global progressbar_2 # creates new progressbar
-    progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate", value=43, maximum=300)
+    progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate", value=43, maximum=300)
     progressbar_2.grid(column=3, row=22)
     # Add progressbar updater
     #progressbar_2["maximum"]= 800
@@ -810,7 +844,7 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     while p == 4:
         if int(progressbar_2['value']) == 128:
             
-            progressbar_2 = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=128,maximum=300)
+            progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=128,maximum=300)
             progressbar_2.grid(column=3, row=22)
             break
         frames_processed_2 = len(list(Path('output_frames/').glob('*')))
@@ -828,7 +862,7 @@ def progressBar8x(): # this is called first.
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -841,7 +875,7 @@ def progressBar8x(): # this is called first.
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 100:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
             progressbar.grid(column=3, row=22)
             break
         
@@ -852,7 +886,7 @@ def Anime8xPb4():
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -865,7 +899,7 @@ def Anime8xPb4():
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 399:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=400,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb3():# called 3nd 8x
@@ -873,7 +907,7 @@ def Anime8xPb3():# called 3nd 8x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -886,7 +920,7 @@ def Anime8xPb3():# called 3nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 299:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb2():# called 2nd 8x
@@ -894,7 +928,7 @@ def Anime8xPb2():# called 2nd 8x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -907,7 +941,7 @@ def Anime8xPb2():# called 2nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 199:
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime8xPb1(): # called first 8x
@@ -915,7 +949,7 @@ def Anime8xPb1(): # called first 8x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=400)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -929,7 +963,7 @@ def Anime8xPb1(): # called first 8x
         progressbar.update()
         if progressbar['value'] == 99:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb1(): # called first 16x
@@ -937,7 +971,7 @@ def Anime16xPb1(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -951,7 +985,7 @@ def Anime16xPb1(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 99:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=100,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb2(): # called first 16x
@@ -959,7 +993,7 @@ def Anime16xPb2(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -973,7 +1007,7 @@ def Anime16xPb2(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 199:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=200,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb3(): # called first 16x
@@ -981,7 +1015,7 @@ def Anime16xPb3(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -995,7 +1029,7 @@ def Anime16xPb3(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 299:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=300,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb4(): # called first 16x
@@ -1003,7 +1037,7 @@ def Anime16xPb4(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -1017,7 +1051,7 @@ def Anime16xPb4(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 399:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=400,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=400,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb5(): # called first 16x
@@ -1025,7 +1059,7 @@ def Anime16xPb5(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -1039,7 +1073,7 @@ def Anime16xPb5(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 499:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=500,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=500,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 def Anime16xPb6(): # called first 16x
@@ -1047,7 +1081,7 @@ def Anime16xPb6(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=3, row=22)
     
     # Add progressbar updater
@@ -1061,7 +1095,7 @@ def Anime16xPb6(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 599:
             
-            progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",value=600,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=600,maximum=600)
             progressbar.grid(column=3, row=22)
             break
 
@@ -1194,12 +1228,12 @@ def get_fps():
     fps = cap.get(cv2.CAP_PROP_FPS)
     # putting these here so it can get referenced every time an interpolation runs.
     global Interpolation
-    Interpolation = Label(main_window,
+    Interpolation = Label(tab1,
                           text=f"Interpolation Started!",
                           font=("Arial", 11),
                           fg=fg,bg=bg)
     global extraction
-    extraction = Label(main_window,
+    extraction = Label(tab1,
                        text=f"Extracting Frames",
                        font=("Arial", 11),
                        fg=fg,bg=bg)
@@ -1220,7 +1254,7 @@ def get_fps2():
     # putting these here so it can get referenced every time an interpolation runs.
     
     global Interpolation2
-    Interpolation2 = Label(main_window,
+    Interpolation2 = Label(tab1,
                            text=f"Interpolation 4X Started!",
                            font=("Arial", 11),
                            fg=fg,bg=bg)
@@ -1239,14 +1273,14 @@ def get_fps3():
     fps3 = cap.get(cv2.CAP_PROP_FPS)
     # putting these here so it can get referenced every time an interpolation runs.
     global Interpolation3
-    Interpolation3 = Label(main_window,
+    Interpolation3 = Label(tab1,
                            text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
                            fg=fg,bg=bg)
     
 
 #def show_term():
-#    termf = Frame(main_window, height=100, width=500)
+#    termf = Frame(tab1, height=100, width=500)
 #
 #    termf.grid(column=3,row=10)
 #    wid = termf.winfo_id()
@@ -1258,10 +1292,10 @@ def Anime():
     #   os.mknod(f"{thisdir}/files/isAnime")
     #with open(f"{thisdir}/files/isAnime", 'w') as f: # gets the repo stored in repository file
     #    f.write("Default")
-    variable2 = StringVar(main_window)
+    variable2 = StringVar(tab1)
     video_options = ['Default', 'Animation (Uneven Framerate)']
     variable2.set('Default')
-    opt1 = OptionMenu(main_window, variable2, *video_options)
+    opt1 = OptionMenu(tab1, variable2, *video_options)
     opt1.config(width=30, font=('Helvetica', 12))
     opt1.config(bg=bg)
     opt1.config(fg=fg)
@@ -1271,13 +1305,13 @@ def Anime():
     def callback(*args):
         #print(variable2.get())
         if variable2.get() == 'Default':
-            start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
             global iterp_opt_variable2
-            iterp_opt_variable2 = StringVar(main_window)
+            iterp_opt_variable2 = StringVar(tab1)
             interpolation_options = ['2X','4X', '8X']
-            interpOptDropDown2 = OptionMenu(main_window, iterp_opt_variable2, *interpolation_options)
+            interpOptDropDown2 = OptionMenu(tab1, iterp_opt_variable2, *interpolation_options)
             interpOptDropDown2.config(width=2, font=('Helvetica', 12))
             iterp_opt_variable2.set('2X')
             interpOptDropDown2.config(bg=bg)
@@ -1303,7 +1337,7 @@ def Anime():
                     f.write("False")
             iterp_opt_variable2.trace("w", callback)
         else:
-            Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
             
@@ -1314,10 +1348,10 @@ def Anime():
             with open(f"{thisdir}/files/isAnime", 'w') as f:
                 f.write("True")
             global iterp_opt_variable1
-            iterp_opt_variable1 = StringVar(main_window)
+            iterp_opt_variable1 = StringVar(tab1)
             interpolation_options = ['4X', '8X', '16X']
             iterp_opt_variable1.set('4X')
-            interpOptDropDown1 = OptionMenu(main_window, iterp_opt_variable1, *interpolation_options)
+            interpOptDropDown1 = OptionMenu(tab1, iterp_opt_variable1, *interpolation_options)
             interpOptDropDown1.config(width=2, font=('Helvetica', 12))
             interpOptDropDown1.config(bg=bg)
             interpOptDropDown1.config(fg=fg)
@@ -1335,42 +1369,42 @@ def Anime():
     variable2.trace("w", callback)
 
 Anime()
-rife_vulkan = Label (main_window,
+rife_vulkan = Label (tab1,
                             text = "Rife Vulkan GUI"
                                                            ,
                             font=("Arial", 25),
                             bg=bg,fg=fg,padx=150)# adjust this padx
-button_explore = Button(main_window,
+button_explore = Button(tab1,
                         text = "Input Video",
                         command = browseFiles, bg=bg_button,fg=fg)
-button_output = Button(main_window,
+button_output = Button(tab1,
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
 def exi11(): # this funtion kills the program.
     os.system('pkill -f GUI.py')
 
-button_exit = Button(main_window,
+button_exit = Button(tab1,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
-settings_menu_button = Button(main_window,
+settings_menu_button = Button(tab1,
                         image=settings_icon, # sets settings icon image for button
                         command = settings_window,bg=bg_button)
-start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
 
 # Last column is 22
-spacer= Label(main_window,
+spacer= Label(tab1,
                  text=f"",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
 spacer.grid(column=3, row=10)
-progressbar = ttk.Progressbar(main_window,orient='horizontal', length=500, mode="determinate",maximum=700)
+progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
 progressbar.grid(column=3, row=22)
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=4, row=0)
 # Sets start button away from everything else
-start_button_spacer = Label(main_window,pady=67,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+start_button_spacer = Label(tab1,pady=67,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
@@ -1397,11 +1431,11 @@ def anime4X(is16x):
         vidQuality = getVidQuality()
         os.chdir("rife-vulkan-models")
         global done
-        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
-        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
         # this if statement sets default output dir, may need to remove when add selector.
@@ -1423,7 +1457,7 @@ def anime4X(is16x):
         os.system('rm temp1.mp4')
         os.chdir("rife-vulkan-models")
         global timestwo
-        timestwo = Label(main_window,
+        timestwo = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
@@ -1446,12 +1480,12 @@ def anime4X(is16x):
         Interpolation2.grid(column=3,row=10)
         global done2
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
-            done2 = Label(main_window,
+            done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
         else:
-            done2 = Label(main_window,
+            done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
@@ -1471,9 +1505,9 @@ def anime4X(is16x):
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
     
-        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
         if is16x == False:
             os.system('rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
@@ -1486,11 +1520,11 @@ def anime8X(is16x):
         os.chdir("rife-vulkan-models")
         vidQuality = getVidQuality()
         #global done
-        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
-        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
         # this if statement sets default output dir, may need to remove when add selector.
@@ -1512,9 +1546,9 @@ def anime8X(is16x):
         on_click2_anime_8x2(is16x) # 4x interpolation from these 2 functions, generate 60fps temp3 file
         on_click2_anime_8x3(is16x) # gets 8x interpolation done with a 30fps file called temp5
         global timestwo
-        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3,row=10)
-        timestwo = Label(main_window,
+        timestwo = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 4X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
@@ -1537,12 +1571,12 @@ def anime8X(is16x):
         Interpolation2.grid(column=3,row=10)
         #global done2
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
-            done2 = Label(main_window,
+            done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
         else:
-            done2 = Label(main_window,
+            done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
@@ -1557,9 +1591,9 @@ def anime8X(is16x):
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
     
-        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
         
         #os.system('rm -rf "'+thisdir+'/temp"')
         os.system('rm -rf input_frames')
@@ -1568,10 +1602,10 @@ def anime8X(is16x):
         os.system('rm temp*')
 
 def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
-    done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
-    timestwo = Label(main_window,
+    timestwo = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
@@ -1599,10 +1633,10 @@ def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to
     os.system('rm temp4.mp4')
     os.chdir("rife-vulkan-models")
 def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
-    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
     #global timestwo
-    timestwo = Label(main_window,
+    timestwo = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
@@ -1631,11 +1665,11 @@ def on_click(rifever):
     if filename != "":
         os.chdir("rife-vulkan-models")
         global done
-        #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=3, row=10)
-        start_button = Button(main_window, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
         # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
         # This is for all modes of interpolation
@@ -1666,12 +1700,12 @@ def on_click(rifever):
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
-            done = Label(main_window,
+            done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
         else:
-           done = Label(main_window,
+           done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
@@ -1683,9 +1717,9 @@ def on_click(rifever):
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=3,row=10)
         # these re-enable the start, input, and output buttons
-        start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-        button_output = Button(main_window,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
-        button_explore = Button(main_window,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
+        start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 3, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 3, row = 3)
         os.system('rm -rf "'+thisdir+'/temp"') # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')
@@ -1699,11 +1733,11 @@ def on_click(rifever):
 def times4(rifever):
     os.chdir("rife-vulkan-models")
     global done
-    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+    start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+    button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
     # this if statement sets default output dir, may need to remove when add selector.
@@ -1720,7 +1754,7 @@ def times4(rifever):
      
     on_click2(rifever)
     global timestwo
-    timestwo = Label(main_window,
+    timestwo = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 2X interpolation. Generated temp.mp4.",
                      fg=fg,bg=bg)
@@ -1740,12 +1774,12 @@ def times4(rifever):
     Interpolation2.grid(column=3,row=10)
     global done2
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
-        done2 = Label(main_window,
+        done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
     else:
-        done2 = Label(main_window,
+        done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
@@ -1759,9 +1793,9 @@ def times4(rifever):
     Interpolation2.after(0, Interpolation2.destroy())
     done2.grid(column=3,row=10)# maybe change done label location in code, edit what row it shows up on
     
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+    start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+    button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
     os.system('rm -rf "'+thisdir+'/temp"')
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')    
@@ -1867,7 +1901,7 @@ def on_click3(rifever):
 
     
     global timestwo3
-    timestwo3 = Label(main_window,
+    timestwo3 = Label(tab1,
                       font=("Arial", 11),
                       text=f"Finished 2X interpolation. Generated temp.mp4.",
                       fg=fg,bg=bg)
@@ -1890,12 +1924,12 @@ def on_click3(rifever):
 def times8(rifever):
     os.chdir("rife-vulkan-models")
     global done
-    #done = Label(main_window,text="                                                                                                                                                                ",bg=bg)
+    #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=3,row=10)
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+    start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
 
-    button_output = Button(main_window,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
+    button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 3, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
     # this if statement sets default output dir, may need to remove when add selector.
@@ -1912,7 +1946,7 @@ def times8(rifever):
     on_click2_8(rifever)
     on_click3(rifever)
     global timestwo2
-    timestwo2 = Label(main_window,
+    timestwo2 = Label(tab1,
                      font=("Arial", 11),
                      text = f"Finished 4X interpolation. Generated temp.mp4.",
                      bg=bg,
@@ -1933,12 +1967,12 @@ def times8(rifever):
     Interpolation3.grid(column=3,row=10)
     global done3
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-        done3 = Label(main_window,
+        done3 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps(1){extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
     else:
-        done3 = Label(main_window,
+        done3 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps{extension}",
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
@@ -1952,9 +1986,9 @@ def times8(rifever):
     os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
     Interpolation3.after(0, Interpolation3.destroy())
     done3.grid(column=3,row=10)
-    start_button = Button(main_window, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-    button_output = Button(main_window,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
-    button_explore = Button(main_window,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
+    start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+    button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 3, row = 4)
+    button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 3, row = 3)
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('rm -rf "'+thisdir+'/temp"')
