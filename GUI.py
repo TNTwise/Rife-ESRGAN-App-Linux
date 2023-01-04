@@ -78,31 +78,38 @@ tabControl = ttk.Notebook(main_window)
 if check_theme() == "Light":
     tab1 = ttk.Frame(tabControl)
     tab2 = ttk.Frame(tabControl)
+    tab3 = ttk.Frame(tabControl)
     s = ttk.Style()
 # Create style used by default for all Frames
     s.configure('TFrame', background='White')
 
 # Create style for the first frame
-    s.configure('Frame1.TFrame', background='red')
+    s.configure('Frame1.TFrame', background='White', foreground='Black')
 if check_theme() == "Dark":
     tab1 = ttk.Frame(tabControl)
     tab2 = ttk.Frame(tabControl)
+    tab3 = ttk.Frame(tabControl)
     s = ttk.Style()
 # Create style used by default for all Frames
-    s.configure('TFrame', background='#4C4E52')
+    s.configure('TFrame', background='#4C4E52',foreground='#4C4E52')
 
 # Create style for the first frame
     s.configure('Frame1.TFrame', background='red')
-tabControl.add(tab1, text='Tab 1')
-tabControl.add(tab2, text='Tab 2')
+#Create tabs
+tabControl.add(tab1, text='Rife')
+tabControl.add(tab2, text='Real-ESRGAN')
+
+tabControl.add(tab3, text='Settings')
 tabControl.grid(row=0,column=0)
 if check_theme() == "Light":
     main_window.config(bg="white")
+    
     fg="black"
     bg="White"
     bg_button="white"
 if check_theme() == "Dark":
     main_window.config(bg="#4C4E52")
+    
     fg="white"
     
     bg_button="#4C4E52"
@@ -355,18 +362,17 @@ listbox = Listbox(tab1, height=7,
 
 
 def settings_window():
-    global settings_window
-    settings_window = Tk()
+    
     # sets colors for window
-    if check_theme() == "Light":
+    #if check_theme() == "Light":
 
-        settings_window.config(bg="white")
+    #    settings_window.config(bg="white")
 
-    if check_theme() == "Dark":
+    #if check_theme() == "Dark":
 
-        settings_window.config(bg="#4C4E52")
+    #    settings_window.config(bg="#4C4E52")
 
-    button_select_default_output = Button(settings_window,
+    button_select_default_output = Button(tab3,
                         text = "Select default output folder",
                         command = sel_default_output_folder, bg=bg_button,fg=fg)
     
@@ -383,7 +389,7 @@ def settings_window():
     #displays current default output folder
     
     global default_output_label
-    default_output_label = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
+    default_output_label = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     # This code just creates the theme file if it doesnt txist
     if os.path.isfile(thisdir+"/theme") == False:
         os.mknod(thisdir+"/theme")
@@ -403,26 +409,26 @@ def settings_window():
     global theme_button
     theme = check_theme()
     if theme == "Light":
-            theme_button = Button(settings_window,text="Light",command=darkTheme,bg="white",fg=fg)
+            theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg)
     if theme == "Dark":
-            theme_button = Button(settings_window,text="Dark",command=lightTheme,bg=bg,fg=fg)
-    theme_label = Label(settings_window,text=" Theme: ",bg=bg,fg=fg)
-    spacer_label = Label(settings_window,text="            ",bg=bg) # This spaces the middle
-    spacer_label1 = Label(settings_window,text="            ",bg=bg) # this spaces the end
-    spacer_label2 = Label(settings_window,text="",bg=bg) # this is at the start of the gui
+            theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg)
+    theme_label = Label(tab3,text=" Theme: ",bg=bg,fg=fg)
+    spacer_label = Label(tab3,text="            ",bg=bg) # This spaces the middle
+    spacer_label1 = Label(tab3,text="            ",bg=bg) # this spaces the end
+    spacer_label2 = Label(tab3,text="",bg=bg) # this is at the start of the gui
     global check_updates_button
-    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
-    install_button = Button(settings_window, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
+    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
+    install_button = Button(tab3, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
     global  update_spacer_label
-    update_spacer_label = Label(settings_window,text = " ", bg=bg)
+    update_spacer_label = Label(tab3,text = " ", bg=bg)
     
     def show_dropdown():
-        update_branch_label = Label(settings_window,text="Update channel:",bg=bg,fg=fg)
+        update_branch_label = Label(tab3,text="Update channel:",bg=bg,fg=fg)
         
-        variable = StringVar(settings_window)
+        variable = StringVar(tab3)
         repo_options = ['Testing', 'Stable']
         variable.set(repo)
-        opt = OptionMenu(settings_window, variable, *repo_options)
+        opt = OptionMenu(tab3, variable, *repo_options)
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -441,7 +447,7 @@ def settings_window():
     is_installed = is_installed[0]
     show_dropdown()
     def video_quality_drop_down():
-        vid_quality_label = Label(settings_window,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
+        vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = getVidQuality()
         if vidQuality == "30":
             vidQuality1 = "Low"
@@ -451,10 +457,10 @@ def settings_window():
             vidQuality1 = "High"
         if vidQuality == "7":
             vidQuality1 = "Lossless"
-        variable = StringVar(settings_window)
+        variable = StringVar(tab3)
         repo_options = ['Lossless','High', 'Medium', 'Low']
         variable.set(vidQuality1)
-        opt = OptionMenu(settings_window, variable, *repo_options)
+        opt = OptionMenu(tab3, variable, *repo_options)
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -496,22 +502,19 @@ def settings_window():
     check_updates_button.grid(column=5,row=3)
     update_spacer_label.grid(column=5,row=2)
     #change_repo_dropdown.grid(column=5,row=2)
-    settings_window.geometry("600x200")
-    settings_window.title('             Settings')
-    settings_window.resizable(False, False) 
-    settings_window.mainloop()
+
 
 
 # this will show if updates exist
 def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
-        update_check_label = Label(settings_window,text="Updated, restart to apply.",bg=bg,fg=fg)
-        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
+        update_check_label = Label(tab3,text="Updated, restart to apply.",bg=bg,fg=fg)
+        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
         restart_window("Updated, re-launch the program to apply.")
     else:
-        update_check_label = Label(settings_window,text="No Updates",bg=bg,fg=fg)
-        check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
+        update_check_label = Label(tab3,text="No Updates",bg=bg,fg=fg)
+        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
     update_check_label.grid(column=5,row=5)
 # restarts the program
 
@@ -554,7 +557,7 @@ def darkTheme():
     bg_button="#4C4E52"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Dark",command=lightTheme,bg=bg,fg=fg)
+    theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg)
     theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
@@ -571,7 +574,7 @@ def lightTheme():
     fg="black"
     global theme_button
     theme_button.destroy()
-    theme_button = Button(settings_window,text="Light",command=darkTheme,bg="white",fg=fg)
+    theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg)
     theme_button.grid(column = 3, row = 1)
     restart_window("Changing theme requires restart.")
     
@@ -590,7 +593,7 @@ def sel_default_output_folder():
         current_default_output_folder = row
     #displays current default output folder
     default_output_label.destroy()
-    default_output_label_1 = Label(settings_window, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
+    default_output_label_1 = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     default_output_label_1.grid(column=1, row=1)
     
 settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
@@ -1164,7 +1167,7 @@ def threading():
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
     t1.start()
-    check_updates_button = Button(settings_window,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=3)
+    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=3)
 def anime_thread():
     t1 = Thread(target=AnimeInterpolation)
     t1.start()
@@ -1174,7 +1177,7 @@ def exit_thread():
     t1 = Thread(target=exi11)
     t1.start()
 #Button
-
+settings_window()
 def browseFiles():
 
     global filename
@@ -1388,14 +1391,12 @@ button_exit = Button(tab1,
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
-settings_menu_button = Button(tab1,
-                        image=settings_icon, # sets settings icon image for button
-                        command = settings_window,bg=bg_button)
+settings_menu_button = Label(tab1,padx='40',bg=bg,fg=fg)
 start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
 
 # Last column is 22
 spacer= Label(tab1,
-                 text=f"",
+                 
                  font=("Arial", 11), width=67, anchor="w",
                  fg=fg,bg=bg)
 spacer.grid(column=3, row=10)
@@ -1404,7 +1405,7 @@ progressbar.grid(column=3, row=22)
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=4, row=0)
 # Sets start button away from everything else
-start_button_spacer = Label(tab1,pady=67,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+start_button_spacer = Label(tab1,pady=57,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
@@ -1993,7 +1994,7 @@ def times8(rifever):
     os.system('rm -rf output_frames ')
     os.system('rm -rf "'+thisdir+'/temp"')
     os.chdir(f"{thisdir}")
-main_window.geometry("700x500")
+main_window.geometry("680x490")
 main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
