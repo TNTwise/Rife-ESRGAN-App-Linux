@@ -600,66 +600,67 @@ settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 
-def show():
+def show(program):
     # These 2 variables are the defaults, will need to remove when make default selector.
-    rifever = ""
+    if program == "rife":
+        rifever = ""
     
-    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == True:
+        if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == True:
             with open(f"{thisdir}/files/temp_interp_opt" , 'r') as f:
                 f = csv.reader(f)
                 for row in f:
                     interpolation_option = row
             interpolation_option = interpolation_option[0]
-    if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False:
-        rifever1 = "4.6"
-    else: 
+        if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False:
+            rifever1 = "4.6"
+        else: 
             with open(f"{thisdir}/files/temp_rife_ver" , 'r') as f:
                 f = csv.reader(f)
                 for row in f:
                     rifever1 = row
             rifever1 = rifever1[0]
-    if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
+        if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                 os.mknod(f"{thisdir}/files/isAnime")
-    with open(f"{thisdir}/files/isAnime", 'r') as f:
+        with open(f"{thisdir}/files/isAnime", 'r') as f:
             f = csv.reader(f)
             for row in f:
                 isAnime = row
-    isAnime = isAnime[0]
+        isAnime = isAnime[0]
     #print(isAnime + "\n\n\n\n\n\n")
     #print(rifever1)
 
     #print(rifever1)
-    if isAnime != "True":
-        if rifever1 == "Rife":
-            rifever = "-m rife"
-        if rifever1 == "HD":
-            rifever = "-m rife-HD"
-        if rifever1 == "UHD":
-            rifever = "-m rife-UHD"
-        if rifever1 == "2.0":
-            rifever = "-m rife-v2"
-        if rifever1 == "2.3":
-            rifever = "-m rife-v2.3"
-        if rifever1 == "3.0":
-            rifever = "-m rife-v3.0"
-        if rifever1 == "4.0":
-            rifever = "-m rife-v4"
-        if rifever1 == "2.4":
-            rifever = "-m rife-v2.4"
-        if rifever1 == "3.1":
-            rifever = "-m rife-v3.1"
-        if rifever1 == "4.6":
-            rifever = "-m rife-v4.6"
-        if rifever1 == "Anime":
-            rifever = "-m rife-anime"
-        if interpolation_option == "2X":
-            on_click(rifever)
-        if interpolation_option == "4X":
-            times4(rifever)
-        if interpolation_option == "8X":
-            times8(rifever)
-    else:
-        AnimeInterpolation()
+        if isAnime != "True":
+            if rifever1 == "Rife":
+                rifever = "-m rife"
+            if rifever1 == "HD":
+                rifever = "-m rife-HD"
+            if rifever1 == "UHD":
+                rifever = "-m rife-UHD"
+            if rifever1 == "2.0":
+                rifever = "-m rife-v2"
+            if rifever1 == "2.3":
+                rifever = "-m rife-v2.3"
+            if rifever1 == "3.0":
+                rifever = "-m rife-v3.0"
+            if rifever1 == "4.0":
+                rifever = "-m rife-v4"
+            if rifever1 == "2.4":
+                rifever = "-m rife-v2.4"
+            if rifever1 == "3.1":
+                rifever = "-m rife-v3.1"
+            if rifever1 == "4.6":
+                rifever = "-m rife-v4.6"
+            if rifever1 == "Anime":
+                rifever = "-m rife-anime"
+            if interpolation_option == "2X":
+                on_click(rifever)
+            if interpolation_option == "4X":
+                times4(rifever)
+            if interpolation_option == "8X":
+                times8(rifever)
+        else:
+            AnimeInterpolation()
 
 # This code allows for the dropdown selector for the rife versions and interpolation option.  
 # This was a very desprate debugging technique i used, apologize for the mess.
@@ -1160,9 +1161,9 @@ def pb8x2():
 def pb8x3():
     t1 = Thread(target=progressBar8xThird)
     t1.start()
-def threading():
+def threading(program):
     # Call work function
-    t1 = Thread(target=show)
+    t1 = Thread(target=lambda: show(program))
     t1.start()
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
@@ -1392,12 +1393,10 @@ button_exit = Button(tab1,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
 settings_menu_button = Label(tab1,padx='40',bg=bg,fg=fg)
-start_button = Button(tab1, text="Start!", command=threading,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
 
 # Last column is 22
-spacer= Label(tab1,
-                 
-                 font=("Arial", 11), width=67, anchor="w",
+spacer= Label(tab1, padx='0',
                  fg=fg,bg=bg)
 spacer.grid(column=3, row=10)
 progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
@@ -1405,7 +1404,7 @@ progressbar.grid(column=3, row=22)
 # Sets the grid location of the settings menu button                        
 settings_menu_button.grid(column=4, row=0)
 # Sets start button away from everything else
-start_button_spacer = Label(tab1,pady=57,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+start_button_spacer = Label(tab1,pady=55,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
 # this is where i layout the stuff on the gui
 button_explore.grid(column = 3, row = 3)
 button_output.grid(column = 3, row = 4)
