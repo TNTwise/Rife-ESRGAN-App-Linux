@@ -1477,12 +1477,12 @@ def anime4X(is16x):
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
             done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         else:
             done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
@@ -1568,12 +1568,12 @@ def anime8X(is16x):
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
             done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         else:
             done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
@@ -1697,12 +1697,12 @@ def on_click(rifever):
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
             done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         else:
            done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
@@ -1771,12 +1771,12 @@ def times4(rifever):
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
         done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     else:
         done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
@@ -1964,12 +1964,12 @@ def times8(rifever):
     if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
         done3 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps(1){extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     else:
         done3 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps{extension}",
-                 font=("Arial", 11), width=67, anchor="w",
+                 font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
 
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
@@ -1992,3 +1992,5 @@ main_window.geometry("680x490")
 main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
+
+#Help me
