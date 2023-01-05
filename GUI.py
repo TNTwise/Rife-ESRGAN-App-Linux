@@ -1513,7 +1513,7 @@ def anime4X(is16x, is8x):
         if is16x == True and is8x == False:
             if i != 2:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
-                os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+                
             else:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                 os.system(fr'rm -rf "{thisdir}/temp.mp4"')
