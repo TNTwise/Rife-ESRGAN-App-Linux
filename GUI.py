@@ -1910,7 +1910,7 @@ def times8(rifever):
     os.system('rm -rf "'+thisdir+'/temp"')
     os.chdir(f"{thisdir}")
 main_window.geometry("680x490")
-main_window.title(' ')
+main_window.title('Rife Vulkan GUI')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
