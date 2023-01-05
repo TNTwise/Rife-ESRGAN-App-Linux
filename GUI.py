@@ -1452,7 +1452,8 @@ def anime4X(is16x, is8x):
             for row in f:
                 outputdir = row
             outputdir = outputdir[0]
-
+        if os.path.exists(outputdir) == False:
+            outputdir = homedir
         if i == 0:
             on_click2_anime(i,is16x, False)
         if i == 1 and is16x == False:
@@ -1493,8 +1494,9 @@ def anime4X(is16x, is8x):
                 Anime8xPb2Thread()
             if i == 1:
                 Anime8xPb4Thread()
-     
-            outputdir = homedir
+        if is8x == False and is16x == False:
+                pb4x2()
+            
         timestwo.after(0, timestwo.destroy())
         Interpolation2.grid(column=4,row=10)
         global done2
@@ -1537,76 +1539,22 @@ def anime4X(is16x, is8x):
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
+        
     if is16x == False and is8x == False:
             os.system('rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
             os.system('rm temp*')
             os.chdir("rife-vulkan-models")
     os.chdir(f"{thisdir}")
+    if i == X4_loop - 1:
+        os.system('rm temp*')
 def anime8X(is16x):
         if is16x == False:
             anime4X(False,True)# this sets is8x to true, which loops the program twice for 8x.
         else:
             anime4X(True,False) # sets 8x and 16x to true, for looping
             
-def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
-    done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-    #done.grid(column=4,row=10)
-    #global timestwo
-    timestwo = Label(tab1,
-                     font=("Arial", 11),
-                     text = f"Finished 2X interpolation. Generated temp.mp4.",
-                     fg=fg,bg=bg)
-    timestwo.grid(column=4,row=10)
-    get_fps2()
-    os.system('rm -rf input_frames')
-    os.system('rm -rf output_frames ')
-    os.system('mkdir input_frames')
-    os.system('mkdir output_frames')
-    os.system(f'ffprobe "{thisdir}/temp3.mp4"')
 
-    os.system(f'ffmpeg -i "{thisdir}/temp3.mp4" input_frames/frame_%08d.png')
-    if is16x == False:
-        Anime8xPb3Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-    else:
-        Anime16xPb5Thread()
-
-    os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.chdir(f"{thisdir}")
-    os.system('rm temp*')
-    os.chdir("rife-vulkan-models")
-    os.system(fr'ffmpeg -framerate 120 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp4.mp4" -y')
-    os.system(f'ffmpeg -i {thisdir}/temp4.mp4  -vf mpdecimate,fps=30 -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -vsync vfr -crf 0 -c:a copy  {thisdir}/temp5.mp4 -y')
-    os.chdir(f"{thisdir}")
-    os.system('rm temp4.mp4')
-    os.chdir("rife-vulkan-models")
-def on_click2_anime_8x2(is16x): # interpolates temp2 to 60fps.
-    #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-    #done.grid(column=4,row=10)
-    #global timestwo
-    timestwo = Label(tab1,
-                     font=("Arial", 11),
-                     text = f"Finished 2X interpolation. Generated temp.mp4.",
-                     fg=fg,bg=bg)
-    timestwo.grid(column=4,row=10)
-    get_fps2()
-    os.system('rm -rf input_frames')
-    os.system('rm -rf output_frames ')
-    os.system('mkdir input_frames')
-    os.system('mkdir output_frames')
-    os.system(f'ffprobe "{thisdir}/temp2.mp4"')
-
-    os.system(f'ffmpeg -i "{thisdir}/temp2.mp4" input_frames/frame_%08d.png')
-    if is16x == False:
-        Anime8xPb2Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-    else:
-        Anime16xPb4Thread()
-    os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.chdir(f"{thisdir}")
-    os.system('rm temp*')
-    os.chdir("rife-vulkan-models")
-    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp3.mp4" -y')
-    
 # different modes of interpolation
 def on_click(rifever):
     vidQuality = getVidQuality()
@@ -1786,6 +1734,7 @@ def on_click2_anime(round, is16x, is8x):
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     if is16x == False and is8x == False:
+        sleep(1)
         pbthread4x() # calls the first 4x progressbar.
     if is16x == True and is8x == False:
         if round == 0:
