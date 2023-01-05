@@ -1767,8 +1767,10 @@ def on_click2(rifever):
     Interpolation.destroy()
 def on_click2_anime(round, is16x, is8x):
     get_fps()
+    if round != 0:
+        os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp2.mp4 -y')
     if is8x == True or is16x == True and round != 0:
-        filename1 = f'"{thisdir}/temp.mp4"'
+        filename1 = f'"{thisdir}/temp2.mp4"'
     else:
         filename1 = filename
     os.system('rm -rf input_frames')
@@ -1798,7 +1800,10 @@ def on_click2_anime(round, is16x, is8x):
             Anime8xPb3Thread()
         
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
+    if round == 0:
+        os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
+    else:
+        os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
 def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
     get_fps()
@@ -1958,3 +1963,4 @@ main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
+#Help me
