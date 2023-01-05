@@ -1452,13 +1452,13 @@ def anime4X(is16x, is8x):
             outputdir = outputdir[0]
 
         if i == 0:
-            on_click2_anime(is16x, False)
+            on_click2_anime(i,is16x, False)
         if i == 1 and is16x == False:
-            on_click2_anime(is16x, True)
+            on_click2_anime(i,is16x, True)
         if i == 1 and is16x == True:
-            on_click2_anime(is16x, False)
+            on_click2_anime(i,is16x, False)
         if i == 2:
-            on_click2_anime(is16x, True)
+            on_click2_anime(i,is16x, True)
         
         os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
         os.chdir(f"{thisdir}")
@@ -1478,11 +1478,20 @@ def anime4X(is16x, is8x):
         os.system(f'ffprobe "{thisdir}/temp.mp4"')
     
         os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
-        if is16x == False:
-            pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
-        else:
-            Anime16xPb2Thread()
-        if os.path.exists(outputdir) == False:
+        if is16x == True and is8x == False:
+            if i == 0:
+                Anime16xPb2Thread()
+            if i == 1:
+                Anime16xPb4Thread()
+            if i == 2:
+                Anime16xPb6Thread()
+            
+        if is8x == True and is16x == False:
+            if i == 0:
+                Anime8xPb2Thread()
+            if i == 1:
+                Anime8xPb4Thread()
+     
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
         Interpolation2.grid(column=4,row=10)
@@ -1756,9 +1765,9 @@ def on_click2(rifever):
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
-def on_click2_anime(is16x, is8x):
+def on_click2_anime(round, is16x, is8x):
     get_fps()
-    if is8x == True:
+    if is8x == True or is16x == True and round != 0:
         filename1 = f'"{thisdir}/temp.mp4"'
     else:
         filename1 = filename
@@ -1772,11 +1781,22 @@ def on_click2_anime(is16x, is8x):
     os.system(f'ffmpeg -i "{filename1}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
-    if is16x == False:
+    if is16x == False and is8x == False:
         pbthread4x() # calls the first 4x progressbar.
-    else:
-        Anime16xPb1Thread()
-            # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    if is16x == True and is8x == False:
+        if round == 0:
+            Anime16xPb1Thread()
+        if round == 1:
+            Anime16xPb3Thread()
+        if round == 2:
+            Anime16xPb5Thread()
+            
+    if is8x == True and is16x == False:
+        if round == 0:
+            Anime8xPb1Thread()
+        if round == 1:
+            Anime8xPb3Thread()
+        
     os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
@@ -1938,4 +1958,3 @@ main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
-#Help me
