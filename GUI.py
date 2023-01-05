@@ -793,7 +793,7 @@ def progressBar4x(): # makes first progressbar in 4x
     
     progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=300)
     progressbar.grid(column=4, row=22)
-    #sleep(1)
+    sleep(1) # Helps progressbar be more consistant
     # Add progressbar updater
     while i == 2:
         frames_processed = len(list(Path('output_frames/').glob('*')))
@@ -868,7 +868,7 @@ def progressBar8x(): # this is called first.
     
     progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
     progressbar.grid(column=4, row=22)
-    
+    sleep(1) #Helps keep consistancy.
     # Add progressbar updater
     while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
         frames_processed = len(list(Path('output_frames/').glob('*')))
@@ -957,6 +957,7 @@ def Anime8xPb1(): # called first 8x
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
+    sleep(1)
     while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
         frames_processed = len(list(Path('output_frames/').glob('*')))
         amount_of_output_files = len(list(Path('input_frames/').glob('*'))) *2
@@ -971,13 +972,14 @@ def Anime8xPb1(): # called first 8x
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb1(): # called first 16x
+
     i = 2
     amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
     progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
-    
+    sleep(1)
     # Add progressbar updater
     while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
         frames_processed = len(list(Path('output_frames/').glob('*')))
