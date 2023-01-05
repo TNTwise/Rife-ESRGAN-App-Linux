@@ -1417,14 +1417,21 @@ def AnimeInterpolation():
             interp_opt = row
     interp_opt = interp_opt[0]
     if interp_opt == "4X":
-        anime4X(False)
+        anime4X(False,False)
 
     if interp_opt == "8X":
         anime8X(False)
     if interp_opt == "16X":
-        anime4X(True)
-        anime8X(True)
-def anime4X(is16x):
+        anime4X(True, False)
+        
+def anime4X(is16x, is8x): 
+    if is8x == True and is16x == False:
+        X4_loop = 2
+    if is8x == False and is16x == False:
+        X4_loop = 1
+    if is8x == False and is16x == True:
+        X4_loop = 3
+    for i in range(X4_loop): # loops through it twice for 8x, 3 times for 16x
         vidQuality = getVidQuality()
         os.chdir("rife-vulkan-models")
         global done
@@ -1444,8 +1451,14 @@ def anime4X(is16x):
                 outputdir = row
             outputdir = outputdir[0]
 
-     
-        on_click2_anime(is16x)
+        if i == 0:
+            on_click2_anime(is16x, False)
+        if i == 1 and is16x == False:
+            on_click2_anime(is16x, True)
+        if i == 1 and is16x == True:
+            on_click2_anime(is16x, False)
+        if i == 2:
+            on_click2_anime(is16x, True)
         
         os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
         os.chdir(f"{thisdir}")
@@ -1486,116 +1499,45 @@ def anime4X(is16x):
                  fg=fg,bg=bg)
     
         os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-        if is16x == False:
+        if is16x == False and is8x == False:# Exports video based on interpolation option
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
             else:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
             os.system(fr'rm -rf "{thisdir}/temp.mp4"')
-        else:
-            
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
-                
-        
+        if is8x == True and is16x == False:
+            if i == 0:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+            else:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+        if is16x == True and is8x == False:
+            if i != 2:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+                os.system(fr'rm -rf "{thisdir}/temp.mp4"')
+            else:
+                os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
     
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
-        if is16x == False:
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')    
+        os.chdir(f"{thisdir}")
+    if is16x == False and is8x == False:
             os.system('rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
             os.system('rm temp*')
             os.chdir("rife-vulkan-models")
-        os.system('rm -rf input_frames')
-        os.system('rm -rf output_frames ')    
-        os.chdir(f"{thisdir}")
+    os.chdir(f"{thisdir}")
 def anime8X(is16x):
-        os.chdir("rife-vulkan-models")
-        vidQuality = getVidQuality()
-        #global done
-        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-        #done.grid(column=4,row=10)
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
-        # this if statement sets default output dir, may need to remove when add selector.
-
-        # this if statement sets default output dir, may need to remove when add selector.
-        if os.path.isfile(f"{thisdir}/temp") == False:
-            outputdir = get_output_dir()
-    
-        else:
-            f = open(f"{thisdir}/temp")
-            f = csv.reader(f)
-            for row in f:
-                outputdir = row
-            outputdir = outputdir[0]
-
         if is16x == False:
-            on_click2_anime_8x(False) # 30fps file output
-        if is16x == True:
-            on_click2_anime_8x(True) # 30fps file output
-        Interpolation.destroy()
-        on_click2_anime_8x2(is16x) # 4x interpolation from these 2 functions, generate 60fps temp3 file
-        on_click2_anime_8x3(is16x) # gets 8x interpolation done with a 30fps file called temp5
-        global timestwo
-        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-        #done.grid(column=4,row=10)
-        timestwo = Label(tab1,
-                     font=("Arial", 11),
-                     text = f"Finished 4X interpolation. Generated temp.mp4.",
-                     fg=fg,bg=bg)
-        timestwo.grid(column=4,row=10)
-        get_fps2()
-        os.system('rm -rf input_frames')
-        os.system('rm -rf output_frames ')
-        os.system('mkdir input_frames')
-        os.system('mkdir output_frames')
-        os.system(f'ffprobe "{thisdir}/temp5.mp4"')
-        
-        os.system(f'ffmpeg -i "{thisdir}/temp5.mp4" input_frames/frame_%08d.png')
-        if is16x == False:
-            Anime8xPb4Thread() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
+            anime4X(False,True)# this sets is8x to true, which loops the program twice for 8x.
         else:
-            Anime16xPb6Thread()
-        if os.path.exists(outputdir) == False:
-            outputdir = homedir
-        timestwo.after(0, timestwo.destroy())
-        Interpolation2.grid(column=4,row=10)
-        #global done2
-        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
-            done2 = Label(tab1,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
-                 font=("Arial", 11), width=57, anchor="w",
-                 fg=fg,bg=bg)
-        else:
-            done2 = Label(tab1,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
-                 font=("Arial", 11), width=57, anchor="w",
-                 fg=fg,bg=bg)
-    
-        os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
-        if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1).{extension}" -y')
-        else:
-            os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps.{extension}" -y')
-        #os.system(fr'rm -rf "{thisdir}/temp.mp4"')
-        
-        Interpolation2.after(0, Interpolation2.destroy())
-        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
-    
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
-        
-        #os.system('rm -rf "'+thisdir+'/temp"')
-        os.system('rm -rf input_frames')
-        os.system('rm -rf output_frames ')    
-        os.chdir(f"{thisdir}")
-        os.system('rm temp*')
-
+            anime4X(True,False) # sets 8x and 16x to true, for looping
+            
 def on_click2_anime_8x3(is16x): # interpolated temp3 to 120fps, and lowers it to 30, outputing temp5
     done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
     #done.grid(column=4,row=10)
@@ -1814,17 +1756,20 @@ def on_click2(rifever):
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
-def on_click2_anime(is16x):
+def on_click2_anime(is16x, is8x):
     get_fps()
-    
+    if is8x == True:
+        filename1 = f'"{thisdir}/temp.mp4"'
+    else:
+        filename1 = filename
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')
     os.system('mkdir input_frames')
     os.system('mkdir output_frames')
-    os.system(f'ffprobe "{filename}"')
-    os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+    os.system(f'ffprobe "{filename1}"')
+    os.system(f'ffmpeg -i "{filename1}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=4,row=10)
-    os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+    os.system(f'ffmpeg -i "{filename1}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     if is16x == False:
