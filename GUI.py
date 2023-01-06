@@ -588,7 +588,6 @@ def sel_default_output_folder():
     default_output_label_1 = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     default_output_label_1.grid(column=1, row=1)
     
-settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 
