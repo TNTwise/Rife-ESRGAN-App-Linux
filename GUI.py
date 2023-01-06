@@ -596,7 +596,6 @@ def sel_default_output_folder():
     default_output_label_1 = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     default_output_label_1.grid(column=1, row=1)
     
-settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 
@@ -1910,7 +1909,7 @@ def times8(rifever):
     os.system('rm -rf "'+thisdir+'/temp"')
     os.chdir(f"{thisdir}")
 main_window.geometry("680x490")
-main_window.title('Rife Vulkan GUI')
+main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
