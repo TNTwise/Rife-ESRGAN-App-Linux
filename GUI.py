@@ -22,8 +22,7 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
-if os.path.isfile(f'{thisdir}/Start') == False:
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
+    
     
 if(os.path.isfile(thisdir+"/theme")) == False:
     os.mknod(thisdir+"/theme")
@@ -364,15 +363,7 @@ listbox = Listbox(tab1, height=7,
 
 def settings_window():
     
-    # sets colors for window
-    #if check_theme() == "Light":
-
-    #    settings_window.config(bg="white")
-
-    #if check_theme() == "Dark":
-
-    #    settings_window.config(bg="#4C4E52")
-
+    
     button_select_default_output = Button(tab3,
                         text = "Select default output folder",
                         command = sel_default_output_folder, bg=bg_button,fg=fg)
@@ -433,8 +424,8 @@ def settings_window():
         opt.config(width=9, font=('Helvetica', 12))
         opt.config(bg=bg)
         opt.config(fg=fg)
-        update_branch_label.grid(column=5,row=0)
-        opt.grid(column=5,row=1)
+        update_branch_label.grid(column=6,row=0)
+        opt.grid(column=6,row=1)
         def callback(*args):
             with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
                 f.write(variable.get())
@@ -499,9 +490,9 @@ def settings_window():
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=4,row=0)
     theme_button.grid(column=4, row=1)
-    spacer_label1.grid(column=4,row=0)
-    check_updates_button.grid(column=5,row=3)
-    update_spacer_label.grid(column=5,row=2)
+    spacer_label1.grid(column=5,row=0)
+    check_updates_button.grid(column=6,row=3)
+    update_spacer_label.grid(column=6,row=2)
     #change_repo_dropdown.grid(column=5,row=2)
 
 
@@ -597,6 +588,7 @@ def sel_default_output_folder():
     default_output_label_1 = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
     default_output_label_1.grid(column=1, row=1)
     
+settings_icon = PhotoImage(file = thisdir+"/icons/settings_icon.png")
 
 
 
@@ -1914,3 +1906,4 @@ main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
+#Help me
