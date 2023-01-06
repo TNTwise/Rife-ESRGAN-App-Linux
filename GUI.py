@@ -22,7 +22,8 @@ if(os.path.isfile(thisdir+"/programstate")) == False:
     os.system('rm files/get-pip.py')
     with open (thisdir+"/programstate", "w") as f:
         f.write(homedir)
-    
+if os.path.isfile(f'{thisdir}/Start') == False:
+    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
     
 if(os.path.isfile(thisdir+"/theme")) == False:
     os.mknod(thisdir+"/theme")
@@ -1913,4 +1914,3 @@ main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
-#Help me
