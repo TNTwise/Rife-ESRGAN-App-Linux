@@ -118,7 +118,7 @@ if check_theme() == "Dark":
 if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
     os.mknod(f"{thisdir}/files/videoQuality")
     with open(f"{thisdir}/files/videoQuality", 'w') as f:
-        f.write("16")
+        f.write("9")
 
 f = open(thisdir+"/programstate", "r")
 f = csv.reader(f)
@@ -442,13 +442,13 @@ def settings_window():
     def video_quality_drop_down():
         vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = getVidQuality()
-        if vidQuality == "30":
-            vidQuality1 = "Low"
         if vidQuality == "25":
+            vidQuality1 = "Low"
+        if vidQuality == "20":
             vidQuality1 = "Medium"
-        if vidQuality == "16":
+        if vidQuality == "13":
             vidQuality1 = "High"
-        if vidQuality == "7":
+        if vidQuality == "3":
             vidQuality1 = "Lossless"
         variable = StringVar(tab3)
         repo_options = ['Lossless','High', 'Medium', 'Low']
@@ -463,13 +463,13 @@ def settings_window():
             with open(f"{thisdir}/files/videoQuality", 'w') as f: # gets the repo stored in repository file
                 # Converts these to cfv format
                 if variable.get() == "Low":
-                    f.write("30")
+                    f.write("22")
                 if variable.get() == "Medium":
-                    f.write("25")
+                    f.write("18")
                 if variable.get() == "High":
-                    f.write("16")
+                    f.write("9")
                 if variable.get() == "Lossless":
-                    f.write("7")
+                    f.write("3")
                 
         variable.trace("w", callback)
     video_quality_drop_down()
@@ -1599,9 +1599,9 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
