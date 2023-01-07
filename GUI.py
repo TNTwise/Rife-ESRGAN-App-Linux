@@ -503,12 +503,12 @@ def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
         update_check_label = Label(tab3,text="Updated, restart to apply.",bg=bg,fg=fg)
-        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
+        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
         restart_window("Updated, re-launch the program to apply.")
     else:
         update_check_label = Label(tab3,text="No Updates",bg=bg,fg=fg)
-        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=5,row=3)
-    update_check_label.grid(column=5,row=5)
+        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
+    update_check_label.grid(column=6,row=5)
 # restarts the program
 
 
@@ -1162,7 +1162,7 @@ def threading(program):
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
     t1.start()
-    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=5,row=3)
+    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=6,row=3)
 def anime_thread():
     t1 = Thread(target=AnimeInterpolation)
     t1.start()
@@ -1905,5 +1905,3 @@ main_window.geometry("680x490")
 main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
-
-#Help me
