@@ -442,11 +442,11 @@ def settings_window():
     def video_quality_drop_down():
         vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = getVidQuality()
-        if vidQuality == "25":
+        if vidQuality == "22":
             vidQuality1 = "Low"
-        if vidQuality == "20":
+        if vidQuality == "18":
             vidQuality1 = "Medium"
-        if vidQuality == "13":
+        if vidQuality == "9":
             vidQuality1 = "High"
         if vidQuality == "3":
             vidQuality1 = "Lossless"
