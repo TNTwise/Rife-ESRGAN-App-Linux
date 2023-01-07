@@ -65,6 +65,7 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
+os.system(f'chmod +x {thisdir}/rife-vulkan-models/rife-ncnn-vulkan')
 def check_theme():
     
     # This code reads the theme file and stores its data in a theme variable
@@ -1905,3 +1906,4 @@ main_window.geometry("680x490")
 main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
+
