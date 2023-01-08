@@ -1098,7 +1098,23 @@ def Anime16xPb6(): # called first 16x
             progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=600,maximum=600)
             progressbar.grid(column=4, row=22)
             break
-
+def RealPB():
+    i = 2
+    amount_of_input_files = (len([name for name in os.listdir('input_frames/') if os.path.isfile(name)]))
+    amount_of_output_files = amount_of_input_files * 2
+    global progressbar
+    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=500, mode="determinate")
+    progressbar.grid(column=4, row=22)
+    # Add progressbar updater
+    progressbar["maximum"]=100
+    while i == 2:
+        frames_processed = len(list(Path('output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path('input_frames/').glob('*'))) 
+        e = frames_processed/amount_of_output_files
+        e*= 100
+        e = int(e)
+        progressbar['value'] = e
+        progressbar.update()
 #Calls respective function, creates new thread for progressbar and other things, will only execute if called.
 def Anime16xPb1Thread():
     t1 = Thread(target=Anime16xPb1)
@@ -1137,6 +1153,9 @@ def Anime8xPb3Thread():
 def Anime8xPb4Thread():
     # Call work function
     t1 = Thread(target=Anime8xPb4)
+    t1.start()
+def pbthreadreal():
+    t1 = Thread(target=RealPB)
     t1.start()
 def pbthread2x():
     # Call work function
@@ -1517,7 +1536,7 @@ def anime4X(is16x, is8x):
         if i == 2:
             on_click2_anime(i,is16x, True)
         
-        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
         os.chdir(f"{thisdir}")
         os.system('rm temp1.mp4')
         os.chdir("rife-vulkan-models")
@@ -1640,29 +1659,29 @@ def realESRGAN(model):
         os.system('mkdir output_frames')
         os.system(f'ffprobe "{filename}"')
         os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
-        extraction.grid(column=4,row=10)
+        #extraction.grid(column=4,row=10)
         os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
-        extraction.after(0, extraction.destroy())
-        Interpolation.grid(column=4,row=10)
-        pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+        #extraction.after(0, extraction.destroy())
+        #Interpolation.grid(column=4,row=10)
+        pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
-            done = Label(tab1,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
+            done = Label(tab2,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps)}fps(1){extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         else:
-           done = Label(tab1,
+           done = Label(tab2,
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
-        Interpolation.after(0, Interpolation.destroy())
+            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+        #Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
         start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
