@@ -1425,7 +1425,7 @@ def layout_realsr():
     def callback(*args):
         global realsr_model
         if variable2.get() == 'Animation':
-            realsr_model = '-n realesrgan-x4plus-anime -s 3'
+            realsr_model = '-n realesr-animevideov3 -s 2'
         else:
             realsr_model = ''
     variable2.trace("w", callback)
