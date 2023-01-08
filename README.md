@@ -37,6 +37,7 @@ As of latest SteamOs 3.4, it does not error out when launching it from "Start". 
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
+Disable tabs when on a certain upscale mode
 Add realesrgan support to upscale video resolution, make app more general purpose<br />
 Set up queue system <br />
 Add scalability to GUI<br />
