@@ -1,3 +1,4 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=Rife Vulkan GUI
 Exec=rife-gui
