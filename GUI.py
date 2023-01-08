@@ -65,6 +65,8 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
+global realsr_model
+realsr_model = ''
 os.system(f'chmod +x {thisdir}/rife-vulkan-models/rife-ncnn-vulkan')
 def check_theme():
     
@@ -619,10 +621,7 @@ def show(program):
             for row in f:
                 isAnime = row
         isAnime = isAnime[0]
-    #print(isAnime + "\n\n\n\n\n\n")
-    #print(rifever1)
-
-    #print(rifever1)
+    
         if isAnime != "True":
             if rifever1 == "Rife":
                 rifever = "-m rife"
@@ -654,6 +653,8 @@ def show(program):
                 times8(rifever)
         else:
             AnimeInterpolation()
+    if program == 'realsr':
+        realESRGAN(realsr_model) 
 
 # This code allows for the dropdown selector for the rife versions and interpolation option.  
 # This was a very desprate debugging technique i used, apologize for the mess.
@@ -1368,43 +1369,103 @@ def Anime():
     variable2.trace("w", callback)
 
 Anime()
-rife_vulkan = Label (tab1,
+def exi11(): # this funtion kills the program.
+    os.system('pkill -f GUI.py')
+
+def layout_rife():
+    rife_vulkan = Label (tab1,
                             text = "Rife Vulkan"
                                                            ,
                             font=("Arial", 23),
                             bg=bg,fg=fg,padx='0')# adjust this padx
-button_explore = Button(tab1,
+    button_explore = Button(tab1,
                         text = "Input Video",
                         command = browseFiles, bg=bg_button,fg=fg)
-button_output = Button(tab1,
+    button_output = Button(tab1,
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
-def exi11(): # this funtion kills the program.
-    os.system('pkill -f GUI.py')
 
-button_exit = Button(tab1,
+    button_exit = Button(tab1,
                         text = "EXIT",
                         command = exi11,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
-settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
-start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+    settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
+    start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
 
-# Last column is 22
-spacer= Label(tab1, padx='0',
+    # Last column is 22
+    spacer= Label(tab1, padx='0',
                  fg=fg,bg=bg)
-spacer.grid(column=4, row=10)
-progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
-progressbar.grid(column=4, row=22)
-# Sets the grid location of the settings menu button                        
-settings_menu_button.grid(column=5, row=0)
-# Sets start button away from everything else
-start_button_spacer = Label(tab1,pady=55,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
-# this is where i layout the stuff on the gui
-button_explore.grid(column = 4, row = 3)
-button_output.grid(column = 4, row = 4)
-button_exit.grid(column=4,row=9)
-rife_vulkan.grid(column=4, row=0)
+    spacer.grid(column=4, row=10)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar.grid(column=4, row=22)
+    # Sets the grid location of the settings menu button                        
+    settings_menu_button.grid(column=5, row=0)
+    # Sets start button away from everything else
+    start_button_spacer = Label(tab1,pady=55,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    # this is where i layout the stuff on the gui
+    button_explore.grid(column = 4, row = 3)
+    button_output.grid(column = 4, row = 4)
+    button_exit.grid(column=4,row=9)
+    rife_vulkan.grid(column=4, row=0)
+layout_rife()
+
+def layout_realsr():
+    variable2 = StringVar(tab1)
+    video_options = ['Default', 'Animation']
+    variable2.set('Default')
+    opt1 = OptionMenu(tab2, variable2, *video_options)
+    opt1.config(width=30, font=('Helvetica', 12))
+    opt1.config(bg=bg)
+    opt1.config(fg=fg)
+    opt1.grid(column=4,row=8)
+    
+    #if os.path.isfile(f"{thisdir}/files/isAnime") == False: 
+    #        os.mknod(f"{thisdir}/files/isAnime")
+    def callback(*args):
+        global realsr_model
+        if variable2.get() == 'Animation':
+            realsr_model = '-n realesrgan-x4plus-anime -s 3'
+        else:
+            realsr_model = ''
+    variable2.trace("w", callback)
+    realsr_vulkan = Label (tab2,
+                            text = "Real-ESRGAN Vulkan"
+                                                           ,
+                            font=("Arial", 23),
+                            bg=bg,fg=fg,padx='0')# adjust this padx
+    button_explore = Button(tab2,
+                        text = "Input Video",
+                        command = browseFiles, bg=bg_button,fg=fg)
+    button_output = Button(tab2,
+                        text = "Output Folder",
+                        command = output, bg=bg_button,fg=fg)
+
+    button_exit = Button(tab2,
+                        text = "EXIT",
+                        command = exi11,
+                        justify=CENTER,bg=bg_button,fg=fg)
+                                                                                                                                                     
+    settings_menu_button = Label(tab2,padx='500',bg=bg,fg=fg)
+    start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+
+    # Last column is 22
+    spacer= Label(tab2, padx='0',
+                 fg=fg,bg=bg)
+    spacer.grid(column=4, row=10)
+    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar.grid(column=4, row=22)
+    # Sets the grid location of the settings menu button                        
+    settings_menu_button.grid(column=5, row=0)
+    # Sets start button away from everything else
+    start_button_spacer = Label(tab2,pady=55,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    # this is where i layout the stuff on the gui
+    button_explore.grid(column = 4, row = 3)
+    button_output.grid(column = 4, row = 4)
+    button_exit.grid(column=4,row=9)
+    realsr_vulkan.grid(column=4, row=0)
+layout_realsr()
+
 def AnimeInterpolation():
     with open(f"{thisdir}/files/temp_interp_opt", 'r') as f:
         f = csv.reader(f)
@@ -1547,6 +1608,70 @@ def anime8X(is16x):
         else:
             anime4X(True,False) # sets 8x and 16x to true, for looping
             
+def realESRGAN(model):
+    vidQuality = getVidQuality()
+    if filename != "":
+        os.chdir("Real-ESRGAN")
+        global done
+        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
+        #done.grid(column=4, row=10)
+        start_button = Button(tab2, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab2,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
+        button_explore = Button(tab2,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+        # this if statement sets default output dir, may need to remove when add selector.
+        # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
+        # This is for all modes of interpolation
+        if os.path.isfile(thisdir+"/temp") == False:
+            outputdir = get_output_dir()
+            
+        else:
+            f = open(thisdir+"/temp")
+            f = csv.reader(f)
+            for row in f:
+                outputdir = row
+            outputdir = outputdir[0]
+    
+        # Calls get_fps function
+        get_fps()
+        #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
+        os.system('mkdir input_frames')
+        os.system('mkdir output_frames')
+        os.system(f'ffprobe "{filename}"')
+        os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+        extraction.grid(column=4,row=10)
+        os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
+        extraction.after(0, extraction.destroy())
+        Interpolation.grid(column=4,row=10)
+        pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+        if os.path.exists(outputdir) == False:
+            outputdir = homedir
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
+            done = Label(tab1,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}",
+                 font=("Arial", 11), width=57, anchor="w",
+                 fg=fg,bg=bg)
+        else:
+           done = Label(tab1,
+                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
+                 font=("Arial", 11), width=57, anchor="w",
+                 fg=fg,bg=bg)
+        os.system(f'./realesrgan-ncnn-vulkan {model} -i input_frames -o output_frames ')
+        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
+            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+        else:
+            os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+        Interpolation.after(0, Interpolation.destroy())
+        done.grid(column=4,row=10)
+        # these re-enable the start, input, and output buttons
+        start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+        button_output = Button(tab2,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
+        button_explore = Button(tab2,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 4, row = 3)
+        os.system('rm -rf input_frames')
+        os.system('rm -rf output_frames ')
+        os.chdir(f"{thisdir}")
+        #print(model)
 
 # different modes of interpolation
 def on_click(rifever):
@@ -1907,3 +2032,4 @@ main_window.title(' ')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
+#Help me
