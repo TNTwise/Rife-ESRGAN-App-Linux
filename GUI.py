@@ -1588,8 +1588,17 @@ def anime4X(is16x, is8x):
         if is16x == False and is8x == False:# Exports video based on interpolation option
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
+                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+                else:
+                        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
+
             else:
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
+                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+                else:
+                        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
             os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         if is8x == True and is16x == False:
             if i == 0:
@@ -1604,7 +1613,6 @@ def anime4X(is16x, is8x):
                 os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                 os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
-        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
     
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
@@ -1679,10 +1687,20 @@ def realESRGAN(model):
         os.system(f'./realesrgan-ncnn-vulkan {model} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow "{outputdir}/{mp4name}_res(1){extension}" -y')
+            if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
+                done.grid(column=4,row=10)
+            else:
+                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+
         else:
             os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.png" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow "{outputdir}/{mp4name}_res{extension}" -y')
+            if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
+                done.grid(column=4,row=10)
+            else:
+                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+
         #Interpolation.after(0, Interpolation.destroy())
-        done.grid(column=4,row=10)
+        
         # these re-enable the start, input, and output buttons
         start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
         button_output = Button(tab2,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
@@ -1745,8 +1763,17 @@ def on_click(rifever):
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
+            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}"') == True:
+                done.grid(column=4,row=10)
+            else:
+                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+
         else:
             os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
+            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}"') == True:
+                done.grid(column=4,row=10)
+            else:
+                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
