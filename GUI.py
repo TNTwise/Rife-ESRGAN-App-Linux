@@ -1249,12 +1249,12 @@ def get_fps():
     global Interpolation
     Interpolation = Label(tab1,
                           text=f"Interpolation Started!",
-                          font=("Arial", 11),
+                          font=("Arial", 11), width=57, anchor="c",
                           fg=fg,bg=bg)
     global extraction
     extraction = Label(tab1,
                        text=f"Extracting Frames",
-                       font=("Arial", 11),
+                       font=("Arial", 11), width=57, anchor="c",
                        fg=fg,bg=bg)
 
 def get_fps2():
@@ -1541,11 +1541,24 @@ def anime4X(is16x, is8x):
         os.system('rm temp1.mp4')
         os.chdir("rife-vulkan-models")
         global timestwo
-        timestwo = Label(tab1,
+        if i == 0:
+            timestwo = Label(tab1,
                      font=("Arial", 11),
-                     text = f"Finished 2X interpolation. Generated temp.mp4.",
+                     text = f"Finished 2X interpolation.",
                      fg=fg,bg=bg)
-        timestwo.grid(column=4,row=10)
+            timestwo.grid(column=4,row=10)
+        if i == 1:
+            timestwo = Label(tab1,
+                     font=("Arial", 11),
+                     text = f"Finished 4X interpolation.",
+                     fg=fg,bg=bg)
+            timestwo.grid(column=4,row=10)
+        if i == 2:
+            timestwo = Label(tab1,
+                     font=("Arial", 11),
+                     text = f"Finished 8X interpolation.",
+                     fg=fg,bg=bg)
+            timestwo.grid(column=4,row=10)
         get_fps2()
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')
@@ -1569,9 +1582,14 @@ def anime4X(is16x, is8x):
                 Anime8xPb4Thread()
         if is8x == False and is16x == False:
                 pb4x2()
-            
-        timestwo.after(0, timestwo.destroy())
+        if i == 1:
+            timestwo.after(0, timestwo.destroy())
+        if i == 0:
+            timestwo.after(0, timestwo.destroy())
+        if i == 2:
+            timestwo.after(0, timestwo.destroy())
         Interpolation2.grid(column=4,row=10)
+
         global done2
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
             done2 = Label(tab1,
@@ -1896,7 +1914,24 @@ def on_click2_anime(round, is16x, is8x):
     extraction.grid(column=4,row=10)
     os.system(f'ffmpeg -i "{filename1}" input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
-    Interpolation.grid(column=4,row=10)
+    if round == 0:
+        Interpolation = Label(tab1,
+                          text=f"Interpolation Started!",
+                          font=("Arial", 11),
+                          fg=fg,bg=bg)
+        Interpolation.grid(column=4,row=10)
+    if round == 1:
+        Interpolation = Label(tab1,
+                          text=f"4X Interpolation Started!",
+                          font=("Arial", 11),
+                          fg=fg,bg=bg)
+        Interpolation.grid(column=4,row=10)
+    if round == 2:
+        Interpolation = Label(tab1,
+                          text=f"8X Interpolation Started!",
+                          font=("Arial", 11),
+                          fg=fg,bg=bg)
+        Interpolation.grid(column=4,row=10)
     if is16x == False and is8x == False:
         sleep(1)
         pbthread4x() # calls the first 4x progressbar.
