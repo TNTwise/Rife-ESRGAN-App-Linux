@@ -66,7 +66,7 @@ import requests
 import re
 from zipfile import ZipFile
 global realsr_model
-realsr_model = ''
+realsr_model = '-n realesrgan-x4plus -s 4'
 os.system(f'chmod +x {thisdir}/rife-vulkan-models/rife-ncnn-vulkan')
 def check_theme():
     
@@ -704,6 +704,7 @@ def show(program):
         else:
             AnimeInterpolation()
     if program == 'realsr':
+
         realESRGAN(realsr_model) 
 
 # This code allows for the dropdown selector for the rife versions and interpolation option.  
@@ -1484,7 +1485,7 @@ def layout_realsr():
     video_options = ['Default', 'Animation']
     variable2.set('Default')
     opt1 = OptionMenu(tab2, variable2, *video_options)
-    opt1.config(width=30, font=('Helvetica', 12))
+    opt1.config(width=9, font=('Helvetica', 12))
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
@@ -1493,10 +1494,12 @@ def layout_realsr():
     #        os.mknod(f"{thisdir}/files/isAnime")
     def callback(*args):
         global realsr_model
+        realsr_model = '-n realesrgan-x4plus -s 4'
+        if variable2.get() == 'Default':
+            realsr_model = '-n realesrgan-x4plus -s 4'
         if variable2.get() == 'Animation':
             realsr_model = '-n realesr-animevideov3 -s 2'
-        else:
-            realsr_model = ''
+        
     variable2.trace("w", callback)
     realsr_vulkan = Label (tab2,
                             text = "Real-ESRGAN Vulkan"
