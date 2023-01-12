@@ -314,7 +314,8 @@ def get_all_models():
         os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu"')
         os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
-        #os.system(f'mv "{thisdir}/files/models" "{thisdir}/Real-ESRGAN/"')
+        os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu')
+        os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
     os.system(f'rm -rf "{thisdir}/temp/"')
 get_all_models()
 
@@ -1363,19 +1364,9 @@ def get_fps3():
                            fg=fg,bg=bg)
     
 
-#def show_term():
-#    termf = Frame(tab1, height=100, width=500)
-#
-#    termf.grid(column=4,row=10)
-#    wid = termf.winfo_id()
-#    os.system('xterm -into %d -geometry 80x10 -sb &' % wid)
-#show_term()
 #create labels
 def Anime():
-    #if os.path.isfile(f"{thisdir}/files/isAnime") == False: 
-    #   os.mknod(f"{thisdir}/files/isAnime")
-    #with open(f"{thisdir}/files/isAnime", 'w') as f: # gets the repo stored in repository file
-    #    f.write("Default")
+    
     variable2 = StringVar(tab1)
     video_options = ['Default', 'Animation (Uneven Framerate)']
     variable2.set('Default')
@@ -1384,10 +1375,8 @@ def Anime():
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
-    #if os.path.isfile(f"{thisdir}/files/isAnime") == False: 
-    #        os.mknod(f"{thisdir}/files/isAnime")
+
     def callback(*args):
-        #print(variable2.get())
         if variable2.get() == 'Default':
             start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
@@ -1427,8 +1416,7 @@ def Anime():
             with open(f'{thisdir}/files/temp_rife_ver', 'w') as f:
                 f.write('2.3')
 
-            #interpOptDropDown.config(state=DISABLED)
-            #rifeVerDropDown.config(state=DISABLED)
+
             if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                 os.mknod(f"{thisdir}/files/isAnime")
             with open(f"{thisdir}/files/isAnime", 'w') as f:
@@ -1505,9 +1493,7 @@ def layout_realsr():
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
-    
-    #if os.path.isfile(f"{thisdir}/files/isAnime") == False: 
-    #        os.mknod(f"{thisdir}/files/isAnime")
+
     def callback(*args):
         global realsr_model
         realsr_model = '-n realesrgan-x4plus -s 4'
@@ -1785,10 +1771,8 @@ def realESRGAN(model):
         os.system('mkdir output_frames')
         os.system(f'ffprobe "{filename}"')
         os.system(f'ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
-        #extraction.grid(column=4,row=10)
         os.system(f'ffmpeg -i "{filename}" input_frames/frame_%08d.png')
-        #extraction.after(0, extraction.destroy())
-        #Interpolation.grid(column=4,row=10)
+
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
             outputdir = homedir
@@ -1817,7 +1801,6 @@ def realESRGAN(model):
             else:
                                     error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
-        #Interpolation.after(0, Interpolation.destroy())
         
         # these re-enable the start, input, and output buttons
         start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
@@ -1826,7 +1809,6 @@ def realESRGAN(model):
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')
         os.chdir(f"{thisdir}")
-        #print(model)
         enable_tabs()
 # different modes of interpolation
 def on_click(rifever):
@@ -1836,8 +1818,6 @@ def on_click(rifever):
         grayout_tabs('rife')
         os.chdir("rife-vulkan-models")
         global done
-        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-        #done.grid(column=4, row=10)
         start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
@@ -1893,7 +1873,9 @@ def on_click(rifever):
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
-            #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+            #      
+            #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+            #idk wtf is going on here, it just prints it out whenever
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
@@ -1915,8 +1897,7 @@ def times4(rifever):
         grayout_tabs('rife')
         os.chdir("rife-vulkan-models")
         global done
-        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-        #done.grid(column=4,row=10)
+
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
@@ -2145,13 +2126,11 @@ def times8(rifever):
         grayout_tabs('rife')
         os.chdir("rife-vulkan-models")
         global done
-        #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
-        #done.grid(column=4,row=10)
+
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4, state=DISABLED).grid(row = 22, column = 0)
 
         button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
-        # this if statement sets default output dir, may need to remove when add selector.
 
         # this if statement sets default output dir, may need to remove when add selector.
         if os.path.isfile(thisdir+"/temp") == False:
@@ -2216,8 +2195,8 @@ def times8(rifever):
         os.chdir(f"{thisdir}")
         enable_tabs()
 main_window.geometry("680x490")
-main_window.title(' ')
+main_window.title('Rife - ESRGAN - App')
 main_window.resizable(False, False) 
 main_window.mainloop()
 
-#Help me
+
