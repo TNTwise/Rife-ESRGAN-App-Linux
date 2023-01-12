@@ -1424,9 +1424,11 @@ def Anime():
             Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
-            
+            with open(f'{thisdir}/files/temp_rife_ver', 'w') as f:
+                f.write('2.3')
+
             #interpOptDropDown.config(state=DISABLED)
-            rifeVerDropDown.config(state=DISABLED)
+            #rifeVerDropDown.config(state=DISABLED)
             if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                 os.mknod(f"{thisdir}/files/isAnime")
             with open(f"{thisdir}/files/isAnime", 'w') as f:
@@ -1553,20 +1555,47 @@ def layout_realsr():
 layout_realsr()
 
 def AnimeInterpolation():
+    with open(f"{thisdir}/files/temp_rife_ver" , 'r') as f:
+                f = csv.reader(f)
+                for row in f:
+                    rifever1 = row
+                rifever1 = rifever1[0]
+    if rifever1 == "Rife":
+                rifever = "-m rife"
+    if rifever1 == "HD":
+                rifever = "-m rife-HD"
+    if rifever1 == "UHD":
+                rifever = "-m rife-UHD"
+    if rifever1 == "2.0":
+                rifever = "-m rife-v2"
+    if rifever1 == "2.3":
+                rifever = "-m rife-v2.3"
+    if rifever1 == "3.0":
+                rifever = "-m rife-v3.0"
+    if rifever1 == "4.0":
+                rifever = "-m rife-v4"
+    if rifever1 == "2.4":
+                rifever = "-m rife-v2.4"
+    if rifever1 == "3.1":
+                rifever = "-m rife-v3.1"
+    if rifever1 == "4.6":
+                rifever = "-m rife-v4.6"
+    if rifever1 == "Anime":
+                rifever = "-m rife-anime"
     with open(f"{thisdir}/files/temp_interp_opt", 'r') as f:
         f = csv.reader(f)
         for row in f:
             interp_opt = row
     interp_opt = interp_opt[0]
     if interp_opt == "4X":
-        anime4X(False,False)
+        anime4X(False,False,rifever)
 
     if interp_opt == "8X":
-        anime8X(False)
+        anime8X(False,rifever)
     if interp_opt == "16X":
-        anime4X(True, False)
+        anime4X(True, False,rifever)
         
-def anime4X(is16x, is8x):
+def anime4X(is16x, is8x,rifever):
     if filename != "": 
         grayout_tabs('rife')
         if is8x == True and is16x == False:
@@ -1597,13 +1626,13 @@ def anime4X(is16x, is8x):
             if os.path.exists(outputdir) == False:
                 outputdir = homedir
             if i == 0:
-                on_click2_anime(i,is16x, False)
+                on_click2_anime(i,is16x, False,rifever)
             if i == 1 and is16x == False:
-                on_click2_anime(i,is16x, True)
+                on_click2_anime(i,is16x, True,rifever)
             if i == 1 and is16x == True:
-                on_click2_anime(i,is16x, False)
+                on_click2_anime(i,is16x, False,rifever)
             if i == 2:
-                on_click2_anime(i,is16x, True)
+                on_click2_anime(i,is16x, True,rifever)
         
             os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
             os.chdir(f"{thisdir}")
@@ -1671,7 +1700,7 @@ def anime4X(is16x, is8x):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
-            os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+            os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
                     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
@@ -1717,11 +1746,11 @@ def anime4X(is16x, is8x):
     os.chdir(f"{thisdir}")
     if i == X4_loop - 1:
         os.system('rm temp*')
-def anime8X(is16x):
+def anime8X(is16x,rifever):
         if is16x == False:
-            anime4X(False,True)# this sets is8x to true, which loops the program twice for 8x.
+            anime4X(False,True,rifever)# this sets is8x to true, which loops the program twice for 8x.
         else:
-            anime4X(True,False) # sets 8x and 16x to true, for looping
+            anime4X(True,False,rifever) # sets 8x and 16x to true, for looping
             
 def realESRGAN(model):
     vidQuality = getVidQuality()
@@ -1972,7 +2001,7 @@ def on_click2(rifever):
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
     Interpolation.destroy()
-def on_click2_anime(round, is16x, is8x):
+def on_click2_anime(round, is16x, is8x,rifever):
     get_fps()
     if round != 0:
         os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp2.mp4 -y')
@@ -2024,7 +2053,7 @@ def on_click2_anime(round, is16x, is8x):
         if round == 1:
             Anime8xPb3Thread()
         
-    os.system(f'./rife-ncnn-vulkan -i input_frames -o output_frames ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
     if round == 0:
         os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
     else:
