@@ -105,6 +105,20 @@ tabControl.add(tab2, text='Real-ESRGAN')
 
 tabControl.add(tab3, text='Settings')
 tabControl.grid(row=0,column=0)
+
+
+def grayout_tabs(mode):
+    if mode == 'rife':
+        tabControl.tab(tab2, state='disabled')
+    if mode == 'realsr':
+        tabControl.tab(tab1, state='disabled')  
+
+def enable_tabs():
+     tabControl.tab(tab1, state='normal')  
+     tabControl.tab(tab2, state='normal')  
+     tabControl.tab(tab3, state='normal')  
+
+
 if check_theme() == "Light":
     main_window.config(bg="white")
     
@@ -264,7 +278,7 @@ def get_all_models():
         with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
             f.extractall()
         os.chdir(f"{thisdir}")
-       
+        os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
         with open(f"{thisdir}/files/version", 'w') as f:
@@ -1553,6 +1567,7 @@ def AnimeInterpolation():
         anime4X(True, False)
         
 def anime4X(is16x, is8x): 
+    grayout_tabs('rife')
     if is8x == True and is16x == False:
         X4_loop = 2
     if is8x == False and is16x == False:
@@ -1691,7 +1706,8 @@ def anime4X(is16x, is8x):
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')    
         os.chdir(f"{thisdir}")
-        
+
+    enable_tabs()    
     if is16x == False and is8x == False:
             os.system('rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
@@ -1709,6 +1725,7 @@ def anime8X(is16x):
 def realESRGAN(model):
     vidQuality = getVidQuality()
     if filename != "":
+        grayout_tabs('realsr')
         os.chdir("Real-ESRGAN")
         global done
         #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
@@ -1780,11 +1797,13 @@ def realESRGAN(model):
         os.system('rm -rf output_frames ')
         os.chdir(f"{thisdir}")
         #print(model)
-
+        enable_tabs()
 # different modes of interpolation
 def on_click(rifever):
+    
     vidQuality = getVidQuality()
     if filename != "":
+        grayout_tabs('rife')
         os.chdir("rife-vulkan-models")
         global done
         #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
@@ -1833,18 +1852,18 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}" -y')
-            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1).{extension}"') == True:
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
+            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
-            else:
-                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+            #else:
+            #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}" -y')
-            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps.{extension}"') == True:
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
+            if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
-            else:
-                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+            #else:
+            #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
@@ -1855,13 +1874,14 @@ def on_click(rifever):
         os.system('rm -rf input_frames')
         os.system('rm -rf output_frames ')
         os.chdir(f"{thisdir}")
-
+        enable_tabs()
 
 
 
 
 
 def times4(rifever):
+    grayout_tabs('rife')
     os.chdir("rife-vulkan-models")
     global done
     #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
@@ -1931,7 +1951,7 @@ def times4(rifever):
     os.system('rm -rf input_frames')
     os.system('rm -rf output_frames ')    
     os.chdir(f"{thisdir}")
-
+    enable_tabs()
 def on_click2(rifever):
     get_fps()
     
@@ -2090,6 +2110,7 @@ def on_click3(rifever):
     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
 
 def times8(rifever):
+    grayout_tabs('rife')
     os.chdir("rife-vulkan-models")
     global done
     #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
@@ -2161,6 +2182,7 @@ def times8(rifever):
     os.system('rm -rf output_frames ')
     os.system('rm -rf "'+thisdir+'/temp"')
     os.chdir(f"{thisdir}")
+    enable_tabs()
 main_window.geometry("680x490")
 main_window.title(' ')
 main_window.resizable(False, False) 
