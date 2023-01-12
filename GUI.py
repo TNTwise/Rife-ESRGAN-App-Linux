@@ -264,7 +264,7 @@ def get_all_models():
         with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
             f.extractall()
         os.chdir(f"{thisdir}")
-        os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
+       
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
         with open(f"{thisdir}/files/version", 'w') as f:
