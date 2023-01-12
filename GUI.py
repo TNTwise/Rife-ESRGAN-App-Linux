@@ -226,7 +226,7 @@ def check_for_updates():
     file2 = open(f"{thisdir}/GUI.py")
     file1_lines = file1.readlines()
     file2_lines = file2.readlines()
-    version = latest() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+    version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
     latest_ver = version[0]
     current = version[1]
     
