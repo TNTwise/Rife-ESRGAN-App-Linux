@@ -141,7 +141,29 @@ def getVidQuality():
     vidQuality = vidQuality[0]
     return vidQuality
 
-def latest():
+def latest_ESRGAN():
+    # this code gets the latest versaion of rife vulkan
+            
+
+            latest = requests.get('https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/latest') 
+            latest = latest.url
+            latest = re.findall(r'v[\d].[\d].[\d]*$', latest)
+            latest = latest[0]
+            if os.path.isfile(f"{thisdir}/files/version") == False:
+                os.mknod(f"{thisdir}/files/version")
+                with open(f'{thisdir}/files/version', 'w') as f:
+                    f.write("v0.2.0")
+                current = "v0.2.0"
+            else:
+                f = open(f"{thisdir}/files/version")
+                f = csv.reader(f)
+                for row in f:
+                    current = row
+                current = current[0]
+                with open(f"{thisdir}/files/version", 'w') as f:
+                    f.write(latest)
+            return(latest,current)
+def latest_rife():
     # this code gets the latest versaion of rife vulkan
             
 
@@ -235,14 +257,14 @@ def get_all_models():
     if os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
         os.mkdir(f"{thisdir}/rife-vulkan-models/")
     if os.path.exists(f"{thisdir}/rife-vulkan-models/rife-HD/") != True:
-        version = latest() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+        version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
         latest_ver = version[0]
         os.chdir(f"{thisdir}/files/")
         os.system(f"wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
         with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
             f.extractall()
         os.chdir(f"{thisdir}")
-        os.system(f'rm -rf "{thisdir}/rife-ncnn-vulkan"')
+        os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
         with open(f"{thisdir}/files/version", 'w') as f:
@@ -250,7 +272,35 @@ def get_all_models():
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
         os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
-                
+    if os.path.exists(f"{thisdir}/Real-ESRGAN/") == False:
+            os.mkdir(f"{thisdir}/Real-ESRGAN/")
+    if os.path.isfile(f"{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan") == False:
+        ESRGAN_version = latest_ESRGAN()
+        latest_ver_ESR = ESRGAN_version[0]
+        os.chdir(f"{thisdir}/files/")
+        os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
+        os.system(f'mkdir "{thisdir}/Real-ESRGAN/"')
+        os.system(f"wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip")
+        os.system(f'mkdir "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
+        os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
+        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','r') as f:
+            f.extractall()
+        os.system(f'mkdir "{thisdir}/Real-ESRGAN/models/"')
+        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/models/"* "{thisdir}/Real-ESRGAN/models/"')
+        os.chdir(f'{thisdir}/files')
+        os.system(f"wget https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip")
+        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip','r') as f:
+            f.extractall()
+        os.chdir(f"{thisdir}")
+        
+        os.system(f'mv "{thisdir}/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu" "{thisdir}/files/"')
+        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu/"* "{thisdir}/Real-ESRGAN"')
+        with open(f"{thisdir}/files/version", 'w') as f:
+            f.write(latest_ver_ESR)
+        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip"')
+        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu"')
+        os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
+        #os.system(f'mv "{thisdir}/files/models" "{thisdir}/Real-ESRGAN/"')
     os.system(f'rm -rf "{thisdir}/temp/"')
 get_all_models()
 
