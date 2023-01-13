@@ -1716,7 +1716,7 @@ def anime4X(is16x, is8x,rifever):
                     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
             Interpolation2.after(0, Interpolation2.destroy())
     
-            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
             button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
             button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
             os.system('rm -rf input_frames')
