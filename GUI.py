@@ -1620,7 +1620,7 @@ def anime4X(is16x, is8x,rifever):
             if i == 2:
                 on_click2_anime(i,is16x, True,rifever)
         
-            os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {thisdir}/temp.mp4 -y')
+            os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf "setpts=PTS,minterpolate=fps=30" -r 30 -an -c:v copy -c:a copy {thisdir}/temp.mp4 -y')
             os.chdir(f"{thisdir}")
             os.system('rm temp1.mp4')
             os.chdir("rife-vulkan-models")
@@ -1985,7 +1985,7 @@ def on_click2(rifever):
 def on_click2_anime(round, is16x, is8x,rifever):
     get_fps()
     if round != 0:
-        os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -qp 0 -profile:v high444 -crf 0 -c:a copy {thisdir}/temp2.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf "setpts=PTS,minterpolate=fps=30" -r 30 -an -c:v copy -c:a copy  {thisdir}/temp2.mp4 -y')
     if is8x == True or is16x == True and round != 0:
         filename1 = f'"{thisdir}/temp2.mp4"'
     else:
