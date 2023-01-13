@@ -1371,14 +1371,14 @@ def Anime():
     video_options = ['Default', 'Animation (Uneven Framerate)']
     variable2.set('Default')
     opt1 = OptionMenu(tab1, variable2, *video_options)
-    opt1.config(width=30, font=('Helvetica', 12))
+    opt1.config(width=29, font=('Helvetica', 12))
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
 
     def callback(*args):
         if variable2.get() == 'Default':
-            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
             global iterp_opt_variable2
@@ -1410,7 +1410,7 @@ def Anime():
                     f.write("False")
             iterp_opt_variable2.trace("w", callback)
         else:
-            Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=10,height=4).grid(row = 22, column = 0)
+            Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
             with open(f'{thisdir}/files/temp_rife_ver', 'w') as f:
