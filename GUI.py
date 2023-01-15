@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-#version=4.0
-#Implementing a version update system, instead of checking if file length is different.
+# have to edit GUI.py for everything to update
 import os 
 global thisdir
 thisdir = os.getcwd()
@@ -79,6 +78,8 @@ def write_defaults():
     write_to_settings_file("Interpolation_Option", f"2X")
     write_to_settings_file("Rife_Option" ,'2.3')
 
+
+
 if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
     os.mknod(f'{thisdir}/files/settings.txt')
     write_defaults()
@@ -104,6 +105,7 @@ def change_setting(setting,svalue):
         for key,value in original_settings.items():
             with open(f'{thisdir}/files/settings.txt', 'a') as f:
                 f.write(key + ',' + value+'\n')
+
 def write_temp(): # im doing this because i am lazy
     change_setting("Interpolation_Option", f"2X")
     change_setting("Rife_Option", f"2.3")
@@ -227,11 +229,11 @@ def check_for_updates():
     
     
     
-    if repo =="Stable":
+    if repo.lower() =="stable":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
-    if repo =="Testing":
+    if repo.lower() =="testing":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/files/start.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
