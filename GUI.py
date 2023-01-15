@@ -106,13 +106,14 @@ def change_setting(setting,svalue):
 def write_temp(): # im doing this because i am lazy
     change_setting("Interpolation_Option", f"2X")
     change_setting("Rife_Option", f"2.3")
+    change_setting("IsAnime", "False")
 write_temp()
 
 Rife_Option = settings_dict['Rife_Option']
 Interpolation_Option = settings_dict['Interpolation_Option']
 Repository = settings_dict['Repository']
 Image_Type = settings_dict['Image Type']
-Is_Anime = settings_dict['IsAnime']
+IsAnime = settings_dict['IsAnime']
 rifeversion = settings_dict['rifeversion']
 esrganversion = settings_dict['esrganversion']
 videoQuality = settings_dict['videoQuality']
@@ -659,7 +660,7 @@ def show(program):
         interpolation_option = Interpolation_Option
         rifever1 = Rife_Option
         
-        isAnime = Is_Anime
+        isAnime = IsAnime
     
         if isAnime != "True":
             if rifever1 == "Rife":
@@ -711,8 +712,7 @@ def show_interp_opt():
     interpOptDropDown.config(bg=bg)
     interpOptDropDown.config(fg=fg)
     interpOptDropDown.grid(column=4,row=6)
-    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-            os.mknod(f"{thisdir}/files/temp_interp_opt")
+    
     def callback(*args):
         change_setting('Interpolation_Option', iterp_opt_variable.get())
                 
@@ -1348,16 +1348,15 @@ def Anime():
             interpOptDropDown2.config(bg=bg)
             interpOptDropDown2.config(fg=fg)
             change_setting('Interpolation_Option', '2X')
-            change_setting('Is_Anime', 'False')
+            change_setting('IsAnime', 'False')
             interpOptDropDown2.grid(column=4,row=6)
-            if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                os.mknod(f"{thisdir}/files/temp_interp_opt")
+            
             def callback(*args):
                 change_setting('Interpolation_Option', variable2.get())
 
                 
                 
-                change_setting('Is_Anime', 'False')
+                change_setting('IsAnime', 'False')
             iterp_opt_variable2.trace("w", callback)
         else:
             Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
@@ -1369,15 +1368,16 @@ def Anime():
             iterp_opt_variable1 = StringVar(tab1)
             interpolation_options = ['4X', '8X', '16X']
             iterp_opt_variable1.set('4X')
+            change_setting('Interpolation_Option', iterp_opt_variable1.get())
             interpOptDropDown1 = OptionMenu(tab1, iterp_opt_variable1, *interpolation_options)
             interpOptDropDown1.config(width=2, font=('Helvetica', 12))
             interpOptDropDown1.config(bg=bg)
             interpOptDropDown1.config(fg=fg)
             interpOptDropDown1.grid(column=4,row=6)
-            change_setting('Rife_Option', '4X')
+            
             
             def callback(*args):
-                change_setting('Interpolation_option', iterp_opt_variable1.get())
+                change_setting('Interpolation_Option', iterp_opt_variable1.get())
             iterp_opt_variable1.trace("w", callback)
     variable2.trace("w", callback)
 
