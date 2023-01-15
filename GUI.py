@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 #version=4.0
+#Implementing a version update system, instead of checking if file length is different.
 import os 
 global thisdir
 thisdir = os.getcwd()
