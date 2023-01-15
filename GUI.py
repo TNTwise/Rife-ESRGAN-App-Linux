@@ -6,29 +6,22 @@ thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 if os.path.exists(f"{thisdir}/files/") == False:
     os.mkdir(f"{thisdir}/files/")
-if os.path.isfile(f"{thisdir}/files/isInstalled") == False:
-    os.mknod(f"{thisdir}/files/isInstalled")
-    with open(f"{thisdir}/files/isInstalled", "w") as f:
-        f.write("False")
-if(os.path.isfile(thisdir+"/programstate")) == False:
+
+if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     os.chdir(f"{thisdir}/files")
     os.system("wget https://bootstrap.pypa.io/get-pip.py")
     os.chdir(f"{thisdir}")
-    os.mknod(thisdir+"/programstate")
+    
     os.system('python3 files/get-pip.py install')
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
     os.system('python3 -m pip install requests')
     os.system('rm files/get-pip.py')
-    with open (thisdir+"/programstate", "w") as f:
-        f.write(homedir)
+    
 if os.path.isfile(f'{thisdir}/Start') == False:
     os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
     
-if(os.path.isfile(thisdir+"/theme")) == False:
-    os.mknod(thisdir+"/theme")
-    with open(thisdir+"/theme", "w") as f:
-        f.write("Light")
+
 import os
 import glob
 import pathlib
@@ -65,17 +58,82 @@ import getpass
 import requests
 import re
 from zipfile import ZipFile
+
+def write_to_settings_file(description, option):
+    
+    with open(f'{thisdir}/files/settings.txt', 'a') as f:
+        f.write(description + ","+option + "\n")
+
+
+
+def write_defaults():
+    write_to_settings_file("Image Type", "webp")
+    write_to_settings_file("IsAnime", "False")
+    write_to_settings_file("Repository", "stable")
+    write_to_settings_file("rifeversion", "20221029")
+    write_to_settings_file("esrganversion", "0.2.0")
+    write_to_settings_file("videoQuality", "9")
+    write_to_settings_file("Theme", "Light")
+    write_to_settings_file("OutputDir", f"{homedir}")
+    write_to_settings_file("Interpolation_Option", f"2X")
+    write_to_settings_file("Rife_Option" ,'2.3')
+
+if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
+    os.mknod(f'{thisdir}/files/settings.txt')
+    write_defaults()
+
+global settings_dict
+settings_dict = {}
+def read_settings():
+    with open(f'{thisdir}/files/settings.txt', 'r') as f:
+        f = csv.reader(f)
+        for row in f:
+            print(row[0], row[1])
+            settings_dict[row[0]] = row[1]
+read_settings()
+def change_setting(setting,svalue):
+    original_settings = {}
+    with open(f'{thisdir}/files/settings.txt', 'r') as f:
+        f = csv.reader(f)
+        for row in f:
+            original_settings[row[0]] = row[1]
+        
+        original_settings[setting] = svalue
+        os.system(f'rm -rf "{thisdir}/files/settings.txt" && touch "{thisdir}/files/settings.txt"')
+        for key,value in original_settings.items():
+            with open(f'{thisdir}/files/settings.txt', 'a') as f:
+                f.write(key + ',' + value+'\n')
+def write_temp(): # im doing this because i am lazy
+    change_setting("Interpolation_Option", f"2X")
+    change_setting("Rife_Option", f"2.3")
+write_temp()
+
+Rife_Option = settings_dict['Rife_Option']
+Interpolation_Option = settings_dict['Interpolation_Option']
+Repository = settings_dict['Repository']
+Image_Type = settings_dict['Image Type']
+Is_Anime = settings_dict['IsAnime']
+rifeversion = settings_dict['rifeversion']
+esrganversion = settings_dict['esrganversion']
+videoQuality = settings_dict['videoQuality']
+Theme = settings_dict['Theme']
+OutputDir = settings_dict['OutputDir']
+
+
+
+
 global realsr_model
 realsr_model = '-n realesrgan-x4plus -s 4'
+
+
+global image_format
+image_format = Image_Type
+
 os.system(f'chmod +x {thisdir}/rife-vulkan-models/rife-ncnn-vulkan')
 def check_theme():
     
     # This code reads the theme file and stores its data in a theme variable
-    f = open(thisdir+"/theme", "r")
-    global theme
-    for row in f:
-        theme = row
-    return theme
+    return Theme
 filename = ""
 main_window = Tk()
 tabControl = ttk.Notebook(main_window)
@@ -132,28 +190,9 @@ if check_theme() == "Dark":
     
     bg_button="#4C4E52"
 
-if os.path.isfile(f"{thisdir}/files/videoQuality") == False:
-    os.mknod(f"{thisdir}/files/videoQuality")
-    with open(f"{thisdir}/files/videoQuality", 'w') as f:
-        f.write("9")
 
-f = open(thisdir+"/programstate", "r")
-f = csv.reader(f)
-for row in f:
-    current_default_output_folder = row
-if os.path.exists(current_default_output_folder[0]) == False:
-    with open(thisdir+"/programstate", 'w') as f:
-        f.write(homedir)
-with open(f"{thisdir}/files/isAnime", 'w') as f:
-                    f.write("False")
-def getVidQuality():
-    with open(f"{thisdir}/files/videoQuality", 'r') as f:
-            f = csv.reader(f)
-            for row in f:
-                vidQuality = row
 
-    vidQuality = vidQuality[0]
-    return vidQuality
+
 
 def latest_ESRGAN():
     # this code gets the latest versaion of rife vulkan
@@ -163,19 +202,7 @@ def latest_ESRGAN():
             latest = latest.url
             latest = re.findall(r'v[\d].[\d].[\d]*$', latest)
             latest = latest[0]
-            if os.path.isfile(f"{thisdir}/files/version") == False:
-                os.mknod(f"{thisdir}/files/version")
-                with open(f'{thisdir}/files/version', 'w') as f:
-                    f.write("v0.2.0")
-                current = "v0.2.0"
-            else:
-                f = open(f"{thisdir}/files/version")
-                f = csv.reader(f)
-                for row in f:
-                    current = row
-                current = current[0]
-                with open(f"{thisdir}/files/version", 'w') as f:
-                    f.write(latest)
+            current = esrganversion
             return(latest,current)
 def latest_rife():
     # this code gets the latest versaion of rife vulkan
@@ -185,19 +212,7 @@ def latest_rife():
             latest = latest.url
             latest = re.findall(r'[\d]*$', latest)
             latest = latest[0]
-            if os.path.isfile(f"{thisdir}/files/version") == False:
-                os.mknod(f"{thisdir}/files/version")
-                with open(f'{thisdir}/files/version', 'w') as f:
-                    f.write("20220728")
-                current = "20220728"
-            else:
-                f = open(f"{thisdir}/files/version")
-                f = csv.reader(f)
-                for row in f:
-                    current = row
-                current = current[0]
-                with open(f"{thisdir}/files/version", 'w') as f:
-                    f.write(latest)
+            current = rifeversion
             return(latest,current)
 # this checks for updates
 # it makes a temp folder, and gets the latest GUI.py from github
@@ -208,11 +223,8 @@ def check_for_updates():
     os.system(f'mkdir "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     
-    with open(f"{thisdir}/files/repository", 'r') as f:
-        f = csv.reader(f)
-        for row in f:
-            repo = row
-    repo = repo[0]
+    
+    
     if repo =="Stable":
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
         os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
@@ -257,8 +269,7 @@ def check_for_updates():
                 os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
                 os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
                 os.system(f'chmod +x "{thisdir}/files/rife-ncnn-vulkan"')
-                with open(f"{thisdir}/files/version", 'w') as f:
-                    f.write(latest_ver)
+                change_setting('rifeversion',f'{latest_ver}')
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
                 os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
 
@@ -281,8 +292,7 @@ def get_all_models():
         os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
-        with open(f"{thisdir}/files/version", 'w') as f:
-            f.write(latest_ver)
+        change_setting('rifeversion', f'{latest_ver}')
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
         os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
@@ -309,8 +319,7 @@ def get_all_models():
         
         os.system(f'mv "{thisdir}/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu/"* "{thisdir}/Real-ESRGAN"')
-        with open(f"{thisdir}/files/version", 'w') as f:
-            f.write(latest_ver_ESR)
+        change_setting('esrganversion', f'{latest_ESRGAN}')
         os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip"')
         os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu"')
         os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
@@ -369,8 +378,6 @@ def pass_dialog_box_err():
     pass_window1.resizable(False, False)
     
 def install():
-    with open(f"{thisdir}/files/isInstalled", "w") as f:
-        f.write("False")
     passwd = pass_box.get()
     pass_window.destroy()
     
@@ -382,8 +389,7 @@ def install():
     else:
         os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
         passwd=""
-        with open(f"{thisdir}/files/isInstalled", "w") as f:
-            f.write("True")
+        
         os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
         os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
@@ -391,8 +397,7 @@ def install():
         os.chdir(f"{thisdir}")
         
 def install1():
-    with open(f"{thisdir}/files/isInstalled", "w") as f:
-        f.write("False")
+    
     passwd = pass_box1.get()
     pass_window1.destroy()
     os.system(f'chmod +x "{thisdir}/install/rife-gui"')
@@ -404,8 +409,7 @@ def install1():
     else:
         os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
         passwd=""
-        with open(f"{thisdir}/files/isInstalled", "w") as f:
-            f.write("True")
+        
         os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
         os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
         os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
@@ -438,31 +442,17 @@ def settings_window():
                         command = sel_default_output_folder, bg=bg_button,fg=fg)
     
     # just writes 'stable' to file repository to be able to change where the program is taken from
-    if os.path.isfile(f"{thisdir}/files/repository") == False:
-        os.mknod(f"{thisdir}/files/repository")
-        with open(f"{thisdir}/files/repository", "w") as f:
-            f.write("stable")
     
-    f = open(thisdir+"/programstate", "r")
-    f = csv.reader(f)
-    for row in f:
-        current_default_output_folder = row
+    
+    current_default_output_folder = OutputDir
     #displays current default output folder
     
     global default_output_label
-    default_output_label = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
-    # This code just creates the theme file if it doesnt txist
-    if os.path.isfile(thisdir+"/theme") == False:
-        os.mknod(thisdir+"/theme")
-        with open(thisdir+"/theme", "w") as f:
-            f.write("Light")
+    default_output_label = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
+    
     # creates theme button and calls check_theme which returns the theme that is currently on
     global repo
-    with open(f"{thisdir}/files/repository", 'r') as f: # gets the repo stored in repository file
-        f = csv.reader(f)
-        for row in f:
-            repo = row
-    repo = repo[0]
+    repo = Repository
     if repo == "stable": # capitolizes repo first char
         repo = "Stable"
     if repo == "testing":
@@ -496,20 +486,30 @@ def settings_window():
         update_branch_label.grid(column=6,row=0)
         opt.grid(column=6,row=1)
         def callback(*args):
-            with open(f"{thisdir}/files/repository", 'w') as f: # gets the repo stored in repository file
-                f.write(variable.get())
+            change_setting('Repository', variable.get())
                 
         variable.trace("w", callback)
-
-    with open(f"{thisdir}/files/isInstalled", "r") as f:
-        f = csv.reader(f)
-        for row in f:
-            is_installed = row
-    is_installed = is_installed[0]
+    def video_image_dropdown():
+        update_branch_label = Label(tab3,text="Render Image Type: ",bg=bg,fg=fg)
+        update_branch_label.grid(column=3,row=5)
+        variable = StringVar(tab3)
+        repo_options = ['wepb (smaller size, lossless)', 'png (lossless)', 'jpg (lossy)']
+        variable.set(repo)
+        opt = OptionMenu(tab3, variable, *repo_options)
+        opt.config(width=9, font=('Helvetica', 12))
+        opt.config(bg=bg)
+        opt.config(fg=fg)
+        
+        opt.grid(column=3,row=6)
+        def callback(*args):
+            image_format = variable.get()
+                
+        variable.trace("w", callback)
+    
     show_dropdown()
     def video_quality_drop_down():
         vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
-        vidQuality = getVidQuality()
+        vidQuality = videoQuality
         if vidQuality == "22":
             vidQuality1 = "Low"
         if vidQuality == "18":
@@ -528,23 +528,20 @@ def settings_window():
         
         opt.grid(column=1,row=3)
         def callback(*args):
-            with open(f"{thisdir}/files/videoQuality", 'w') as f: # gets the repo stored in repository file
+                
                 # Converts these to cfv format
                 if variable.get() == "Low":
-                    f.write("22")
+                    change_setting('videoQuality', '22')
                 if variable.get() == "Medium":
-                    f.write("18")
+                    change_setting('videoQuality', '18')
                 if variable.get() == "High":
-                    f.write("9")
+                    change_setting('videoQuality', '9')
                 if variable.get() == "Lossless":
-                    f.write("3")
+                    change_setting('videoQuality', '3')
                 
         variable.trace("w", callback)
     video_quality_drop_down()
-    with open(f"{thisdir}/files/isInstalled", "r") as f:
-        f = csv.reader(f)
-        for row in f:
-            is_installed = row
+    
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     spacer_label2.config(padx=30)
@@ -608,8 +605,7 @@ def restart_window(message):
 # Switches themes for tkinter
 
 def darkTheme():
-    with open(thisdir+"/theme", "w") as f:
-        f.write("Dark")
+    change_setting('Theme', 'Dark')
     global bg
     global bg_button
     global fg
@@ -624,8 +620,7 @@ def darkTheme():
     
 
 def lightTheme():
-    with open(thisdir+"/theme", "w") as f:
-        f.write("Light")
+    change_setting('Theme', 'Light')
     
     global bg
     global bg_button
@@ -645,13 +640,9 @@ def sel_default_output_folder():
     select_default_output_folder = filedialog.askdirectory(initialdir = fr"{homedir}",
                                           title = "Select a Folder",)
     if isinstance(select_default_output_folder, str) == True and len(select_default_output_folder) > 0:
-        with open(thisdir+"/programstate", "w") as f:
-            f.write(select_default_output_folder)
+        change_setting('OutputDir', select_default_output_folder)
 
-    f = open(thisdir+"/programstate", "r")
-    f = csv.reader(f)
-    for row in f:
-        current_default_output_folder = row
+    current_default_output_folder = OutputDir()
     #displays current default output folder
     default_output_label.destroy()
     default_output_label_1 = Label(tab3, text=current_default_output_folder[0],bg=bg,fg=fg, width=25, anchor="w")
@@ -665,27 +656,11 @@ def show(program):
     if program == "rife":
         rifever = ""
     
-        if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == True:
-            with open(f"{thisdir}/files/temp_interp_opt" , 'r') as f:
-                f = csv.reader(f)
-                for row in f:
-                    interpolation_option = row
-            interpolation_option = interpolation_option[0]
-        if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False:
-            rifever1 = "4.6"
-        else: 
-            with open(f"{thisdir}/files/temp_rife_ver" , 'r') as f:
-                f = csv.reader(f)
-                for row in f:
-                    rifever1 = row
-            rifever1 = rifever1[0]
+        interpolation_option = Interpolation_Option
+        rifever1 = Rife_Option
         if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
                 os.mknod(f"{thisdir}/files/isAnime")
-        with open(f"{thisdir}/files/isAnime", 'r') as f:
-            f = csv.reader(f)
-            for row in f:
-                isAnime = row
-        isAnime = isAnime[0]
+        isAnime = Is_Anime
     
         if isAnime != "True":
             if rifever1 == "Rife":
@@ -726,10 +701,7 @@ def show(program):
 # This was a very desprate debugging technique i used, apologize for the mess.
 # The solution was me not being an idiot
 def show_interp_opt():
-    if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-       os.mknod(f"{thisdir}/files/temp_interp_opt")
-    with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-        f.write("2X")
+    
     global iterp_opt_variable
     iterp_opt_variable = StringVar(tab1)
     interpolation_options = ['2X', '4X', '8X']
@@ -743,19 +715,13 @@ def show_interp_opt():
     if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
             os.mknod(f"{thisdir}/files/temp_interp_opt")
     def callback(*args):
-        if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-            os.mknod(f"{thisdir}/files/temp_interp_opt")
-        with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-            f.write(iterp_opt_variable.get())
+        change_setting('Interpolation_Option', iterp_opt_variable.get())
                 
     iterp_opt_variable.trace("w", callback)
 show_interp_opt()
 
 def show_rife_ver():
-    if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
-       os.mknod(f"{thisdir}/files/temp_rife_ver")
-    with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
-        f.write("2.3")
+    
     global rife_ver_variable
     rife_ver_variable = StringVar(tab1)
     interpolation_options = ['Rife', 'Rife-HD','Rife-UHD','Rife Anime','Rife 2.0','Rife 2.3', 'Rife 2.4','Rife 3.0', 'Rife 3.1','Rife 4.0', 'Rife 4.6']
@@ -768,31 +734,29 @@ def show_rife_ver():
     rifeVerDropDown.grid(column=4,row=7)
     
     def callback(*args):
-        if os.path.isfile(f"{thisdir}/files/temp_rife_ver") == False: 
-            os.mknod(f"{thisdir}/files/temp_rife_ver")
-        with open(f"{thisdir}/files/temp_rife_ver", 'w') as f: # gets the repo stored in repository file
+        
             if rife_ver_variable.get() == "Rife":
-                f.write("Rife")
+                change_setting("Rife_Option", 'Rife')
             if rife_ver_variable.get() == "Rife-HD":
-                f.write("HD")
+                change_setting("Rife_Option", 'HD')
             if rife_ver_variable.get() == "Rife Anime":
-                f.write("Anime")
+                change_setting("Rife_Option", 'Anime')
             if rife_ver_variable.get() == "Rife-UHD":
-                f.write("UHD")
+                change_setting("Rife_Option", 'UHD')
             if rife_ver_variable.get() == "Rife 4.0":
-                f.write("4.0")
+                change_setting("Rife_Option", '4.0')
             if rife_ver_variable.get() == "Rife 3.0":
-                f.write("3.0")
+                change_setting("Rife_Option", '3.0')
             if rife_ver_variable.get() == "Rife 2.0":
-                f.write("2.0")
+                change_setting("Rife_Option", '2.0')
             if rife_ver_variable.get() == "Rife 2.3":
-                f.write("2.3")
+                change_setting("Rife_Option", '2.3')
             if rife_ver_variable.get() == "Rife 2.4":
-                f.write("2.4")
+                change_setting("Rife_Option", '2.4')
             if rife_ver_variable.get() == "Rife 3.1":
-                f.write("3.1")
+                change_setting("Rife_Option", '3.1')
             if rife_ver_variable.get() == "Rife 4.6":
-                f.write("4.6")
+                change_setting("Rife_Option", '4.6')
                 
     rife_ver_variable.trace("w", callback)
 show_rife_ver()
@@ -1292,12 +1256,7 @@ def output(): # this function gets the output directory and writes outputdir to 
 
 # get output dir from programstate, this will only happen if temp file doesnt exist.
 def get_output_dir():
-    f = open(thisdir+"/programstate", "r")
-    f = csv.reader(f)
-    for row in f:
-        outputdir = row
-    outputdir = outputdir[0]
-    return outputdir
+    return OutputDir
 # gets fps of video, for all get_fps methods.
 def get_fps():
     if os.path.isfile(thisdir+"/temp") == False: # same if statement to check what outputdir to get. Checks if temp file exists or not
@@ -1389,38 +1348,24 @@ def Anime():
             iterp_opt_variable2.set('2X')
             interpOptDropDown2.config(bg=bg)
             interpOptDropDown2.config(fg=fg)
-            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write("2X")
-            with open(f"{thisdir}/files/isAnime", 'w') as f:
-                    f.write("False")
+            change_setting('Interpolation_Option', '2X')
+            change_setting('Is_Anime', 'False')
             interpOptDropDown2.grid(column=4,row=6)
             if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
                 os.mknod(f"{thisdir}/files/temp_interp_opt")
             def callback(*args):
-                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                    os.mknod(f"{thisdir}/files/temp_interp_opt")
-                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write(iterp_opt_variable2.get())
+                change_setting('Interpolation_Option', variable2.get())
 
                 
                 
-                if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
-                    os.mknod(f"{thisdir}/files/isAnime")
-                with open(f"{thisdir}/files/isAnime", 'w') as f:
-                    f.write("False")
+                change_setting('Is_Anime', 'False')
             iterp_opt_variable2.trace("w", callback)
         else:
             Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
-            with open(f'{thisdir}/files/temp_rife_ver', 'w') as f:
-                f.write('2.3')
-
-
-            if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
-                os.mknod(f"{thisdir}/files/isAnime")
-            with open(f"{thisdir}/files/isAnime", 'w') as f:
-                f.write("True")
+            change_setting('Rife_Option', '2.3')
+            change_setting('Is_Anime', "True")
             global iterp_opt_variable1
             iterp_opt_variable1 = StringVar(tab1)
             interpolation_options = ['4X', '8X', '16X']
@@ -1430,15 +1375,10 @@ def Anime():
             interpOptDropDown1.config(bg=bg)
             interpOptDropDown1.config(fg=fg)
             interpOptDropDown1.grid(column=4,row=6)
-            with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write("4X")
-            if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                os.mknod(f"{thisdir}/files/temp_interp_opt")
+            change_setting('Rife_Option', '4X')
+            
             def callback(*args):
-                if os.path.isfile(f"{thisdir}/files/temp_interp_opt") == False: 
-                    os.mknod(f"{thisdir}/files/temp_interp_opt")
-                with open(f"{thisdir}/files/temp_interp_opt", 'w') as f: # gets the repo stored in repository file
-                    f.write(iterp_opt_variable1.get())
+                change_setting('Interpolation_option', iterp_opt_variable1.get())
             iterp_opt_variable1.trace("w", callback)
     variable2.trace("w", callback)
 
@@ -1541,11 +1481,7 @@ def layout_realsr():
 layout_realsr()
 
 def AnimeInterpolation():
-    with open(f"{thisdir}/files/temp_rife_ver" , 'r') as f:
-                f = csv.reader(f)
-                for row in f:
-                    rifever1 = row
-                rifever1 = rifever1[0]
+    rifever1 = Rife_Option
     if rifever1 == "Rife":
                 rifever = "-m rife"
     if rifever1 == "HD":
@@ -1568,11 +1504,7 @@ def AnimeInterpolation():
                 rifever = "-m rife-v4.6"
     if rifever1 == "Anime":
                 rifever = "-m rife-anime"
-    with open(f"{thisdir}/files/temp_interp_opt", 'r') as f:
-        f = csv.reader(f)
-        for row in f:
-            interp_opt = row
-    interp_opt = interp_opt[0]
+    interp_opt = Interpolation_Option
     if interp_opt == "4X":
         anime4X(False,False,rifever)
 
@@ -1591,7 +1523,7 @@ def anime4X(is16x, is8x,rifever):
         if is8x == False and is16x == True:
             X4_loop = 3
         for i in range(X4_loop): # loops through it twice for 8x, 3 times for 16x
-            vidQuality = getVidQuality()
+            vidQuality = videoQuality
             os.chdir("rife-vulkan-models")
             global done
         
@@ -1739,7 +1671,7 @@ def anime8X(is16x,rifever):
             anime4X(True,False,rifever) # sets 8x and 16x to true, for looping
             
 def realESRGAN(model):
-    vidQuality = getVidQuality()
+    vidQuality = videoQuality
     if filename != "":
         grayout_tabs('realsr')
         os.chdir("Real-ESRGAN")
@@ -1813,7 +1745,7 @@ def realESRGAN(model):
 # different modes of interpolation
 def on_click(rifever):
     
-    vidQuality = getVidQuality()
+    vidQuality = videoQuality
     if filename != "":
         grayout_tabs('rife')
         os.chdir("rife-vulkan-models")
@@ -1860,16 +1792,16 @@ def on_click(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.webp" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
             #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.webp" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
@@ -1923,13 +1855,8 @@ def times4(rifever):
                      fg=fg,bg=bg)
         timestwo.grid(column=4,row=10)
         get_fps2()
-        os.system('rm -rf input_frames')
-        os.system('rm -rf output_frames ')
-        os.system('mkdir input_frames')
-        os.system('mkdir output_frames')
-        os.system(f'ffprobe "{thisdir}/temp.mp4"')
-        os.system(f'ffmpeg -i "{thisdir}/temp.mp4" -vn -acodec copy audio.m4a -y')
-        os.system(f'ffmpeg -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+        
+        
         pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ffmpeg extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
@@ -1949,9 +1876,9 @@ def times4(rifever):
     
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps2 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
         os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -1980,7 +1907,7 @@ def on_click2(rifever):
     pbthread4x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
-    os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy -pix_fmt yuv420p "{thisdir}/temp.mp4" -y')
+    os.system(fr'rm -rf input_frames/ && mkdir input_frames && mv output_frames/* input_frames')
     Interpolation.destroy()
 def on_click2_anime(round, is16x, is8x,rifever):
     get_fps()
@@ -2179,9 +2106,9 @@ def times8(rifever):
 
         os.system(f'./rife-ncnn-vulkan {rifever} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {getVidQuality()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps3 * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.png" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps3 * 2)}fps.{extension}" -y')
     
         os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
         Interpolation3.after(0, Interpolation3.destroy())
