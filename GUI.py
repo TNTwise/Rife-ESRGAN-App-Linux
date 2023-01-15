@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# have to edit GUI.py for everything to update
+#version=4.0
 import os 
 global thisdir
 thisdir = os.getcwd()
