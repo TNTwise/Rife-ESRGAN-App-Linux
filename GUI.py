@@ -658,8 +658,7 @@ def show(program):
     
         interpolation_option = Interpolation_Option
         rifever1 = Rife_Option
-        if os.path.isfile(f"{thisdir}/files/isAnime") == False: # temp solution to not selecting anime after interpolating video.
-                os.mknod(f"{thisdir}/files/isAnime")
+        
         isAnime = Is_Anime
     
         if isAnime != "True":
@@ -1365,7 +1364,7 @@ def Anime():
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
             change_setting('Rife_Option', '2.3')
-            change_setting('Is_Anime', "True")
+            change_setting('IsAnime', "True")
             global iterp_opt_variable1
             iterp_opt_variable1 = StringVar(tab1)
             interpolation_options = ['4X', '8X', '16X']
