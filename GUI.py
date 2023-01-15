@@ -1654,12 +1654,12 @@ def anime4X(is16x, is8x,rifever):
                 os.system(fr'rm -rf "{thisdir}/temp.mp4"')
             if is8x == True and is16x == False:
                 if i == 0:
-                    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+                    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
                 else:
                     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec copy -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+                    os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
                 
                 else:
                     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
@@ -1984,7 +1984,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     if round == 0:
         os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec libx264  "{thisdir}/temp1.mp4" -y')
     else:
-        os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec copy  "{thisdir}/temp1.mp4" -y')
+        os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec libx264  "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
 def on_click2_anime_8x(is16x):# generates temp2 file witch is 30fps
     get_fps()
@@ -2133,6 +2133,5 @@ main_window.geometry("680x490")
 main_window.title('Rife - ESRGAN - App')
 main_window.resizable(False, False) 
 main_window.mainloop()
-
 
 
