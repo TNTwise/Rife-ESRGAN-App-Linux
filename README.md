@@ -21,11 +21,11 @@ This install method will copy everything to the home folder, and execute from th
 ## Installing Dependencies
 On Ubuntu <br />
 ```
-sudo apt install python3-opencv ffmpeg python3-tk konsole wget
+sudo apt install python3-opencv ffmpeg python3-tk konsole
 ```
 On Arch/Arch based Distros <br />
 ```
-sudo pacman -S tk opencv konsole ffmpeg python-pip wget
+sudo pacman -S tk opencv konsole ffmpeg python-pip
 ```
 On SteamOS/Steam Deck <br />
 ```
