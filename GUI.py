@@ -686,46 +686,35 @@ def gpu_setting():
         return "-j 1:2:2"
         
     if GPUUsage == 'High' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
-        print('\nhigh gpu\n')
         return "-j 5:5:5"
     if GPUUsage == 'Very High' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
-        print('\nvery high gpu\n')
         return "-j 10:10:10"
     if GPUUsage == 'Low' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
-        print('\nlow gpu\n')
         return "-j 1:1:1"
     if GPUUsage == 'Default' and RenderDevice == 'Dual GPU':
-        print('\ndef dual\n')
         return "-j 1:2,2,2:2"
     if GPUUsage == 'High' and RenderDevice != 'GPU' and RenderDevice == 'Dual GPU':
-        print('\nhigh dual\n')
         return "-j 5:5,5,5:5"
     if GPUUsage == 'Very High' and RenderDevice != 'GPU' and RenderDevice == 'Dual GPU':
-        print('\nvery high dual\n')
         return "-j 10:10,10,10:10"
     if GPUUsage == 'Low' and RenderDevice != 'GPU' and RenderDevice == 'Dual GPU':
-        print('\nlow dual\n')
         return "-j 1:1,1,1:1"
     if GPUUsage =='Default' and RenderDevice == 'CPU + GPU':
-        print('\ndef CPU + GPU\n')
         return '-j 2:4,2,1:4'
     if GPUUsage =='Low' and RenderDevice == 'CPU + GPU':
-        print('\nlow CPU + GPU\n')
         return '-j 1:2,1,1:2'
     if GPUUsage =='High' and RenderDevice == 'CPU + GPU':
-        print('\nhigh CPU + GPU\n')
         return '-j 8:8,8,8:8'
     if GPUUsage =='Very High' and RenderDevice == 'CPU + GPU':
-        print('\nvery high cpu + gpu\n')
-        return '-j 10:10,10,10:10'
+        return '-j 10:10,12,12:10'
         
 def get_cpu_load_ffmpeg():
     if GPUUsage == 'Default':
-        return '-cpu-used 3'
-    if GPUUsage == 'Low':
-        return '-cpu-used 2'
-    if GPUUsage == 'High':
         return '-cpu-used 5'
+    if GPUUsage == 'Low':
+        return '-cpu-used 5'
+    if GPUUsage == 'High':
+        return '-cpu-used 6'
     if GPUUsage == 'Very High':
         return '-cpu-used 7'
 # Switches themes for tkinter
