@@ -1836,7 +1836,7 @@ def realESRGAN(model):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        os.system(f'./realesrgan-ncnn-vulkan {model} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i input_frames -o output_frames ')
+        os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format}  -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
