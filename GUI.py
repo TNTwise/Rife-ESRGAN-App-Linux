@@ -78,6 +78,7 @@ def write_defaults():
     write_to_settings_file("OutputDir", f"{homedir}")
     write_to_settings_file("Interpolation_Option", f"2X")
     write_to_settings_file("Rife_Option" ,'2.3')
+    write_to_settings_file("GPUUsage" ,'Default')
 
 if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
     os.mknod(f'{thisdir}/files/settings.txt')
@@ -115,6 +116,9 @@ def read_settings():
     Theme = settings_dict['Theme']
     global OutputDir
     OutputDir = settings_dict['OutputDir']
+    global GPUUsage
+    GPUUsage = settings_dict['GPUUsage']
+    global GPUSetting
 read_settings()
 def change_setting(setting,svalue):
     original_settings = {}
@@ -304,6 +308,7 @@ def get_all_models():
             f.extractall()
         os.chdir(f"{thisdir}")
         os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
+        os.system(f'mkdir "{thisdir}/rife-vulkan-models"')
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
         change_setting('rifeversion', f'{latest_ver}')
@@ -501,7 +506,7 @@ def settings_window():
         update_branch_label = Label(tab3,text="Render Image Type: ",bg=bg,fg=fg)
         update_branch_label.grid(column=1,row=5)
         variable = StringVar(tab3)
-        repo_options = ['wepb            (smaller size, lossless)', 'png            (lossless)', 'jpg            (lossy)']
+        repo_options = ['webp            (smaller size, lossless)', 'png            (lossless)', 'jpg            (lossy)']
         variable.set(Image_Type)
         opt = OptionMenu(tab3, variable, *repo_options)
         opt.config(width=4, font=('Helvetica', 12))
@@ -512,7 +517,7 @@ def settings_window():
         opt.grid(column=1,row=6)
         def callback(*args):
             
-            if variable.get() == 'wepb            (smaller size, lossless)':
+            if variable.get() == 'webp            (smaller size, lossless)':
                 change_setting('Image_Type', 'webp')
             if variable.get() == 'png            (lossless)':
                 change_setting('Image_Type', 'png')
@@ -520,6 +525,25 @@ def settings_window():
                 change_setting('Image_Type', 'jpg')
             
         variable.trace("w", callback)
+    def gpu_usage_dropdown():
+        update_branch_label = Label(tab3,text="GPU Usage:",bg=bg,fg=fg)
+        update_branch_label.grid(column=4,row=5)
+        variable = StringVar(tab3)
+        repo_options = ['Default', 'Low', 'High', 'Very High']
+        variable.set(GPUUsage)
+        opt = OptionMenu(tab3, variable, *repo_options)
+        opt.config(width=8, font=('Helvetica', 12))
+        
+        opt.config(bg=bg)
+        opt.config(fg=fg)
+        opt.config(anchor="w")
+        opt.grid(column=4,row=6)
+        def callback(*args):
+            
+            change_setting("GPUUsage", variable.get())
+            
+        variable.trace("w", callback)
+    gpu_usage_dropdown()
     video_image_dropdown()
     show_dropdown()
     def video_quality_drop_down():
@@ -617,6 +641,19 @@ def restart_window(message):
     restart_window.geometry("300x200")
     restart_window.resizable(False, False)
     restart_window.mainloop()
+
+
+#This returns the settings for each gpu setting
+
+def gpu_setting():
+    if GPUUsage == 'Default':
+        return "-j 1:2:2"
+    if GPUUsage == 'High':
+        return "-j 5:5:5"
+    if GPUUsage == 'Very High':
+        return "-j 10:10:10"
+    if GPUUsage == 'Low':
+        return "-j 1:1:1"
 # Switches themes for tkinter
 
 def darkTheme():
@@ -1625,7 +1662,7 @@ def anime4X(is16x, is8x,rifever):
             Interpolation2.grid(column=4,row=10)
 
             global done2
-            if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps{extension}") == True:
+            if os.path.isfile(fr"{outputdir}/{mp4name}_60fps{extension}") == True:
                 done2 = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps(1){extension}",
                  font=("Arial", 11), width=57, anchor="w",
@@ -1636,7 +1673,7 @@ def anime4X(is16x, is8x,rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
-            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames')
+            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {gpu_setting()} -i input_frames -o output_frames')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
                     os.system(fr'ffmpeg -framerate 60 -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i "{thisdir}/rife-vulkan-models/audio.m4a"  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
@@ -1810,7 +1847,7 @@ def on_click(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {vidQuality} -c:v libx264 -preset slow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
@@ -1892,11 +1929,11 @@ def times4(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} -i input_frames -o output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality} -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps(1).{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality} -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
         else:
-            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality} -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps2 * 2)}fps.{extension}" -y')
+            os.system(fr'ffmpeg -framerate {fps * 4} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf {videoQuality} -c:v libx264 -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -1924,7 +1961,7 @@ def on_click2(rifever):
     Interpolation.grid(column=4,row=10)
     pbthread4x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} -i input_frames -o output_frames ')
     os.system(fr'rm -rf input_frames/ && mkdir input_frames && mv output_frames/* input_frames')
     Interpolation.destroy()
 def on_click2_anime(round, is16x, is8x,rifever):
@@ -1980,7 +2017,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
         if round == 1:
             Anime8xPb3Thread()
         
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} -i input_frames -o output_frames ')
     if round == 0:
         os.system(fr'ffmpeg -framerate {fps * 2} -i "{thisdir}/rife-vulkan-models/output_frames/%08d.{image_format}" -i {thisdir}/rife-vulkan-models/audio.m4a -c:a copy -crf 0 -vcodec libx264  "{thisdir}/temp1.mp4" -y')
     else:
@@ -2036,7 +2073,7 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     pbthread8x() #Set this to 8x, this is the first of 3 progressbars
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} -i input_frames -o output_frames ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} -i input_frames -o output_frames ')
     os.system(fr'rm -rf input_frames/ && mkdir input_frames && mv output_frames/* input_frames')
     Interpolation.destroy()
 
