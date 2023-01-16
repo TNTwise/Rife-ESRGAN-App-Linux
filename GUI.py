@@ -2031,7 +2031,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     
     get_fps()
     if round != 0:
-        os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf "setpts=PTS,minterpolate=fps=30" -r 30 -an -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -c:a copy  {thisdir}/temp2.mp4 -y')
+        os.system(f'ffmpeg -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  {thisdir}/temp2.mp4 -y')
     if is8x == True or is16x == True and round != 0:
         filename1 = f'"{thisdir}/temp2.mp4"'
     else:
