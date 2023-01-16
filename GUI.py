@@ -17,8 +17,9 @@ def wget(URL,name):
 
 if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     os.chdir(f"{thisdir}/files")
-    os.system('python3 -m pip install requests')
     os.system('curl -O "https://bootstrap.pypa.io/get-pip.py" > get-pip.py')
+    os.system('python3 -m pip install requests')
+    
     os.chdir(f"{thisdir}")
     
     os.system('python3 files/get-pip.py install')
