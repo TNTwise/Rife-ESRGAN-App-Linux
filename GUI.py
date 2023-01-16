@@ -1670,7 +1670,7 @@ def anime4X(is16x, is8x,rifever):
             if i == 2:
                 on_click2_anime(i,is16x, True,rifever)
         
-            os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf "setpts=PTS,minterpolate=fps=30" -r 30 -an -c:v libx264 -c:a copy {get_cpu_load_ffmpeg()} {thisdir}/temp.mp4 -y')
+            os.system(f'ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()} {thisdir}/temp.mp4 -y')
             os.chdir(f"{thisdir}")
             os.system('rm temp1.mp4')
             os.chdir("rife-vulkan-models")
@@ -1700,7 +1700,7 @@ def anime4X(is16x, is8x,rifever):
             os.system('mkdir output_frames')
             os.system(f'ffprobe "{thisdir}/temp.mp4"')
     
-            os.system(f'ffmpeg {get_cpu_load_ffmpeg()} -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
+            os.system(f'ffmpeg  -i "{thisdir}/temp.mp4" input_frames/frame_%08d.png')
             if is16x == True and is8x == False:
                 if i == 0:
                     Anime16xPb2Thread()
