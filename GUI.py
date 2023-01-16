@@ -3,24 +3,32 @@
 #Implementing a version update system, instead of checking if file length is different.
 import os 
 global thisdir
+import requests
+import re
 thisdir = os.getcwd()
 homedir = os.path.expanduser(r"~")
 if os.path.exists(f"{thisdir}/files/") == False:
     os.mkdir(f"{thisdir}/files/")
 
+#This will replace wget
+def wget(URL,name):
+    response = requests.get(URL)
+    open(f"{name}", 'wb').write(response.content)
+
 if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     os.chdir(f"{thisdir}/files")
-    os.system("wget https://bootstrap.pypa.io/get-pip.py")
+    os.system('python3 -m pip install requests')
+    os.system('curl -O "https://bootstrap.pypa.io/get-pip.py" > get-pip.py')
     os.chdir(f"{thisdir}")
     
     os.system('python3 files/get-pip.py install')
     os.system('python3 -m pip install opencv-python')
     os.system('python3 -m pip install tk')
-    os.system('python3 -m pip install requests')
+    
     os.system('rm files/get-pip.py')
     
-if os.path.isfile(f'{thisdir}/Start') == False:
-    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
+#if os.path.isfile(f'{thisdir}/Start') == False:
+#    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
     
 
 import os
@@ -56,10 +64,13 @@ import csv
 from tkinter import *
 from functools import partial
 import getpass
-import requests
-import re
+
 from zipfile import ZipFile
 
+
+
+
+# These change the settings file
 def write_to_settings_file(description, option):
     
     with open(f'{thisdir}/files/settings.txt', 'a') as f:
@@ -246,13 +257,13 @@ def check_for_updates():
     
     
     if repo =="Stable":
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py")
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/files/start.py")
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start")
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/GUI.py', 'GUI.py')
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/start.py', 'start.py')
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/Stable/Start', 'Start')
     if repo =="Testing":
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py")
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/files/start.py")
-        os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/GUI.py', 'GUI.py')
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/start.py', 'start.py')
+        wget('https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start', 'Start')
         os.chdir(f"{thisdir}")
     file1 = open(f"{thisdir}/temp/GUI.py")
     file2 = open(f"{thisdir}/GUI.py")
@@ -281,7 +292,7 @@ def check_for_updates():
     if latest_ver > current:
                 is_updated = 1
                 os.chdir(f"{thisdir}/files/")
-                os.system(f"wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
+                wget(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
                 with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
                     f.extractall()
                 os.chdir(f"{thisdir}")
@@ -305,7 +316,7 @@ def get_all_models():
         version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
         latest_ver = version[0]
         os.chdir(f"{thisdir}/files/")
-        os.system(f"wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
+        wget(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
         with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
             f.extractall()
         os.chdir(f"{thisdir}")
@@ -325,7 +336,7 @@ def get_all_models():
         os.chdir(f"{thisdir}/files/")
         os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
         os.system(f'mkdir "{thisdir}/Real-ESRGAN/"')
-        os.system(f"wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip")
+        wget('https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
         os.system(f'mkdir "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
         os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
         with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','r') as f:
@@ -333,16 +344,16 @@ def get_all_models():
         os.system(f'mkdir "{thisdir}/Real-ESRGAN/models/"')
         os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/models/"* "{thisdir}/Real-ESRGAN/models/"')
         os.chdir(f'{thisdir}/files')
-        os.system(f"wget https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip")
-        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip','r') as f:
+        wget('https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip', 'realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip')
+        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip','r') as f:
             f.extractall()
         os.chdir(f"{thisdir}")
         
-        os.system(f'mv "{thisdir}/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu" "{thisdir}/files/"')
-        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu/"* "{thisdir}/Real-ESRGAN"')
-        change_setting('esrganversion', f'{latest_ESRGAN}')
-        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu.zip"')
-        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-{latest_ver_ESR}-ubuntu"')
+        os.system(f'mv "{thisdir}/realesrgan-ncnn-vulkan-v0.2.0-ubuntu" "{thisdir}/files/"')
+        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu/"* "{thisdir}/Real-ESRGAN"')
+        change_setting('esrganversion', f'{latest_ver_ESR}')
+        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip"')
+        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu"')
         os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
         os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu')
         os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
