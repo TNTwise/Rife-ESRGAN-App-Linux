@@ -6,13 +6,46 @@ global thisdir
 import requests
 import re
 import sys
+import csv
 global onefile_dir
-onefile_dir = sys._MEIPASS
-
+thisdir = os.getcwd()
+onefile_dir = thisdir
+global ffmpeg_command
+ffmpeg_command = 'ffmpeg'
 homedir = os.path.expanduser(r"~")
+
+if len(sys.argv) > 1: 
+    if sys.argv[1] == '--compile-appimage':
+        GUI_List = []
+        with open('GUIAppimage.py', 'r') as f:
+            for line in f:
+                GUI_List.append(line)
+                if line == '#ffmpeg_command = ../ffmpeg\n':
+                    line_index = GUI_List.index(line)
+                    GUI_List[line_index] = 'ffmpeg_command = "../ffmpeg"\n'
+                    print(GUI_List[line_index])
+                if line == '#thisdir = f"{homedir}/.Rife-Vulkan-GUI"\n':
+                    line_index = GUI_List.index(line)
+                    GUI_List[line_index] ='thisdir = f\'\"{homedir}/.Rife-Vulkan-GUI\"\'\n'
+                    print(GUI_List[line_index])
+                if line == '#onefile_dir = sys._MEIPASS\n':
+                    line_index = GUI_List.index(line)
+                    GUI_List[line_index] = 'onefile_dir = sys._MEIPASS\n'
+                    print(GUI_List[line_index])
+    with open ('GUI-test.py', 'w') as f:
+        for i in GUI_List:
+            f.write(i)
+    print('Completed')
+    exit()
+#do not edit these 27,28,29 lines.
+
+#ffmpeg_command = ../ffmpeg
+#thisdir = f"{homedir}/.Rife-Vulkan-GUI"
+#onefile_dir = sys._MEIPASS
+
 if os.path.exists(f'{homedir}/.Rife-Vulkan-GUI') == False:
     os.mkdir(f'{homedir}/.Rife-Vulkan-GUI')
-thisdir = f'{homedir}/.Rife-Vulkan-GUI'
+
 if os.path.exists(f"{thisdir}/files/") == False:
     os.mkdir(f"{thisdir}/files/")
 
@@ -1688,7 +1721,7 @@ def anime4X(is16x, is8x,rifever):
             if i == 2:
                 on_click2_anime(i,is16x, True,rifever)
         
-            os.system(f'../ffmpeg -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()} {thisdir}/temp.mp4 -y')
+            os.system(f'{ffmpeg_command} -i {thisdir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()} {thisdir}/temp.mp4 -y')
             os.chdir(f"{thisdir}")
             os.system(f'rm temp1.mp4')
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1718,7 +1751,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'mkdir {thisdir}/output_frames')
             os.system(f'ffprobe "{thisdir}/temp.mp4"')
     
-            os.system(f'../ffmpeg  -i "{thisdir}/temp.mp4" {thisdir}/input_frames/frame_%08d.png')
+            os.system(f'{ffmpeg_command}  -i "{thisdir}/temp.mp4" {thisdir}/input_frames/frame_%08d.png')
             if is16x == True and is8x == False:
                 if i == 0:
                     Anime16xPb2Thread()
@@ -1757,14 +1790,14 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i {thisdir}/input_frames -o {thisdir}/output_frames')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
                         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
 
                 else:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
@@ -1772,15 +1805,15 @@ def anime4X(is16x, is8x,rifever):
                 os.system(fr'rm -rf "{thisdir}/temp.mp4"')
             if is8x == True and is16x == False:
                 if i == 0:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
                 else:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{thisdir}/temp.mp4" -y')
                 
                 else:
-                    os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{thisdir}/temp.mp4"')
             Interpolation2.after(0, Interpolation2.destroy())
     
@@ -1839,8 +1872,8 @@ def realESRGAN(model):
         os.system(f'mkdir {thisdir}/input_frames')
         os.system(f'mkdir {thisdir}/output_frames')
         os.system(f'ffprobe "{filename}"')
-        os.system(f'../ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
-        os.system(f'../ffmpeg -i "{filename}"  {thisdir}/input_frames/frame_%08d.png')
+        os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
+        os.system(f'{ffmpeg_command} -i "{filename}"  {thisdir}/input_frames/frame_%08d.png')
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
@@ -1857,14 +1890,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format}  -i "{thisdir}/input_frames" -o "{thisdir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'../ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/Real-ESRGAN/{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'../ffmpeg -framerate {fps} -i "{thisdir}/Real-ESRGAN/{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/Real-ESRGAN/{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
@@ -1911,9 +1944,9 @@ def on_click(rifever):
         os.system(f'mkdir "{thisdir}/input_frames"')
         os.system(f'mkdir "{thisdir}/output_frames"')
         os.system(f'ffprobe "{filename}"')
-        os.system(f'../ffmpeg -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
+        os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
         extraction.grid(column=4,row=10)
-        os.system(f'../ffmpeg -i "{filename}" "{thisdir}/input_frames/frame_%08d.png"')
+        os.system(f'{ffmpeg_command} -i "{filename}" "{thisdir}/input_frames/frame_%08d.png"')
         extraction.after(0, extraction.destroy())
         Interpolation.grid(column=4,row=10)
         pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
@@ -1931,14 +1964,14 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i "{thisdir}/input_frames" -o "{thisdir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'../ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
             #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'../ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
@@ -1994,7 +2027,7 @@ def times4(rifever):
         get_fps2()
         
         
-        pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the ../ffmpeg extracts the frames
+        pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the {ffmpeg_command} extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         timestwo.after(0, timestwo.destroy())
@@ -2013,9 +2046,9 @@ def times4(rifever):
     
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i {thisdir}/input_frames -o {thisdir}/output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps2 * 2}fps.{extension}") == True:
-            os.system(fr'../ffmpeg -framerate {fps * 4} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 4} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
         else:
-            os.system(fr'../ffmpeg -framerate {fps * 4} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 4} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{thisdir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
@@ -2036,9 +2069,9 @@ def on_click2(rifever):
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename}"')
-    os.system(f'../ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=4,row=10)
-    os.system(f'../ffmpeg -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     pbthread4x() # calls the first 4x progressbar.
@@ -2050,7 +2083,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     
     get_fps()
     if round != 0:
-        os.system(f'../ffmpeg -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  {thisdir}/temp2.mp4 -y')
+        os.system(f'{ffmpeg_command} -i {thisdir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -preset veryslow -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  {thisdir}/temp2.mp4 -y')
     if is8x == True or is16x == True and round != 0:
         filename1 = f'"{thisdir}/temp2.mp4"'
     else:
@@ -2060,9 +2093,9 @@ def on_click2_anime(round, is16x, is8x,rifever):
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename1}"')
-    os.system(f'../ffmpeg -i "{filename1}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename1}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=4,row=10)
-    os.system(f'../ffmpeg -i "{filename1}" {thisdir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -i "{filename1}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     if round == 0:
         Interpolation = Label(tab1,
@@ -2101,9 +2134,9 @@ def on_click2_anime(round, is16x, is8x,rifever):
         
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i {thisdir}/input_frames -o {thisdir}/output_frames ')
     if round == 0:
-        os.system(fr'../ffmpeg -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  "{thisdir}/temp1.mp4" -y')
+        os.system(fr'{ffmpeg_command} -framerate {fps * 2} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  "{thisdir}/temp1.mp4" -y')
     else:
-        os.system(fr'../ffmpeg -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  "{thisdir}/temp1.mp4" -y')
+        os.system(fr'{ffmpeg_command} -framerate 60 -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow  "{thisdir}/temp1.mp4" -y')
     Interpolation.destroy()
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
@@ -2114,9 +2147,9 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename}"')
-    os.system(f'../ffmpeg -i "{filename}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
     extraction.grid(column=4,row=10)
-    os.system(f'../ffmpeg -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     pbthread8x() #Set this to 8x, this is the first of 3 progressbars
@@ -2180,7 +2213,7 @@ def times8(rifever):
         
         timestwo2.after(0, timestwo2.destroy())
         
-        pb8x3() # should be called after ../ffmpeg extracts the frames
+        pb8x3() # should be called after {ffmpeg_command} extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         Interpolation3.grid(column=4,row=10)
@@ -2198,9 +2231,9 @@ def times8(rifever):
 
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting()} {get_render_device()} -i {thisdir}/input_frames -o {thisdir}/output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps3 * 2}fps.{extension}") == True:
-            os.system(fr'../ffmpeg -framerate {fps * 8} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 8} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
         else:
-            os.system(fr'../ffmpeg -framerate {fps * 8} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps * 8} -i "{thisdir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
     
         os.system(fr'rm -rf "{thisdir}/temp2.mp4"')
         Interpolation3.after(0, Interpolation3.destroy())
