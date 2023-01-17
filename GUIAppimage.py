@@ -590,7 +590,7 @@ def settings_window():
     RenderDeviceDropDown()    
     gpu_usage_dropdown()
     video_image_dropdown()
-    show_dropdown()
+    #show_dropdown()
     def video_quality_drop_down():
         vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = videoQuality
@@ -632,7 +632,7 @@ def settings_window():
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
     if os.path.exists(f"{homedir}/Rife-Vulkan-GUI/") == False:
-        is_installed = False
+        is_installed = True
     else:
         is_installed = True
     if is_installed == False:
@@ -641,7 +641,7 @@ def settings_window():
     theme_label.grid(column=4,row=0)
     theme_button.grid(column=4, row=1)
     spacer_label1.grid(column=5,row=0)
-    check_updates_button.grid(column=6,row=3)
+    #check_updates_button.grid(column=6,row=3)
     update_spacer_label.grid(column=6,row=2)
     #change_repo_dropdown.grid(column=5,row=2)
 
