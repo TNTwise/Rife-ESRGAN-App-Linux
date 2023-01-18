@@ -43,6 +43,7 @@ make
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
+Add a function that deletes already processced files (check if file num x 2 exists in output_folder)
 Fix CPU + GPU combo not working with realsrgan <br />
 Add shutdown when done<br />
 Disable tabs when on a certain upscale mode<br />
