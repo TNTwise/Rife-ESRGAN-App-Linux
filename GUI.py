@@ -1615,7 +1615,7 @@ def layout_rife():
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
-    #button_exit.grid(column=4,row=9)
+    button_exit.grid(column=4,row=9)
     rife_vulkan.grid(column=4, row=0)
 layout_rife()
 
