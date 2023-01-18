@@ -8,7 +8,6 @@ import re
 import sys
 import csv
 import requests
-import psutil
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -507,10 +506,7 @@ def install1():
 
 # Insert settings menu here
 
-def exit_thread():
-    # Call work function
-    t1 = Thread(target=exi11)
-    t1.start()
+
 def settings_window():
     
     
@@ -711,7 +707,10 @@ def restart_thread():
     t1 = Thread(target=restart_window)
     t1.start()
 
-
+def exit_thread():
+    # Call work function
+    t1 = Thread(target=exi11)
+    t1.start()
 
 # restart window, this allows the program to restart after a application settings changes. call this with a message to confirm restart of program.   
 def restart_window(message):
@@ -1557,27 +1556,9 @@ def Anime():
 
 Anime()
 def exi11(): # this funtion kills the program.
-    #os.system(f'pkill rife-ncnn-vulkan')
-    #os.system(f'pkill GUI.py')
-    from subprocess import check_output
-    def get_pid(name):
-        import psutil
-
-        p = psutil.process_iter(attrs=['pid', 'name'])
-        for process in p:
-            if process.info['name'] == name:
-                pid = process.info['pid']
-                #pid = re.findall(f'[\d]*')
-                #pid = pid[0]
-                
-                #print(pid)
-                return pid
-    
-    os.system(f'kill -9 {get_pid("ffmpeg")}')
-    os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
-    
     os.system(f'kill -9 {os.getpid()}')
-    os.system('pkill -f GUI.py')
+    
+
 
 def layout_rife():
     rife_vulkan = Label (tab1,
@@ -1613,7 +1594,7 @@ def layout_rife():
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
-    button_exit.grid(column=4,row=9)
+    #button_exit.grid(column=4,row=9)
     rife_vulkan.grid(column=4, row=0)
 layout_rife()
 
@@ -2097,7 +2078,7 @@ def on_click2(rifever):
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename}"')
-    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
     extraction.grid(column=4,row=10)
     os.system(f'{ffmpeg_command} -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
@@ -2121,7 +2102,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename1}"')
-    os.system(f'{ffmpeg_command} -i "{filename1}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename1}" -vn -acodec copy {thisdir}/audio.m4a -y')
     extraction.grid(column=4,row=10)
     os.system(f'{ffmpeg_command} -i "{filename1}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
@@ -2175,7 +2156,7 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     os.system(f'mkdir {thisdir}/input_frames')
     os.system(f'mkdir {thisdir}/output_frames')
     os.system(f'ffprobe "{filename}"')
-    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
+    os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
     extraction.grid(column=4,row=10)
     os.system(f'{ffmpeg_command} -i "{filename}" {thisdir}/input_frames/frame_%08d.png')
     extraction.after(0, extraction.destroy())
