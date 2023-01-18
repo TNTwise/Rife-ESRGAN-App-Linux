@@ -14,7 +14,7 @@ To run this program, you can just click on "Start".
 There is a new install.sh script in the install directory that you can run that will install it to your system. <br />
 You can either search for Rife in your destop enfironment, or can run rife-gui from your terminal. <br />
 This install method will copy everything to the home folder, and execute from there. <br />
-## Installing Dependencies
+##Installing Dependencies
 On Ubuntu <br />
 ```
 sudo apt install python3-opencv ffmpeg python3-tk konsole
@@ -29,6 +29,16 @@ Run "Start"
 ```
 As of latest SteamOs 3.4, it does not error out when launching it from "Start". <br />
 
+## Building
+#Note: Building only works on Arch Linux for the time being, I am going to fix this in the future.
+Install needed dependencies
+```
+yay -S pyinstaller
+```
+run GUI.py at least once to install PIP dependencies
+```
+make
+```
 ## Errors
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
