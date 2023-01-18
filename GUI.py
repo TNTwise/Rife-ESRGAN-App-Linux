@@ -506,7 +506,10 @@ def install1():
 
 # Insert settings menu here
 
-
+def exit_thread():
+    # Call work function
+    t1 = Thread(target=exi11)
+    t1.start()
 def settings_window():
     
     
@@ -714,7 +717,7 @@ def restart_window(message):
     restart_window = Tk()
     centering_label = Label(restart_window, text="                                                                         ")
     restart_label = Label(restart_window, text=message, justify=CENTER)
-    exit_button = Button(restart_window, text="Exit", command=exi11,justify=CENTER)
+    exit_button = Button(restart_window, text="Exit", command=exit_thread,justify=CENTER)
     #restart_button = Button(restart_window, text="Restart", command=restart_thread,justify=CENTER)
     # lays out restart window 
     centering_label.grid(column=0,row=0)
@@ -1390,10 +1393,7 @@ def anime_thread():
     t1 = Thread(target=AnimeInterpolation)
     t1.start()
 
-def exit_thread():
-    # Call work function
-    t1 = Thread(target=exi11)
-    t1.start()
+
 #Button
 settings_window()
 def browseFiles():
@@ -1556,7 +1556,8 @@ def Anime():
 
 Anime()
 def exi11(): # this funtion kills the program.
-    exit()
+    os.system(f'pkill GUI.py')
+    os.system(f'kill -9 {os.getpid()}')
 
 def layout_rife():
     rife_vulkan = Label (tab1,
@@ -1573,7 +1574,7 @@ def layout_rife():
 
     button_exit = Button(tab1,
                         text = "EXIT",
-                        command = exi11,
+                        command = exit_thread,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
     settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
