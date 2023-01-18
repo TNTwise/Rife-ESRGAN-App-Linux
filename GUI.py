@@ -129,6 +129,7 @@ if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     os.system(f'python3 files/get-pip.py install')
     os.system(f'python3 -m pip install opencv-python')
     os.system(f'python3 -m pip install tk')
+    os.system(f'python3 -m pip install psutil')
     
     os.system(f'rm files/get-pip.py')
     
@@ -169,7 +170,7 @@ import csv
 from tkinter import *
 from functools import partial
 import getpass
-
+import psutil
 from zipfile import ZipFile
 
 
@@ -1556,7 +1557,27 @@ def Anime():
 
 Anime()
 def exi11(): # this funtion kills the program.
+        #os.system(f'pkill rife-ncnn-vulkan')
+    #os.system(f'pkill GUI.py')
+    from subprocess import check_output
+    def get_pid(name):
+        import psutil
+
+        p = psutil.process_iter(attrs=['pid', 'name'])
+        for process in p:
+            if process.info['name'] == name:
+                pid = process.info['pid']
+                #pid = re.findall(f'[\d]*')
+                #pid = pid[0]
+
+                #print(pid)
+                return pid
+
+    os.system(f'kill -9 {get_pid("ffmpeg")}')
+    os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
+
     os.system(f'kill -9 {os.getpid()}')
+    os.system('pkill -f GUI.py')
     
 
 
