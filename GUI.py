@@ -8,6 +8,7 @@ import re
 import sys
 import csv
 import requests
+import psutil
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -1556,7 +1557,25 @@ def Anime():
 
 Anime()
 def exi11(): # this funtion kills the program.
-    os.system(f'pkill GUI.py')
+    #os.system(f'pkill rife-ncnn-vulkan')
+    #os.system(f'pkill GUI.py')
+    from subprocess import check_output
+    def get_pid(name):
+        import psutil
+
+        p = psutil.process_iter(attrs=['pid', 'name'])
+        for process in p:
+            if process.info['name'] == name:
+                pid = process.info['pid']
+                #pid = re.findall(f'[\d]*')
+                #pid = pid[0]
+                
+                #print(pid)
+                return pid
+    
+    os.system(f'kill -9 {get_pid("ffmpeg")}')
+    os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
+    
     os.system(f'kill -9 {os.getpid()}')
 
 def layout_rife():
@@ -1630,7 +1649,7 @@ def layout_realsr():
 
     button_exit = Button(tab2,
                         text = "EXIT",
-                        command = exi11,
+                        command = exit_thread,
                         justify=CENTER,bg=bg_button,fg=fg)
                                                                                                                                                      
     settings_menu_button = Label(tab2,padx='500',bg=bg,fg=fg)
