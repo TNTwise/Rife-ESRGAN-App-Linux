@@ -97,9 +97,9 @@ if len(sys.argv) > 1:
                     GUI_List[line_index] = 'onefile_dir = sys._MEIPASS\n'
                     print(GUI_List[line_index])
         get_all_models()
-    if os.path.isfile('GUIAppimage.py') == False:
-        os.mknod('GUIAppimage.py')
-    with open ('GUIAppimage.py', 'w') as f:
+    if os.path.isfile('GUIPortable.py') == False:
+        os.mknod('GUIPortable.py')
+    with open ('GUIPortable.py', 'w') as f:
         for i in GUI_List:
             f.write(i)
     print('Completed')
