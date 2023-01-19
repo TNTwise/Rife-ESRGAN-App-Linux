@@ -1591,7 +1591,7 @@ def exi11(): # this funtion kills the program.
 
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
-
+    os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
     os.system(f'kill -9 {os.getpid()}')
     os.system('pkill -f GUI.py')
     
