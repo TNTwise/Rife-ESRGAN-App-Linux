@@ -1918,7 +1918,7 @@ def realESRGAN(model):
         os.system(f'mkdir {thisdir}/input_frames')
         os.system(f'mkdir {thisdir}/output_frames')
         os.system(f'ffprobe "{filename}"')
-        os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy audio.m4a -y')
+        os.system(f'{ffmpeg_command} -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
         os.system(f'{ffmpeg_command} -i "{filename}"  {thisdir}/input_frames/frame_%08d.png')
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
@@ -1936,14 +1936,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{thisdir}/input_frames" -o "{thisdir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
-                                    error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
+                                    error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/Real-ESRGAN/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command} -framerate {fps} -i "{thisdir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -preset veryslow "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
