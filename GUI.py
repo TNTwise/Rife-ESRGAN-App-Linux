@@ -67,7 +67,7 @@ if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     os.chdir(f"{thisdir}/files")
     os.system(f'curl -O "https://bootstrap.pypa.io/get-pip.py" > get-pip.py')
     os.system(f'python3 -m pip install requests')
-    get_all_models()
+    
     os.chdir(f"{thisdir}")
     
     os.system(f'python3 files/get-pip.py install')
