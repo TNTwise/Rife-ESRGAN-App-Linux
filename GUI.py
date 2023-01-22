@@ -119,7 +119,6 @@ from zipfile import ZipFile
 
 
 
-
 # These change the settings file
 def write_to_settings_file(description, option):
     
@@ -201,8 +200,10 @@ def change_setting(setting,svalue):
     read_settings()
 write_temp()
 
-
-
+def check_output_dir():
+    if os.path.exists(f'{OutputDir}') == False:
+        change_setting('OutputDir', f'{homedir}')
+check_output_dir()
 
 
 
