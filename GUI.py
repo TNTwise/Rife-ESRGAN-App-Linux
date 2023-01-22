@@ -17,6 +17,8 @@ thisdir = os.getcwd()
 onefile_dir = thisdir
 global ffmpeg_command
 ffmpeg_command = 'ffmpeg'
+global ffprobe_command
+ffprobe_command = 'ffprobe'
 homedir = os.path.expanduser(r"~")
 
 if len(sys.argv) > 1: 
@@ -41,6 +43,10 @@ if len(sys.argv) > 1:
                     line_index = GUI_List.index(line)
                     GUI_List[line_index] = '#get_all_models()\n'
                     print(GUI_List[line_index])
+                if line =='#ffprobe_command = ../ffprobe\n':
+                    line_index = GUI_List.index(line)
+                    GUI_List[line_index] = 'ffprobe_command = "../ffprobe"\n'
+                    print(GUI_List[line_index])
     if os.path.isfile('GUIPortable.py') == False:
         os.mknod('GUIPortable.py')
     with open ('GUIPortable.py', 'w') as f:
@@ -53,7 +59,7 @@ if len(sys.argv) > 1:
 #ffmpeg_command = ../ffmpeg
 #thisdir = f{homedir}/.Rife-Vulkan-GUI
 #onefile_dir = sys._MEIPASS
-
+#ffprobe_command = ../ffprobe
 #you can edit from down here on
 if os.path.exists(f'{homedir}/.Rife-Vulkan-GUI') == False:
     os.mkdir(f'{homedir}/.Rife-Vulkan-GUI')
@@ -216,7 +222,7 @@ realsr_model = '-n realesrgan-x4plus -s 4'
 global image_format
 image_format = Image_Type
 
-os.system(f'chmod +x {thisdir}/rife-vulkan-models/rife-ncnn-vulkan')
+os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
 def check_theme():
     
     # This code reads the theme file and stores its data in a theme variable
@@ -1962,7 +1968,7 @@ def on_click(rifever):
         os.system(f'mkdir "{RenderDir}/input_frames"')
         os.system(f'mkdir "{RenderDir}/output_frames"')
         os.system(f'ffprobe "{filename}"')
-        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
+        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
         extraction.grid(column=4,row=10)
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
         extraction.after(0, extraction.destroy())
@@ -1982,14 +1988,14 @@ def on_click(rifever):
                  fg=fg,bg=bg)
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
             #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
@@ -2003,8 +2009,8 @@ def on_click(rifever):
         button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 4, row = 3)
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
-        os.system(f'rm -rf {RenderDir}/input_frames')
-        os.system(f'rm -rf {RenderDir}/output_frames ')
+        os.system(f'rm -rf "{RenderDir}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/output_frames" ')
         os.chdir(f"../")
         enable_tabs()
 
@@ -2065,11 +2071,11 @@ def times4(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Interpolation2.grid(column=4,row=10)
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 4}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
         else:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
         
@@ -2086,26 +2092,26 @@ def times4(rifever):
 def on_click2(rifever):
     get_fps()
     
-    os.system(f'rm -rf {RenderDir}/input_frames')
-    os.system(f'rm -rf {RenderDir}/output_frames ')
-    os.system(f'mkdir {RenderDir}/input_frames')
-    os.system(f'mkdir {RenderDir}/output_frames')
+    os.system(f'rm -rf "{RenderDir}/input_frames"')
+    os.system(f'rm -rf "{RenderDir}/output_frames" ')
+    os.system(f'mkdir "{RenderDir}/input_frames"')
+    os.system(f'mkdir "{RenderDir}/output_frames"')
     os.system(f'ffprobe "{filename}"')
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     extraction.grid(column=4,row=10)
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" {RenderDir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     pbthread4x() # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
-    os.system(fr'rm -rf {RenderDir}/input_frames/ && mkdir {RenderDir}/input_frames && mv {RenderDir}/output_frames/* {RenderDir}/input_frames')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
     Interpolation.destroy()
 def on_click2_anime(round, is16x, is8x,rifever):
     
     get_fps()
     if round != 0:
-        os.system(f'{ffmpeg_command} -hwaccel auto -i {RenderDir}/temp.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  {RenderDir}/temp2.mp4 -y')
+        os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  "{RenderDir}/temp2.mp4" -y')
     if is8x == True or is16x == True and round != 0:
         filename1 = f'"{RenderDir}/temp2.mp4"'
     else:
