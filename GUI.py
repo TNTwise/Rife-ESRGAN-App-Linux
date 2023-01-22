@@ -685,7 +685,7 @@ def get_render_device(app):
         return ""
 def gpu_setting(app):
     if GPUUsage == 'Default' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
-        #print('\ndef gpu\n')
+        
         return "-j 1:2:2"
         
     if GPUUsage == 'High' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
@@ -860,7 +860,7 @@ def show(program):
         rifever1 = Rife_Option
         
         isAnime = IsAnime
-        print(isAnime)
+        
         if isAnime != "True":
             if rifever1 == "Rife":
                 rifever = "-m rife"
@@ -1476,7 +1476,7 @@ def get_fps():
                        text=f"Extracting Frames",
                        font=("Arial", 11), width=57, anchor="c",
                        fg=fg,bg=bg)
-global Interpolation2
+
 Interpolation2 = Label(tab1,
                            text=f"Interpolation 4X Started!",
                            font=("Arial", 11),
@@ -1559,17 +1559,13 @@ def exi11(): # this funtion kills the program.
         for process in p:
             if process.info['name'] == name:
                 pid = process.info['pid']
-                #pid = re.findall(f'[\d]*')
-                #pid = pid[0]
-
-                #print(pid)
+                
                 return pid
     os.system(f'pkill konsole')
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
     os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
     os.system(f'kill -9 {os.getpid()}')
-    os.system('pkill -f GUI.py')
     
 
 
@@ -1695,7 +1691,11 @@ def AnimeInterpolation():
         anime4X(True, False,rifever)
         
 def anime4X(is16x, is8x,rifever):
-    if filename != "":
+    Interpolation2 = Label(tab1,
+                           text=f"Interpolation 4X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
+    if filename != "" and isinstance(filename, str) == True:
         
             
         grayout_tabs('rife')
@@ -1857,7 +1857,7 @@ def anime8X(is16x,rifever):
             
 def realESRGAN(model):
     vidQuality = videoQuality
-    if filename != "":
+    if filename != "" and isinstance(filename, str) == True:
         grayout_tabs('realsr')
         
         os.chdir(f"{onefile_dir}/Real-ESRGAN")
@@ -1932,7 +1932,7 @@ def realESRGAN(model):
 def on_click(rifever):
     
     vidQuality = videoQuality
-    if filename != "":
+    if filename != "" and isinstance(filename, str) == True:
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
@@ -1993,7 +1993,7 @@ def on_click(rifever):
             #else:
             #      
             #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-            #idk wtf is going on here, it just prints it out whenever
+            
         Interpolation.after(0, Interpolation.destroy())
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
@@ -2011,7 +2011,11 @@ def on_click(rifever):
 
 
 def times4(rifever):
-    if filename != "":
+    Interpolation2 = Label(tab1,
+                           text=f"Interpolation 4X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
+    if filename != "" and isinstance(filename, str) == True:
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
@@ -2174,26 +2178,20 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     Interpolation.destroy()
 
 def on_click3(rifever):
-    
+    Interpolation8 = Label(tab1,
+                           text=f"Interpolation 4X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
         # this if statement sets default output dir, may need to remove when add selector.
     
 
     
-    global timestwo3
-    timestwo3 = Label(tab1,
-                      font=("Arial", 11),
-                      text=f"Finished 2X interpolation. Generated temp.mp4.",
-                      fg=fg,bg=bg)
-    timestwo3.grid(column=4,row=10)
     
-    timestwo3.after(0, timestwo3.destroy())
-    Interpolation2.grid(column=4,row=10)
-    pb8x2()            # This calls it for the second time, initiates second progressbar 
-    Interpolation2.after(0, Interpolation2.destroy())
-    Interpolation2.grid(column=4,row=10)
+    Interpolation8.grid(column=4,row=10)
+    pb8x2()
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
     os.system(fr'rm -rf {RenderDir}/input_frames/ && mkdir {RenderDir}/input_frames && mv {RenderDir}/output_frames/* {RenderDir}/input_frames')
-    Interpolation2.after(0, Interpolation2.destroy())
+    Interpolation8.after(0, Interpolation8.destroy())
     
 
 def times8(rifever):
@@ -2201,7 +2199,7 @@ def times8(rifever):
                            text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
                            fg=fg,bg=bg)
-    if filename != "":
+    if filename != "" and isinstance(filename, str) == True:
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
