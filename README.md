@@ -3,7 +3,6 @@
 </p>
 
 ## A simple GUI for Rife Vulkan on Linux
-## Note: GUI.py and GUIAppimage.py will be merged in the future, so i can just work on one single script that can be a portable appimage and can be run normally.
 ## Dependencies: 
 OpenCV <br />
 Tkinter<br />
