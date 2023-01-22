@@ -2170,19 +2170,19 @@ def on_click2_anime(round, is16x, is8x,rifever):
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
     
-    os.system(f'rm -rf {RenderDir}/input_frames')
-    os.system(f'rm -rf {RenderDir}/output_frames ')
-    os.system(f'mkdir {RenderDir}/input_frames')
-    os.system(f'mkdir {RenderDir}/output_frames')
+    os.system(f'rm -rf "{RenderDir}/input_frames"')
+    os.system(f'rm -rf "{RenderDir}/output_frames" ')
+    os.system(f'mkdir "{RenderDir}/input_frames"')
+    os.system(f'mkdir "{RenderDir}/output_frames"')
     os.system(f'{ffprobe_command} "{filename}"')
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     extraction.grid(column=4,row=10)
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" {RenderDir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     extraction.after(0, extraction.destroy())
     Interpolation.grid(column=4,row=10)
     pbthread8x() #Set this to 8x, this is the first of 3 progressbars
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
-    os.system(fr'rm -rf {RenderDir}/input_frames/ && mkdir {RenderDir}/input_frames && mv {RenderDir}/output_frames/* {RenderDir}/input_frames')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
     Interpolation.destroy()
 
 def on_click3(rifever):
@@ -2197,8 +2197,8 @@ def on_click3(rifever):
     
     Interpolation8.grid(column=4,row=10)
     pb8x2()
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
-    os.system(fr'rm -rf {RenderDir}/input_frames/ && mkdir {RenderDir}/input_frames && mv {RenderDir}/output_frames/* {RenderDir}/input_frames')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
     Interpolation8.after(0, Interpolation8.destroy())
     
 
@@ -2250,11 +2250,11 @@ def times8(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
 
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 8}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
         else:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
     
         os.system(fr'rm -rf "{RenderDir}/temp2.mp4"')
         Interpolation3.after(0, Interpolation3.destroy())
