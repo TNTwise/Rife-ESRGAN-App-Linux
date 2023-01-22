@@ -1556,13 +1556,18 @@ def exi11(): # this funtion kills the program.
                 pid = process.info['pid']
                 
                 return pid
-    
+    os.system(f'rm -rf "{RenderDir}/temp"')
+    os.system(f'rm -rf "{RenderDir}/temp.mp4"')
+    os.system(f'rm -rf "{RenderDir}/temp2.mp4"')
+    os.system(f'rm -rf "{RenderDir}/temp1.mp4"')
+    os.system(f'rm -rf "{thisdir}/temp"')
+    os.system(f'rm -rf "{RenderDir}/input_frames/"')
+    os.system(f'rm -rf "{RenderDir}/output_frames/"')
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
     os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
     os.system(f'kill -9 {os.getpid()}')
     
-
 
 def layout_rife():
     rife_vulkan = Label (tab1,
@@ -1686,7 +1691,7 @@ def AnimeInterpolation():
         anime4X(True, False,rifever)
         
 def anime4X(is16x, is8x,rifever):
-    Interpolation2 = Label(tab1,
+    Interpolation9 = Label(tab1,
                            text=f"Interpolation 4X Started!",
                            font=("Arial", 11),
                            fg=fg,bg=bg)
@@ -1782,7 +1787,7 @@ def anime4X(is16x, is8x,rifever):
                 timestwo.after(0, timestwo.destroy())
             if i == 2:
                 timestwo.after(0, timestwo.destroy())
-            Interpolation2.grid(column=4,row=10)
+            Interpolation9.grid(column=4,row=10)
 
             global done2
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps{extension}") == True:
@@ -1995,7 +2000,7 @@ def on_click(rifever):
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 4, row = 3)
-        os.system(f'rm -rf "'+thisdir+'/temp"') # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
+         # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')
         os.chdir(f"../")
@@ -2251,7 +2256,7 @@ def times8(rifever):
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')
-        os.system(f'rm -rf "'+thisdir+'/temp"')
+        
         os.chdir(f"{thisdir}")
         enable_tabs()
         done3.grid(column=4,row=10)
