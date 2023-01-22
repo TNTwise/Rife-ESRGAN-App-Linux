@@ -1564,7 +1564,7 @@ def exi11(): # this funtion kills the program.
 
                 #print(pid)
                 return pid
-
+    os.system(f'pkill konsole')
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
     os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
@@ -1586,10 +1586,7 @@ def layout_rife():
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
 
-    button_exit = Button(tab1,
-                        text = "EXIT",
-                        command = exit_thread,
-                        justify=CENTER,bg=bg_button,fg=fg)
+    
                                                                                                                                                      
     settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
     start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
@@ -1603,11 +1600,10 @@ def layout_rife():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab1,pady=57,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab1,pady=73,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
-    button_exit.grid(column=4,row=9)
     rife_vulkan.grid(column=4, row=0)
 layout_rife()
 
@@ -1642,10 +1638,7 @@ def layout_realsr():
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
 
-    button_exit = Button(tab2,
-                        text = "EXIT",
-                        command = exit_thread,
-                        justify=CENTER,bg=bg_button,fg=fg)
+    
                                                                                                                                                      
     settings_menu_button = Label(tab2,padx='500',bg=bg,fg=fg)
     start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
@@ -1659,11 +1652,10 @@ def layout_realsr():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab2,pady=90,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab2,pady=106,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
-    button_exit.grid(column=4,row=9)
     realsr_vulkan.grid(column=4, row=0)
 layout_realsr()
 
@@ -2045,7 +2037,7 @@ def times4(rifever):
         global timestwo
         timestwo = Label(tab1,
                      font=("Arial", 11),
-                     text = f"Finished 2X interpolation. Generated temp.mp4.",
+                     text = f"Finished 2X interpolation",
                      fg=fg,bg=bg)
         timestwo.grid(column=4,row=10)
         
@@ -2066,7 +2058,7 @@ def times4(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-    
+        Interpolation2.grid(column=4,row=10)
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 4}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
@@ -2074,11 +2066,12 @@ def times4(rifever):
             os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
         Interpolation2.after(0, Interpolation2.destroy())
-        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
+        
     
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
+        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
         os.system(f'rm -rf "'+thisdir+'/temp"')
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')    
@@ -2196,14 +2189,16 @@ def on_click3(rifever):
     timestwo3.after(0, timestwo3.destroy())
     Interpolation2.grid(column=4,row=10)
     pb8x2()            # This calls it for the second time, initiates second progressbar 
+    Interpolation2.after(0, Interpolation2.destroy())
+    Interpolation2.grid(column=4,row=10)
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
     os.system(fr'rm -rf {RenderDir}/input_frames/ && mkdir {RenderDir}/input_frames && mv {RenderDir}/output_frames/* {RenderDir}/input_frames')
     Interpolation2.after(0, Interpolation2.destroy())
     
 
 def times8(rifever):
-    Interpolation2 = Label(tab1,
-                           text=f"Interpolation 4X Started!",
+    Interpolation3 = Label(tab1,
+                           text=f"Interpolation 8X Started!",
                            font=("Arial", 11),
                            fg=fg,bg=bg)
     if filename != "":
@@ -2229,16 +2224,9 @@ def times8(rifever):
 
         on_click2_8(rifever)
         on_click3(rifever)
-        global timestwo2
-        timestwo2 = Label(tab1,
-                     font=("Arial", 11),
-                     text = f"Finished 4X interpolation. Generated temp.mp4.",
-                     bg=bg,
-                     fg=fg)
-        timestwo2.grid(column=4,row=10)
         
         
-        timestwo2.after(0, timestwo2.destroy())
+        
         
         pb8x3() # should be called after {ffmpeg_command} -hwaccel auto extracts the frames
         if os.path.exists(outputdir) == False:
@@ -2264,7 +2252,7 @@ def times8(rifever):
     
         os.system(fr'rm -rf "{RenderDir}/temp2.mp4"')
         Interpolation3.after(0, Interpolation3.destroy())
-        done3.grid(column=4,row=10)
+        
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
@@ -2273,6 +2261,11 @@ def times8(rifever):
         os.system(f'rm -rf "'+thisdir+'/temp"')
         os.chdir(f"{thisdir}")
         enable_tabs()
+        done3.grid(column=4,row=10)
+
+
+main_window.protocol('WM_DELETE_WINDOW',exit_thread)
+
 main_window.geometry("680x490")
 main_window.title('Rife - ESRGAN - App')
 main_window.resizable(False, False) 
