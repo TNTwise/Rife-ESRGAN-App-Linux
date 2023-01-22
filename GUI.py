@@ -1561,7 +1561,7 @@ def exi11(): # this funtion kills the program.
                 pid = process.info['pid']
                 
                 return pid
-    os.system(f'pkill konsole')
+    
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
     os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
