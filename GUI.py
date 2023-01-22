@@ -1743,7 +1743,7 @@ def anime4X(is16x, is8x,rifever):
             if i == 2:
                 on_click2_anime(i,is16x, True,rifever)
         
-            os.system(f'{ffmpeg_command} -hwaccel auto -i {RenderDir}/temp1.mp4  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} {RenderDir}/temp.mp4 -y')
+            os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp1.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/temp.mp4" -y')
             os.chdir(f"{thisdir}")
             os.system(f'rm temp1.mp4')
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1773,7 +1773,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'mkdir {RenderDir}/output_frames')
             os.system(f'{ffprobe_command} "{RenderDir}/temp.mp4"')
     
-            os.system(f'{ffmpeg_command} -hwaccel auto  -i "{RenderDir}/temp.mp4" {RenderDir}/input_frames/frame_%08d.png')
+            os.system(f'{ffmpeg_command} -hwaccel auto  -i "{RenderDir}/temp.mp4" "{RenderDir}/input_frames/frame_%08d.png"')
             if is16x == True and is8x == False:
                 if i == 0:
                     Anime16xPb2Thread()
@@ -1809,17 +1809,17 @@ def anime4X(is16x, is8x,rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
     
-            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames')
+            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames"')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
                         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
 
                 else:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
@@ -1827,16 +1827,16 @@ def anime4X(is16x, is8x,rifever):
                 os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
             if is8x == True and is16x == False:
                 if i == 0:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
                 else:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
                 
                 else:
-                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{thisdir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
             Interpolation2.after(0, Interpolation2.destroy())
@@ -1844,8 +1844,8 @@ def anime4X(is16x, is8x,rifever):
             start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
             button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
             button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
-            os.system(f'rm -rf {RenderDir}/input_frames')
-            os.system(f'rm -rf {RenderDir}/output_frames ')    
+            os.system(f'rm -rf "{RenderDir}/input_frames"')
+            os.system(f'rm -rf "{RenderDir}/output_frames" ')    
             os.chdir(f"{thisdir}")
 
     enable_tabs()    
@@ -1896,7 +1896,7 @@ def realESRGAN(model):
         os.system(f'mkdir {RenderDir}/input_frames')
         os.system(f'mkdir {RenderDir}/output_frames')
         os.system(f'{ffprobe_command} "{filename}"')
-        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {thisdir}/audio.m4a -y')
+        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {RenderDir}/audio.m4a -y')
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}"  {RenderDir}/input_frames/frame_%08d.png')
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
@@ -1914,14 +1914,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}_res(1).{extension}") == True:
-            os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {RenderDir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {RenderDir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
@@ -2113,17 +2113,17 @@ def on_click2_anime(round, is16x, is8x,rifever):
     if round != 0:
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  "{RenderDir}/temp2.mp4" -y')
     if is8x == True or is16x == True and round != 0:
-        filename1 = f'"{RenderDir}/temp2.mp4"'
+        filename1 = f'{RenderDir}/temp2.mp4'
     else:
         filename1 = filename
-    os.system(f'rm -rf {RenderDir}/input_frames')
-    os.system(f'rm -rf {RenderDir}/output_frames ')
-    os.system(f'mkdir {RenderDir}/input_frames')
-    os.system(f'mkdir {RenderDir}/output_frames')
+    os.system(f'rm -rf "{RenderDir}/input_frames"')
+    os.system(f'rm -rf "{RenderDir}/output_frames" ')
+    os.system(f'mkdir "{RenderDir}/input_frames"')
+    os.system(f'mkdir "{RenderDir}/output_frames"')
     os.system(f'{ffprobe_command} "{filename1}"')
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" -vn -acodec copy {thisdir}/audio.m4a -y')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     extraction.grid(column=4,row=10)
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" {RenderDir}/input_frames/frame_%08d.png')
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" "{RenderDir}/input_frames/frame_%08d.png"')
     extraction.after(0, extraction.destroy())
     if round == 0:
         Interpolation = Label(tab1,
@@ -2160,11 +2160,11 @@ def on_click2_anime(round, is16x, is8x,rifever):
         if round == 1:
             Anime8xPb3Thread()
         
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i {RenderDir}/input_frames -o {RenderDir}/output_frames ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     if round == 0:
-        os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
+        os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
     else:
-        os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i {thisdir}/audio.m4a -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
+        os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
     Interpolation.destroy()
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
