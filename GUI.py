@@ -203,6 +203,8 @@ write_temp()
 def check_output_dir():
     if os.path.exists(f'{OutputDir}') == False:
         change_setting('OutputDir', f'{homedir}')
+    if os.path.exists(f'{RenderDir}') == False:
+        change_setting('RenderDir', f'{homedir}')
 check_output_dir()
 
 
