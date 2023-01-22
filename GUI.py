@@ -799,10 +799,7 @@ def darkTheme():
     bg="#4C4E52"
     fg="white"
     bg_button="#4C4E52"
-    global theme_button
-    theme_button.destroy()
-    theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg)
-    theme_button.grid(column = 3, row = 1)
+    
     restart_window("Changing theme requires restart.")
     
 
@@ -815,10 +812,7 @@ def lightTheme():
     bg="white"
     bg_button="white" 
     fg="black"
-    global theme_button
-    theme_button.destroy()
-    theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg)
-    theme_button.grid(column = 3, row = 1)
+    
     restart_window("Changing theme requires restart.")
     
     
