@@ -1561,9 +1561,13 @@ def layout_rife():
     button_output = Button(tab1,
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
-
-    
-                                                                                                                                                     
+    #set outputdir textbox
+    '''global output_textbox
+    output_textbox = Text(tab1,width=20,height=1)
+    #output_textbox.delete(0,"end")
+    output_textbox.insert(1.0,OutputDir)
+    output_textbox.grid(column=4,row=4)'''
+    #this is getting ready for textboxes                                                                                                                                           
     settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
     start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
 
@@ -1584,6 +1588,25 @@ def layout_rife():
 layout_rife()
 
 def layout_realsr():
+    variable1 = StringVar(tab1)
+    video_options1 = ['2X', '3X', '4X']
+    variable1.set('4X')
+    opt2 = OptionMenu(tab2, variable1, *video_options1)
+    opt2.config(width=3, font=('Helvetica', 12))
+    opt2.config(bg=bg)
+    opt2.config(fg=fg)
+    opt2.grid(column=4,row=9)
+    global realsr_scale
+    realsr_scale = '-s 4'
+    def callback(*args):
+        
+        if variable1.get() == '2X':
+            realsr_scale = '-s 2'
+        if variable1.get() == '3X':
+            realsr_scale = '-s 3'
+        if variable1.get() == '4X':
+            realsr_scale = '-s 4'
+
     variable2 = StringVar(tab1)
     video_options = ['Default', 'Animation']
     variable2.set('Default')
@@ -1592,16 +1615,26 @@ def layout_realsr():
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
-
+    opt2.config(state=DISABLED)
     def callback(*args):
         global realsr_model
-        realsr_model = '-n realesrgan-x4plus -s 4'
+        realsr_model = '-n realesrgan-x4plus'
         if variable2.get() == 'Default':
-            realsr_model = '-n realesrgan-x4plus -s 4'
+            realsr_model = '-n realesrgan-x4plus'
+            variable1.set('4X')
+            opt2.config(state=DISABLED)
+
         if variable2.get() == 'Animation':
-            realsr_model = '-n realesr-animevideov3 -s 2'
-        
+            realsr_model = '-n realesr-animevideov3'
+            variable1.set('2X')
+            opt2.config(state='normal')
     variable2.trace("w", callback)
+    
+    
+    
+        
+        
+    
     realsr_vulkan = Label (tab2,
                             text = "Real-ESRGAN Vulkan"
                                                            ,
@@ -1613,7 +1646,7 @@ def layout_realsr():
     button_output = Button(tab2,
                         text = "Output Folder",
                         command = output, bg=bg_button,fg=fg)
-
+    
     
                                                                                                                                                      
     settings_menu_button = Label(tab2,padx='500',bg=bg,fg=fg)
@@ -1628,7 +1661,7 @@ def layout_realsr():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab2,pady=104,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab2,pady=88,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -1859,7 +1892,7 @@ def realESRGAN(model):
                  text=f"Done! Output File = {outputdir}/{mp4name}_res{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+        os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
             os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
