@@ -69,7 +69,7 @@ if os.path.exists(f"{thisdir}/files/") == False:
 
 
 
-if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
+if(os.path.isfile(thisdir+"/files/settings.txt")) == False and ffmpeg_command == 'ffmpeg':
     os.chdir(f"{thisdir}/files")
     os.system(f'curl -O "https://bootstrap.pypa.io/get-pip.py" > get-pip.py')
     os.system(f'python3 -m pip install requests')
