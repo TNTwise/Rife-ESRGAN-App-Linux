@@ -1900,13 +1900,13 @@ def realESRGAN(model):
         # Calls get_fps function
         get_fps()
         #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-        os.system(f'rm -rf {RenderDir}/input_frames')
-        os.system(f'rm -rf {RenderDir}/output_frames ')
-        os.system(f'mkdir {RenderDir}/input_frames')
-        os.system(f'mkdir {RenderDir}/output_frames')
+        os.system(f'rm -rf "{RenderDir}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/output_frames" ')
+        os.system(f'mkdir "{RenderDir}/input_frames"')
+        os.system(f'mkdir "{RenderDir}/output_frames"')
         os.system(f'{ffprobe_command} "{filename}"')
-        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy {RenderDir}/audio.m4a -y')
-        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}"  {RenderDir}/input_frames/frame_%08d.png')
+        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
+        os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}"  "{RenderDir}/input_frames/frame_%08d.png"')
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
@@ -1923,14 +1923,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}_res(1).{extension}") == True:
-            os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {RenderDir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i {RenderDir}/audio.m4a -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
