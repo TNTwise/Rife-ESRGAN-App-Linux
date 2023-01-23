@@ -1859,18 +1859,18 @@ def realESRGAN(model):
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
             outputdir = homedir
-        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}_res{extension}") == True:
+        if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
             done = Label(tab2,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps)}fps(1){extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_res(1){extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         else:
            done = Label(tab2,
-                 text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
+                 text=f"Done! Output File = {outputdir}/{mp4name}_res{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
-        if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}_res(1).{extension}") == True:
+        if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
             os.system(fr'{ffmpeg_command} -hwaccel auto  -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
