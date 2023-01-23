@@ -83,43 +83,29 @@ if(os.path.isfile(thisdir+"/files/settings.txt")) == False:
     
     os.system(f'rm files/get-pip.py')
     
-#if os.path.isfile(f'{thisdir}/Start') == False:
-#    os.system(f"wget https://raw.githubusercontent.com/TNTwise/Rife-Vulkan-GUI-Linux/main/Start")
-    
 
+import getpass
+from pathlib import Path
+import pathlib
 import os
 import glob
-import pathlib
-from pathlib import Path
 from tkinter.ttk import Progressbar
-import tkinter
 import sys
 import os.path
 from tkinter import *
 from tkinter import filedialog
-import time
 from multiprocessing import Queue, Process
-import queue
-from decimal import Decimal, getcontext
-from datetime import datetime
-import shutil
 import subprocess
 from subprocess import Popen, PIPE
 from time import sleep
 from threading import *
-import socket
-import json
 from tkinter import ttk
 import ntpath
 from sys import exit
 import glob
 import os.path
-import pathlib
 import cv2
-import csv
 from tkinter import *
-from functools import partial
-import getpass
 import psutil
 from zipfile import ZipFile
 
@@ -164,32 +150,35 @@ def read_settings():
         f = csv.reader(f)
         for row in f:
             settings_dict[row[0]] = row[1]
-    global Rife_Option
-    Rife_Option = settings_dict['Rife_Option']
-    global Interpolation_Option
-    Interpolation_Option = settings_dict['Interpolation_Option']
-    global Repository
-    Repository = settings_dict['Repository']
-    global Image_Type
-    Image_Type = settings_dict['Image_Type']
-    global IsAnime
-    IsAnime = settings_dict['IsAnime']
-    global rifeversion
-    rifeversion = settings_dict['rifeversion']
-    global esrganversion
-    esrganversion = settings_dict['esrganversion']
-    global videoQuality
-    videoQuality = settings_dict['videoQuality']
-    global Theme
-    Theme = settings_dict['Theme']
-    global OutputDir
-    OutputDir = settings_dict['OutputDir']
-    global GPUUsage
-    GPUUsage = settings_dict['GPUUsage']
-    global RenderDevice
-    RenderDevice = settings_dict['RenderDevice']
-    global RenderDir
-    RenderDir = settings_dict['RenderDir']
+    try:
+        global Rife_Option
+        Rife_Option = settings_dict['Rife_Option']
+        global Interpolation_Option
+        Interpolation_Option = settings_dict['Interpolation_Option']
+        global Repository
+        Repository = settings_dict['Repository']
+        global Image_Type
+        Image_Type = settings_dict['Image_Type']
+        global IsAnime
+        IsAnime = settings_dict['IsAnime']
+        global rifeversion
+        rifeversion = settings_dict['rifeversion']
+        global esrganversion
+        esrganversion = settings_dict['esrganversion']
+        global videoQuality
+        videoQuality = settings_dict['videoQuality']
+        global Theme
+        Theme = settings_dict['Theme']
+        global OutputDir
+        OutputDir = settings_dict['OutputDir']
+        global GPUUsage
+        GPUUsage = settings_dict['GPUUsage']
+        global RenderDevice
+        RenderDevice = settings_dict['RenderDevice']
+        global RenderDir
+        RenderDir = settings_dict['RenderDir']
+    except:
+        write_defaults()
 read_settings()
 def change_setting(setting,svalue):
     original_settings = {}
@@ -973,7 +962,7 @@ def progressBar2x():
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate")
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate")
     progressbar.grid(column=4, row=22)
     # Add progressbar updater
     progressbar["maximum"]=100
@@ -990,7 +979,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
     amount_of_input_files_1 = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_1 = amount_of_input_files_1 * 2
     global progressbar_1 # creates new progressbar
-    progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=50,maximum=150)
+    progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=50,maximum=150)
     progressbar_1.grid(column=4, row=22)
     # Add progressbar updater
     #sleep(1) # wont update unless we sleep for 1 second?????????
@@ -1004,7 +993,7 @@ def progressBar4xSecond(): # makes second progressbar in 4x
         progressbar_1['value'] = e_1
         progressbar_1.update()
         if progressbar_1['value'] == 150:
-            progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=150,maximum=150)
+            progressbar_1 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=150,maximum=150)
             progressbar_1.grid(column=4, row=22)
             break
             
@@ -1016,7 +1005,7 @@ def progressBar4x(): # makes first progressbar in 4x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=300)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=300)
     progressbar.grid(column=4, row=22)
     sleep(1) # Helps progressbar be more consistant
     # Add progressbar updater
@@ -1039,7 +1028,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
     
     global progressbar_5 # creates new progressbar
    
-    progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=73,maximum=170)
+    progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=73,maximum=170)
     
     progressbar_5.grid(column=4, row=22)
     progressbar_5.update()
@@ -1055,7 +1044,7 @@ def progressBar8xThird(): # this is called third, makes 3rd progressbar
         progressbar_5['value'] = e_5
         progressbar_5.update()
         if progressbar_5['value'] == 170:
-            progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=700,maximum=700)
+            progressbar_5 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=700,maximum=700)
             progressbar_5.grid(column=4, row=22)
             break
 
@@ -1065,7 +1054,7 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     amount_of_input_files_2 = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files_2 = amount_of_input_files_2 * 2
     global progressbar_2 # creates new progressbar
-    progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate", value=43, maximum=300)
+    progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate", value=43, maximum=300)
     progressbar_2.grid(column=4, row=22)
     # Add progressbar updater
     #progressbar_2["maximum"]= 800
@@ -1073,7 +1062,7 @@ def progressBar8xSecond(): # calls this second, this is called by onclick3
     while p == 4:
         if int(progressbar_2['value']) == 128:
             
-            progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=128,maximum=300)
+            progressbar_2 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=128,maximum=300)
             progressbar_2.grid(column=4, row=22)
             break
         frames_processed_2 = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
@@ -1091,7 +1080,7 @@ def progressBar8x(): # this is called first.
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=700)
     progressbar.grid(column=4, row=22)
     sleep(1) #Helps keep consistancy.
     # Add progressbar updater
@@ -1104,7 +1093,7 @@ def progressBar8x(): # this is called first.
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 100:
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=700)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=100,maximum=700)
             progressbar.grid(column=4, row=22)
             break
         
@@ -1115,7 +1104,7 @@ def Anime8xPb4():
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=300,maximum=400)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1128,7 +1117,7 @@ def Anime8xPb4():
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 399:
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=400,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=400,maximum=400)
             progressbar.grid(column=4, row=22)
             break
 def Anime8xPb3():# called 3nd 8x
@@ -1136,7 +1125,7 @@ def Anime8xPb3():# called 3nd 8x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=200,maximum=400)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1149,7 +1138,7 @@ def Anime8xPb3():# called 3nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 299:
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=300,maximum=400)
             progressbar.grid(column=4, row=22)
             break
 def Anime8xPb2():# called 2nd 8x
@@ -1157,7 +1146,7 @@ def Anime8xPb2():# called 2nd 8x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=200,maximum=400)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1170,7 +1159,7 @@ def Anime8xPb2():# called 2nd 8x
         progressbar['value'] = e # sets the progressbar value to e
         progressbar.update()
         if progressbar['value'] == 199:
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=200,maximum=400)
             progressbar.grid(column=4, row=22)
             break
 def Anime8xPb1(): # called first 8x
@@ -1178,7 +1167,7 @@ def Anime8xPb1(): # called first 8x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=400)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=400)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1193,7 +1182,7 @@ def Anime8xPb1(): # called first 8x
         progressbar.update()
         if progressbar['value'] == 99:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=400)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=100,maximum=400)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb1(): # called first 16x
@@ -1202,7 +1191,7 @@ def Anime16xPb1(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     sleep(1)
     # Add progressbar updater
@@ -1216,7 +1205,7 @@ def Anime16xPb1(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 99:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=100,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=100,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb2(): # called first 16x
@@ -1224,7 +1213,7 @@ def Anime16xPb2(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1238,7 +1227,7 @@ def Anime16xPb2(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 199:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=200,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=200,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb3(): # called first 16x
@@ -1246,7 +1235,7 @@ def Anime16xPb3(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1260,7 +1249,7 @@ def Anime16xPb3(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 299:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=300,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=300,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb4(): # called first 16x
@@ -1268,7 +1257,7 @@ def Anime16xPb4(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1282,7 +1271,7 @@ def Anime16xPb4(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 399:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=400,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=400,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb5(): # called first 16x
@@ -1290,7 +1279,7 @@ def Anime16xPb5(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1304,7 +1293,7 @@ def Anime16xPb5(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 499:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=500,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=500,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def Anime16xPb6(): # called first 16x
@@ -1312,7 +1301,7 @@ def Anime16xPb6(): # called first 16x
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=600)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
     progressbar.grid(column=4, row=22)
     
     # Add progressbar updater
@@ -1326,7 +1315,7 @@ def Anime16xPb6(): # called first 16x
         progressbar.update()
         if progressbar['value'] == 599:
             
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",value=600,maximum=600)
+            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=600,maximum=600)
             progressbar.grid(column=4, row=22)
             break
 def RealPB():
@@ -1334,7 +1323,7 @@ def RealPB():
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
-    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=500, mode="determinate")
+    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=630, mode="determinate")
     progressbar.grid(column=4, row=22)
     # Add progressbar updater
     progressbar["maximum"]=100
@@ -1564,7 +1553,7 @@ def layout_rife():
                             text = "Rife Vulkan"
                                                            ,
                             font=("Arial", 23),
-                            bg=bg,fg=fg,padx='0')# adjust this padx
+                            bg=bg,fg=fg,padx='239')# adjust this padx for adjustment of center
     button_explore = Button(tab1,
                         text = "Input Video",
                         command = browseFiles, bg=bg_button,fg=fg)
@@ -1581,12 +1570,12 @@ def layout_rife():
     spacer= Label(tab1, padx='0',
                  fg=fg,bg=bg)
     spacer.grid(column=4, row=10)
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=700)
     progressbar.grid(column=4, row=22)
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab1,pady=73,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab1,pady=71,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -1616,7 +1605,7 @@ def layout_realsr():
                             text = "Real-ESRGAN Vulkan"
                                                            ,
                             font=("Arial", 23),
-                            bg=bg,fg=fg,padx='0')# adjust this padx
+                            bg=bg,fg=fg,padx='166')# adjust this padx for adjustment of center
     button_explore = Button(tab2,
                         text = "Input Video",
                         command = browseFiles, bg=bg_button,fg=fg)
@@ -1633,12 +1622,12 @@ def layout_realsr():
     spacer= Label(tab2, padx='0',
                  fg=fg,bg=bg)
     spacer.grid(column=4, row=10)
-    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=500, mode="determinate",maximum=700)
+    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=630, mode="determinate",maximum=700)
     progressbar.grid(column=4, row=22)
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab2,pady=106,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab2,pady=104,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -2172,7 +2161,7 @@ def times8(rifever):
 
 main_window.protocol('WM_DELETE_WINDOW',exit_thread)
 
-main_window.geometry("680x490")
+main_window.geometry("850x490")
 main_window.title('Rife - ESRGAN - App')
 main_window.resizable(False, False) 
 main_window.mainloop()
