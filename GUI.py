@@ -133,6 +133,7 @@ def write_defaults():
     write_to_settings_file("GPUUsage" ,'Default')
     write_to_settings_file("RenderDevice" ,'GPU')
     write_to_settings_file("RenderDir" ,f"{thisdir}")
+    read_settings()
 
 if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
     os.mknod(f'{thisdir}/files/settings.txt')
