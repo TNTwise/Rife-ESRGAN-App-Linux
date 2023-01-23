@@ -1699,10 +1699,7 @@ def AnimeInterpolation():
         anime4X(True, False,rifever)
         
 def anime4X(is16x, is8x,rifever):
-    Interpolation9 = Label(tab1,
-                           text=f"Interpolation 4X Started!",
-                           font=("Arial", 11),
-                           fg=fg,bg=bg)
+    
     if filename != "" and isinstance(filename, str) == True:
         
             
@@ -1735,17 +1732,29 @@ def anime4X(is16x, is8x,rifever):
             if os.path.exists(outputdir) == False:
                 outputdir = homedir
             if i == 0:
+                Interpolation9 = Label(tab1,
+                           text=f"Interpolation 4X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
                 on_click2_anime(i,is16x, False,rifever)
             if i == 1 and is16x == False:
+                Interpolation9 = Label(tab1,
+                           text=f"Interpolation 8X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
                 on_click2_anime(i,is16x, True,rifever)
             if i == 1 and is16x == True:
                 on_click2_anime(i,is16x, False,rifever)
             if i == 2:
+                Interpolation9 = Label(tab1,
+                           text=f"Interpolation 16X Started!",
+                           font=("Arial", 11),
+                           fg=fg,bg=bg)
                 on_click2_anime(i,is16x, True,rifever)
         
             os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp1.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/temp.mp4" -y')
             os.chdir(f"{thisdir}")
-            os.system(f'rm temp1.mp4')
+            
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
             global timestwo
             if i == 0:
@@ -1757,23 +1766,23 @@ def anime4X(is16x, is8x,rifever):
             if i == 1:
                 timestwo = Label(tab1,
                      font=("Arial", 11),
-                     text = f"Finished 4X interpolation.",
+                     text = f"Finished 8X interpolation.",
                      fg=fg,bg=bg)
                 timestwo.grid(column=4,row=10)
             if i == 2:
                 timestwo = Label(tab1,
                      font=("Arial", 11),
-                     text = f"Finished 8X interpolation.",
+                     text = f"Finished 16X interpolation.",
                      fg=fg,bg=bg)
                 timestwo.grid(column=4,row=10)
             
-            os.system(f'rm -rf {RenderDir}/input_frames')
-            os.system(f'rm -rf {RenderDir}/output_frames ')
-            os.system(f'mkdir {RenderDir}/input_frames')
-            os.system(f'mkdir {RenderDir}/output_frames')
+            os.system(f'rm -rf "{RenderDir}/input_frames"')
+            os.system(f'rm -rf "{RenderDir}/output_frames" ')
+            os.system(f'mkdir "{RenderDir}/input_frames"')
+            os.system(f'mkdir "{RenderDir}/output_frames"')
             os.system(f'{ffprobe_command} "{RenderDir}/temp.mp4"')
     
-            os.system(f'{ffmpeg_command} -hwaccel auto  -i "{RenderDir}/temp.mp4" "{RenderDir}/input_frames/frame_%08d.png"')
+            os.system(f'{ffmpeg_command}  -i "{RenderDir}/temp.mp4" "{RenderDir}/input_frames/frame_%08d.png"')
             if is16x == True and is8x == False:
                 if i == 0:
                     Anime16xPb2Thread()
@@ -1839,7 +1848,7 @@ def anime4X(is16x, is8x,rifever):
                     os.system(fr'{ffmpeg_command} -hwaccel auto -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
-            Interpolation2.after(0, Interpolation2.destroy())
+            Interpolation9.after(0, Interpolation2.destroy())
     
             start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
             button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
@@ -2121,9 +2130,9 @@ def on_click2_anime(round, is16x, is8x,rifever):
     os.system(f'mkdir "{RenderDir}/input_frames"')
     os.system(f'mkdir "{RenderDir}/output_frames"')
     os.system(f'{ffprobe_command} "{filename1}"')
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
+   
     extraction.grid(column=4,row=10)
-    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename1}" "{RenderDir}/input_frames/frame_%08d.png"')
+    os.system(f'{ffmpeg_command}  -i "{filename1}" "{RenderDir}/input_frames/frame_%08d.png"')
     extraction.after(0, extraction.destroy())
     if round == 0:
         Interpolation = Label(tab1,
@@ -2151,8 +2160,8 @@ def on_click2_anime(round, is16x, is8x,rifever):
             Anime16xPb1Thread()
         if round == 1:
             Anime16xPb3Thread()
-        if round == 2:
-            Anime16xPb5Thread()
+    if round == 2:
+        Anime16xPb5Thread()
             
     if is8x == True and is16x == False:
         if round == 0:
