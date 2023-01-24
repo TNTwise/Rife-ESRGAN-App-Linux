@@ -459,7 +459,7 @@ def settings_window():
     
     button_select_default_output = Button(tab3,
                         text = "Select default output folder",
-                        command = sel_default_output_folder, bg=bg_button,fg=fg)
+                        command = sel_default_output_folder, bg=bg_button,fg=fg,font=('Helvetica', 16))
     
     # just writes 'stable' to file repository to be able to change where the program is taken from
     
@@ -468,7 +468,7 @@ def settings_window():
     #displays current default output folder
     
     global default_output_label
-    default_output_label = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
+    default_output_label = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=43, anchor="w")
     
     # creates theme button and calls check_theme which returns the theme that is currently on
     global repo
@@ -480,16 +480,16 @@ def settings_window():
     global theme_button
     theme = check_theme()
     if theme == "Light":
-            theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg)
+            theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg,font=('Helvetica', 16))
     if theme == "Dark":
-            theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg)
-    theme_label = Label(tab3,text=" Theme: ",bg=bg,fg=fg)
+            theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg,font=('Helvetica', 16))
+    theme_label = Label(tab3,text=" Theme: ",bg=bg,fg=fg,font=('Helvetica', 16))
     spacer_label = Label(tab3,text="            ",bg=bg) # This spaces the middle
-    spacer_label1 = Label(tab3,text="            ",bg=bg) # this spaces the end
-    spacer_label2 = Label(tab3,text="",bg=bg) # this is at the start of the gui
+    #spacer_label1 = Label(tab3,text="            ",bg=bg) # this spaces the end
+    #spacer_label2 = Label(tab3,text="",bg=bg) # this is at the start of the gui
     global default_render_label
-    default_render_label = Label(tab3,text=RenderDir,bg=bg,fg=fg,width=25,anchor='w')
-    default_render_label.grid(column=6,row=1)
+    default_render_label = Label(tab3,text=RenderDir,bg=bg,fg=fg,width=44,anchor='w')
+    default_render_label.grid(column=6,row=2)
     global check_updates_button
     check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
     install_button = Button(tab3, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
@@ -498,21 +498,21 @@ def settings_window():
     
     button_select_default_render = Button(tab3,
                         text = "Select default render folder",
-                        command = sel_default_render_folder, bg=bg_button,fg=fg).grid(column=6, row=0)
+                        command = sel_default_render_folder, bg=bg_button,fg=fg,font=('Helvetica', 16)).grid(column=6, row=1)
         
     def video_image_dropdown():
         update_branch_label = Label(tab3,text="Render Image Type: ",bg=bg,fg=fg)
-        update_branch_label.grid(column=1,row=5)
+        update_branch_label.grid(column=1,row=6)
         variable = StringVar(tab3)
         repo_options = ['webp            (smaller size, lossless)', 'png            (lossless)', 'jpg            (lossy)']
         variable.set(Image_Type)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=4, font=('Helvetica', 12))
+        opt.config(width=4, font=('Helvetica', 16))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
         opt.config(anchor="w")
-        opt.grid(column=1,row=6)
+        opt.grid(column=1,row=7)
         def callback(*args):
             
             if variable.get() == 'webp            (smaller size, lossless)':
@@ -525,17 +525,17 @@ def settings_window():
         variable.trace("w", callback)
     def gpu_usage_dropdown():
         update_branch_label = Label(tab3,text="System Load:",bg=bg,fg=fg)
-        update_branch_label.grid(column=4,row=5)
+        update_branch_label.grid(column=4,row=6)
         variable = StringVar(tab3)
         repo_options = ['Default', 'Low', 'High', 'Very High']
         variable.set(GPUUsage)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=8, font=('Helvetica', 12))
+        opt.config(width=8, font=('Helvetica', 16))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
         opt.config(anchor="w")
-        opt.grid(column=4,row=6)
+        opt.grid(column=4,row=7)
         def callback(*args):
             
             change_setting("GPUUsage", variable.get())
@@ -543,7 +543,7 @@ def settings_window():
         variable.trace("w", callback)
     def RenderDeviceDropDown():
         update_branch_label = Label(tab3,text="Render Device:",bg=bg,fg=fg)
-        update_branch_label.grid(column=6,row=5)
+        update_branch_label.grid(column=6,row=6)
         variable = StringVar(tab3)
         repo_options = ['CPU', 'GPU', 'Dual GPU', 'CPU + GPU']
         if RenderDevice != 'CPU + GPU':
@@ -551,12 +551,12 @@ def settings_window():
         else:
             variable.set('CPU + GPU')
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=9, font=('Helvetica', 12))
+        opt.config(width=9, font=('Helvetica', 16))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
         opt.config(anchor="w")
-        opt.grid(column=6,row=6)
+        opt.grid(column=6,row=7)
         def callback(*args):
             if variable.get() != 'CPU + GPU':
                 change_setting("RenderDevice", variable.get())
@@ -570,7 +570,7 @@ def settings_window():
     video_image_dropdown()
     #show_dropdown()
     def video_quality_drop_down():
-        vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
+        vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=4)
         vidQuality = videoQuality
         if vidQuality == "22":
             vidQuality1 = "Low"
@@ -584,11 +584,11 @@ def settings_window():
         repo_options = ['Lossless','High', 'Medium', 'Low']
         variable.set(vidQuality1)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=9, font=('Helvetica', 12))
+        opt.config(width=9, font=('Helvetica', 16))
         opt.config(bg=bg)
         opt.config(fg=fg)
         
-        opt.grid(column=1,row=3)
+        opt.grid(column=1,row=5)
         def callback(*args):
                 
                 # Converts these to cfv format
@@ -605,22 +605,23 @@ def settings_window():
     video_quality_drop_down()
     
      # lays out the menu
-    spacer_label2.grid(column=0,row=0)
-    spacer_label2.config(padx=30)
-    button_select_default_output.grid(column=1, row=0)
-    default_output_label.grid(column=1, row=1)
+    #spacer_label2.grid(column=0,row=0)
+    #spacer_label2.config(padx=30)
+    Label(tab3,pady=20,bg=bg,fg=fg).grid(column=0,row=0)
+    button_select_default_output.grid(column=1, row=1)
+    default_output_label.grid(column=1, row=2)
     if os.path.exists(f"{homedir}/Rife-Vulkan-GUI/") == False:
         is_installed = True
     else:
         is_installed = True
     if is_installed == False:
-        install_button.grid(column=4,row=4)
-    spacer_label.grid(column=2,row=0)
-    theme_label.grid(column=4,row=0)
-    theme_button.grid(column=4, row=1)
-    spacer_label1.grid(column=5,row=0)
+        install_button.grid(column=4,row=5)
+    spacer_label.grid(column=2,row=1)
+    theme_label.grid(column=4,row=1)
+    theme_button.grid(column=4, row=2)
+    #spacer_label1.grid(column=5,row=0)
     #check_updates_button.grid(column=6,row=3)
-    update_spacer_label.grid(column=6,row=2)
+    update_spacer_label.grid(column=6,row=3)
     #change_repo_dropdown.grid(column=5,row=2)
 
 
@@ -1580,7 +1581,7 @@ def layout_rife():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab1,pady=71,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab1,pady=73,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -1661,7 +1662,7 @@ def layout_realsr():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab2,pady=88,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab2,pady=89,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -2195,7 +2196,7 @@ def times8(rifever):
 
 main_window.protocol('WM_DELETE_WINDOW',exit_thread)
 
-main_window.geometry("850x490")
+main_window.geometry("830x490")
 main_window.title('Rife - ESRGAN - App')
 main_window.resizable(False, False) 
 main_window.mainloop()
