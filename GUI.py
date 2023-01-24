@@ -125,7 +125,7 @@ def write_defaults():
     write_to_settings_file("Repository", "stable")
     write_to_settings_file("rifeversion", "20221029")
     write_to_settings_file("esrganversion", "0.2.0")
-    write_to_settings_file("videoQuality", "9")
+    write_to_settings_file("videoQuality", "14")
     write_to_settings_file("Theme", "Light")
     write_to_settings_file("OutputDir", f"{homedir}")
     write_to_settings_file("Interpolation_Option", f"2X")
@@ -576,9 +576,9 @@ def settings_window():
             vidQuality1 = "Low"
         if vidQuality == "18":
             vidQuality1 = "Medium"
-        if vidQuality == "9":
+        if vidQuality == "14":
             vidQuality1 = "High"
-        if vidQuality == "3":
+        if vidQuality == "7":
             vidQuality1 = "Lossless"
         variable = StringVar(tab3)
         repo_options = ['Lossless','High', 'Medium', 'Low']
@@ -597,9 +597,9 @@ def settings_window():
                 if variable.get() == "Medium":
                     change_setting('videoQuality', '18')
                 if variable.get() == "High":
-                    change_setting('videoQuality', '9')
+                    change_setting('videoQuality', '14')
                 if variable.get() == "Lossless":
-                    change_setting('videoQuality', '3')
+                    change_setting('videoQuality', '7')
                 
         variable.trace("w", callback)
     video_quality_drop_down()
