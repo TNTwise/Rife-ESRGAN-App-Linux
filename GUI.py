@@ -507,7 +507,7 @@ def settings_window():
         repo_options = ['webp            (smaller size, lossless)', 'png            (lossless)', 'jpg            (lossy)']
         variable.set(Image_Type)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=4, font=('Helvetica', 10))
+        opt.config(width=4,font=('Ariel', '12'))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -530,7 +530,7 @@ def settings_window():
         repo_options = ['Default', 'Low', 'High', 'Very High']
         variable.set(GPUUsage)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=8, font=('Helvetica', 10))
+        opt.config(width=8,font=('Ariel', '12'))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -551,7 +551,7 @@ def settings_window():
         else:
             variable.set('CPU + GPU')
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=9, font=('Helvetica', 10))
+        opt.config(width=9,font=('Ariel', '12'))
         
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -584,7 +584,7 @@ def settings_window():
         repo_options = ['Lossless','High', 'Medium', 'Low']
         variable.set(vidQuality1)
         opt = OptionMenu(tab3, variable, *repo_options)
-        opt.config(width=9, font=('Helvetica', 10))
+        opt.config(width=9,font=('Ariel', '12'))
         opt.config(bg=bg)
         opt.config(fg=fg)
         
@@ -900,7 +900,7 @@ def show_interp_opt():
     iterp_opt_variable.set('2X')
     global interpOptDropDown
     interpOptDropDown = OptionMenu(tab1, iterp_opt_variable, *interpolation_options)
-    interpOptDropDown.config(width=2, font=('Helvetica', 10))
+    interpOptDropDown.config(width=2,font=('Ariel', '12'))
     interpOptDropDown.config(bg=bg)
     interpOptDropDown.config(fg=fg)
     interpOptDropDown.grid(column=4,row=6)
@@ -919,7 +919,7 @@ def show_rife_ver():
     rife_ver_variable.set('Rife 2.3')
     global rifeVerDropDown
     rifeVerDropDown = OptionMenu(tab1, rife_ver_variable, *interpolation_options)
-    rifeVerDropDown.config(width=10, font=('Helvetica', 10))
+    rifeVerDropDown.config(width=10,font=('Ariel', '12'))
     rifeVerDropDown.config(bg=bg)
     rifeVerDropDown.config(fg=fg)
     rifeVerDropDown.grid(column=4,row=7)
@@ -1470,7 +1470,7 @@ def Anime():
     video_options = ['Default', 'Animation (Uneven Framerate)']
     variable2.set('Default')
     opt1 = OptionMenu(tab1, variable2, *video_options)
-    opt1.config(width=29, font=('Helvetica', 10))
+    opt1.config(width=29,font=('Ariel', '12'))
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
@@ -1484,7 +1484,7 @@ def Anime():
             iterp_opt_variable2 = StringVar(tab1)
             interpolation_options = ['2X','4X', '8X']
             interpOptDropDown2 = OptionMenu(tab1, iterp_opt_variable2, *interpolation_options)
-            interpOptDropDown2.config(width=2, font=('Helvetica', 10))
+            interpOptDropDown2.config(width=2,font=('Ariel', '12'))
             iterp_opt_variable2.set('2X')
             interpOptDropDown2.config(bg=bg)
             interpOptDropDown2.config(fg=fg)
@@ -1511,7 +1511,7 @@ def Anime():
             iterp_opt_variable1.set('4X')
             change_setting('Interpolation_Option', iterp_opt_variable1.get())
             interpOptDropDown1 = OptionMenu(tab1, iterp_opt_variable1, *interpolation_options)
-            interpOptDropDown1.config(width=2, font=('Helvetica', 10))
+            interpOptDropDown1.config(width=2,font=('Ariel', '12'))
             interpOptDropDown1.config(bg=bg)
             interpOptDropDown1.config(fg=fg)
             interpOptDropDown1.grid(column=4,row=6)
@@ -1553,14 +1553,14 @@ def layout_rife():
     rife_vulkan = Label (tab1,
                             text = "Rife Vulkan"
                                                            ,
-                            font=("Arial", 23),
-                            bg=bg,fg=fg,padx='239')# adjust this padx for adjustment of center
+                            font=("Arial", 35),
+                            bg=bg,fg=fg,padx='200')# adjust this padx for adjustment of center
     button_explore = Button(tab1,
                         text = "Input Video",
-                        command = browseFiles, bg=bg_button,fg=fg)
+                        command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12'))
     button_output = Button(tab1,
                         text = "Output Folder",
-                        command = output, bg=bg_button,fg=fg)
+                        command = output, bg=bg_button,fg=fg,font=('Ariel', '12'))
     #set outputdir textbox
     '''global output_textbox
     output_textbox = Text(tab1,width=20,height=1)
@@ -1569,7 +1569,7 @@ def layout_rife():
     output_textbox.grid(column=4,row=4)'''
     #this is getting ready for textboxes                                                                                                                                           
     settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
-    start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+    start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
 
     # Last column is 22
     spacer= Label(tab1, padx='0',
@@ -1580,7 +1580,7 @@ def layout_rife():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab1,pady=71,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab1,pady=45,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
@@ -1592,7 +1592,7 @@ def layout_realsr():
     video_options1 = ['2X', '3X', '4X']
     variable1.set('4X')
     opt2 = OptionMenu(tab2, variable1, *video_options1)
-    opt2.config(width=3, font=('Helvetica', 10))
+    opt2.config(width=3,font=('Ariel', '12'))
     opt2.config(bg=bg)
     opt2.config(fg=fg)
     opt2.grid(column=4,row=9)
@@ -1611,7 +1611,7 @@ def layout_realsr():
     video_options = ['Default', 'Animation']
     variable2.set('Default')
     opt1 = OptionMenu(tab2, variable2, *video_options)
-    opt1.config(width=9, font=('Helvetica', 10))
+    opt1.config(width=9,font=('Ariel', '12'))
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
@@ -1638,19 +1638,19 @@ def layout_realsr():
     realsr_vulkan = Label (tab2,
                             text = "Real-ESRGAN Vulkan"
                                                            ,
-                            font=("Arial", 23),
-                            bg=bg,fg=fg,padx='166')# adjust this padx for adjustment of center
+                            font=("Arial", 30),
+                            bg=bg,fg=fg,padx='120')# adjust this padx for adjustment of center
     button_explore = Button(tab2,
                         text = "Input Video",
-                        command = browseFiles, bg=bg_button,fg=fg)
+                        command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12'))
     button_output = Button(tab2,
                         text = "Output Folder",
-                        command = output, bg=bg_button,fg=fg)
+                        command = output, bg=bg_button,fg=fg,font=('Ariel', '12'))
     
     
                                                                                                                                                      
     settings_menu_button = Label(tab2,padx='500',bg=bg,fg=fg)
-    start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+    start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel', '13', 'bold')).grid(row = 22, column = 0)
 
     # Last column is 22
     spacer= Label(tab2, padx='0',
@@ -1661,7 +1661,7 @@ def layout_realsr():
     # Sets the grid location of the settings menu button                        
     settings_menu_button.grid(column=5, row=0)
     # Sets start button away from everything else
-    start_button_spacer = Label(tab2,pady=88,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
+    start_button_spacer = Label(tab2,pady=68,bg=bg,fg=fg).grid(column=0,row=21)# Adjust this padY for start button.
     # this is where i layout the stuff on the gui
     button_explore.grid(column = 4, row = 3)
     button_output.grid(column = 4, row = 4)
