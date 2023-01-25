@@ -1477,7 +1477,7 @@ def Anime():
 
     def callback(*args):
         if variable2.get() == 'Default':
-            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
             global iterp_opt_variable2
@@ -1500,7 +1500,7 @@ def Anime():
                 change_setting('IsAnime', 'False')
             iterp_opt_variable2.trace("w", callback)
         else:
-            Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
+            Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
             # Grey out inter_opt and rive_ver buttons
             rife_ver_variable.set("Rife 2.3")
             change_setting('Rife_Option', '2.3')
@@ -1720,9 +1720,9 @@ def anime4X(is16x, is8x,rifever):
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
             global done
         
-            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4, state=DISABLED).grid(row = 22, column = 0)
-            button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-            button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+            start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
+            button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+            button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
             # this if statement sets default output dir, may need to remove when add selector.
 
             if os.path.isfile(thisdir+"/temp") == False:
@@ -1821,9 +1821,9 @@ def anime4X(is16x, is8x,rifever):
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
     
-            start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
-            button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
-            button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
+            start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
+            button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+            button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
             os.system(f'rm -rf "{RenderDir}/input_frames"')
             os.system(f'rm -rf "{RenderDir}/output_frames" ')    
             os.chdir(f"{thisdir}")
@@ -1852,9 +1852,9 @@ def realESRGAN(model):
         global done
         #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=4, row=10)
-        start_button = Button(tab2, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(tab2,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab2,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab2, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel', '13', 'bold'), state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab2,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab2,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
         # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
         # This is for all modes of interpolation
@@ -1909,9 +1909,9 @@ def realESRGAN(model):
 
         
         # these re-enable the start, input, and output buttons
-        start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
-        button_output = Button(tab2,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab2,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab2, text="Start!", command=lambda: threading('realsr'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel', '13')).grid(row = 22, column = 0)
+        button_output = Button(tab2,text = "Output Folder",command = output,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab2,text = "Input Video",command = browseFiles,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')
         os.chdir(f"{thisdir}")
@@ -1924,9 +1924,9 @@ def on_click(rifever):
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
-        start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=9,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
         # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
         # This is for all modes of interpolation
@@ -1981,9 +1981,9 @@ def on_click(rifever):
             
         done.grid(column=4,row=10)
         # these re-enable the start, input, and output buttons
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
         os.system(f'rm -rf "{RenderDir}/input_frames"')
         os.system(f'rm -rf "{RenderDir}/output_frames" ')
@@ -2001,9 +2001,9 @@ def times4(rifever):
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
 
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4, state=DISABLED).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel 12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel 12')).grid(column = 4, row = 3)
         # this if statement sets default output dir, may need to remove when add selector.
 
         # this if statement sets default output dir, may need to remove when add selector.
@@ -2043,9 +2043,9 @@ def times4(rifever):
         os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
         
     
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         os.system(f'rm -rf "'+thisdir+'/temp"')
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')    
@@ -2138,10 +2138,10 @@ def times8(rifever):
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
 
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4, state=DISABLED).grid(row = 22, column = 0)
+        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
 
-        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg).grid(column = 4, row = 3)
+        button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
 
         # this if statement sets default output dir, may need to remove when add selector.
         if os.path.isfile(thisdir+"/temp") == False:
@@ -2182,9 +2182,9 @@ def times8(rifever):
     
         os.system(fr'rm -rf "{RenderDir}/temp2.mp4"')
         
-        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=9,height=4).grid(row = 22, column = 0)
-        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg).grid(column = 4, row = 4)
-        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg).grid(column = 4, row = 3)
+        start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
+        button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
+        button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         os.system(f'rm -rf {RenderDir}/input_frames')
         os.system(f'rm -rf {RenderDir}/output_frames ')
         
