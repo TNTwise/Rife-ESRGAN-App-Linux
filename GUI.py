@@ -275,7 +275,7 @@ if check_theme() == "Dark":
 
 
 
-
+    
 
 def latest_ESRGAN():
     # this code gets the latest versaion of rife vulkan
@@ -840,6 +840,20 @@ def sel_default_output_folder():
         default_output_label_1 = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
         default_output_label_1.grid(column=1, row=1)
         
+def remove_processced_files():
+    
+    def start():
+        i = 0
+        while i == 0:
+            frames_processced =len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
+            frames_to_remove = int(frames_processced/2) - 20
+            frame = str(frames_to_remove).zfill(8)
+            os.system(f'rm -rf "{RenderDir}/input_frames/frame_{frame}.png"')
+            if os.path.exists(f'{RenderDir}/input_frames/') == False:
+                
+                break
+    Thread(target=start).start()
+
 
 
 
@@ -960,6 +974,7 @@ show_rife_ver()
 # the 8x protion is 3/7-7/7
 def progressBar2x():
     i = 2
+    p=0
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
@@ -969,12 +984,17 @@ def progressBar2x():
     progressbar["maximum"]=100
     while i == 2:
         frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
+        if p < 1:
+            amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
+            print(amount_of_output_files)
         e = frames_processed/amount_of_output_files
         e*= 100
         e = int(e)
         progressbar['value'] = e
         progressbar.update()
+        p =2
+        if progressbar['value'] == 99:
+            break
 def progressBar4xSecond(): # makes second progressbar in 4x
     i = 4
     amount_of_input_files_1 = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
@@ -1963,6 +1983,7 @@ def on_click(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
+        remove_processced_files()
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
