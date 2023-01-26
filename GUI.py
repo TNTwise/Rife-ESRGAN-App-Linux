@@ -1118,7 +1118,7 @@ def Anime():
             interpOptDropDown2.grid(column=4,row=6)
             
             def callback(*args):
-                change_setting('Interpolation_Option', variable2.get())
+                change_setting('Interpolation_Option', iterp_opt_variable2.get())
 
                 
                 
@@ -1327,11 +1327,26 @@ def AnimeInterpolation():
         anime8X(False,rifever)
     if interp_opt == "16X":
         anime4X(True, False,rifever)
-        
+
+def delete_done():
+    try:
+            done.destroy()
+    except:
+            pass
+    try:
+            done2.destroy()
+    except:
+            pass
+    try:
+            done3.destroy()
+    except:
+            pass
+
+
 def anime4X(is16x, is8x,rifever):
     
     if filename != "" and isinstance(filename, str) == True:
-        
+        delete_done()
             
         grayout_tabs('rife')
         if is8x == True and is16x == False:
@@ -1343,7 +1358,7 @@ def anime4X(is16x, is8x,rifever):
         for i in range(X4_loop): # loops through it twice for 8x, 3 times for 16x
             vidQuality = videoQuality
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            global done
+            global done2
         
             start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
             button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
@@ -1461,6 +1476,7 @@ def anime8X(is16x,rifever):
 def realESRGAN(model):
     vidQuality = videoQuality
     if filename != "" and isinstance(filename, str) == True:
+        delete_done()
         grayout_tabs('realsr')
         
         os.chdir(f"{onefile_dir}/Real-ESRGAN")
@@ -1536,13 +1552,11 @@ def on_click(rifever):
     
     vidQuality = videoQuality
     if filename != "" and isinstance(filename, str) == True:
+        delete_done()
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
-        try:
-            done.destroy()
-        except:
-            pass
+        
         start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
@@ -1617,6 +1631,7 @@ def on_click(rifever):
 def times4(rifever):
     
     if filename != "" and isinstance(filename, str) == True:
+        delete_done()
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
@@ -1661,7 +1676,10 @@ def times4(rifever):
         else:
             os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
-        
+        if os.path.isfile(f'{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}') == True:
+            done2.grid(column=4,row=10)
+        else:
+            Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
     
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
@@ -1752,11 +1770,11 @@ def on_click3(rifever):
     
 
 def times8(rifever):
-    
+    delete_done()
     if filename != "" and isinstance(filename, str) == True:
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
-        global done
+        global done3
 
         start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
 
