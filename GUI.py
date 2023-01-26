@@ -1361,18 +1361,8 @@ def anime4X(is16x, is8x,rifever):
                 outputdir = outputdir[0]
             if os.path.exists(outputdir) == False:
                 outputdir = homedir
-            if i == 0:
-                
-                on_click2_anime(i,is16x, is8x,rifever)
-            if i == 1 and is16x == False:
-                
-                on_click2_anime(i,is16x, True,rifever)
-            if i == 1 and is16x == True:
-                on_click2_anime(i,is16x, False,rifever)
-            if i == 2:
-                
-                on_click2_anime(i,is16x, True,rifever)
-        
+            on_click2_anime(i,is16x, is8x,rifever)
+            
             os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp1.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/temp.mp4" -y')
             os.chdir(f"{thisdir}")
             
