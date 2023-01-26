@@ -999,57 +999,9 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
             
             break
 def progressBarThread(starting_value,maximum,adding_value,ending_value):
-    Thread(target=lambda: progressBar(starting_value,maximum,adding_value,ending_value)).start()
-def progressBar2x():
-    progressBar(0,100,0,100)
-    
-def progressBar4xSecond(): # makes second progressbar in 4x
-    progressBar(50,150,50,150)
-    
-            
-# work on this later, it will change the progressbar based on the amount of interpolation.
-def progressBar4x(): # makes first progressbar in 4x 
-    progressBar(0,300,0,100)
-    
+    t1 = Thread(target=lambda: progressBar(starting_value,maximum,adding_value,ending_value))
+    t1.start()
 
-
-def progressBar8xThird(): # this is called third, makes 3rd progressbar
-    progressBar(73,170,73,170)
-    
-
-def progressBar8xSecond(): # calls this second, this is called by onclick3
-    progressBar(43,300,43,128)
-    
-        
-def progressBar8x(): # this is called first.
-    progressBar(0,700,0,100)
-
-        
-
-# anime progress bars
-def Anime8xPb4():
-    progressBar(300,400,300,400)
-def Anime8xPb3():# called 3nd 8x
-    progressBar(200,400,200,300)
-    
-def Anime8xPb2():# called 2nd 8x
-    progressBar(100,400,100,200)
-def Anime8xPb1(): # called first 8x
-    progressBar(0,400,0,100)
-    
-def Anime16xPb1(): # called first 16x
-    progressBar(0,600,0,100)
-def Anime16xPb2(): # called first 16x
-    progressBar(100,600,100,200)
-def Anime16xPb3(): # called first 16x
-    progressBar(200,600,200,300)
-def Anime16xPb4(): # called first 16x
-    progressBar(300,600,300,400)
-def Anime16xPb5(): # called first 16x
-    progressBar(400,600,400,500)
-def Anime16xPb6(): # called first 16x
-    i = 2
-    progressBar(500,600,500,600)
 def RealPB():
     i = 2
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
@@ -1068,66 +1020,8 @@ def RealPB():
         progressbar['value'] = e
         progressbar.update()
 #Calls respective function, creates new thread for progressbar and other things, will only execute if called.
-def Anime16xPb1Thread():
-    t1 = Thread(target=Anime16xPb1)
-    t1.start()
-def Anime16xPb2Thread():
-    t1 = Thread(target=Anime16xPb2)
-    t1.start()
-def Anime16xPb3Thread():
-    t1 = Thread(target=Anime16xPb3)
-    t1.start()
-def Anime16xPb4Thread():
-    t1 = Thread(target=Anime16xPb4)
-    t1.start()
-def Anime16xPb5Thread():
-    t1 = Thread(target=Anime16xPb5)
-    t1.start()
-def Anime16xPb6Thread():
-    t1 = Thread(target=Anime16xPb6)
-    t1.start()
-
-
-
-
-def Anime8xPb1Thread():
-    # Call work function
-    t1 = Thread(target=Anime8xPb1)
-    t1.start()
-def Anime8xPb2Thread():
-    # Call work function
-    t1 = Thread(target=Anime8xPb2)
-    t1.start()
-def Anime8xPb3Thread():
-    # Call work function
-    t1 = Thread(target=Anime8xPb3)
-    t1.start()
-def Anime8xPb4Thread():
-    # Call work function
-    t1 = Thread(target=Anime8xPb4)
-    t1.start()
 def pbthreadreal():
-    t1 = Thread(target=RealPB)
-    t1.start()
-def pbthread2x():
-    # Call work function
-    t1 = Thread(target=progressBar2x)
-    t1.start()
-def pbthread4x():
-    t1 = Thread(target=progressBar4x)
-    t1.start()
-def pb4x2():
-    t1 = Thread(target=progressBar4xSecond)
-    t1.start()
-def pbthread8x():
-    t1 = Thread(target=progressBar8x)
-    t1.start()
-def pb8x2():
-    t1 = Thread(target=progressBar8xSecond)
-    t1.start()
-def pb8x3():
-    t1 = Thread(target=progressBar8xThird)
-    t1.start()
+    Thread(target=RealPB)
 def threading(program):
     # Call work function
     t1 = Thread(target=lambda: show(program))
@@ -1494,17 +1388,17 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'{ffmpeg_command}  -i "{RenderDir}/temp.mp4" "{RenderDir}/input_frames/frame_%08d.png"')
             if is16x == True and is8x == False:
                 if i == 0:
-                    Anime16xPb2Thread()
+                    progressBarThread(100,600,100,200)
                 if i == 1:
-                    Anime16xPb4Thread()
+                    progressBarThread(300,600,300,400)
                 if i == 2:
-                    Anime16xPb6Thread()
+                    progressBarThread(500,600,500,600)
             
             if is8x == True and is16x == False:
                 if i == 0:
-                    Anime8xPb2Thread()
+                    progressBarThread(100,400,100,200)
                 if i == 1:
-                    Anime8xPb4Thread()
+                    progressBarThread(300,400,300,400)
             if is8x == False and is16x == False:
                 progressBarThread(100,200,100,200)
             
@@ -1655,6 +1549,10 @@ def on_click(rifever):
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done
+        try:
+            done.destroy()
+        except:
+            pass
         start_button = Button(tab1, text="Start!", command=anime_thread,bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
         button_output = Button(tab1,text = "Output Folder",command = output, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, state=DISABLED,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
@@ -1681,7 +1579,7 @@ def on_click(rifever):
         os.system(f'{ffprobe_command} "{filename}"')
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
-        pbthread2x()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+        progressBarThread(0,100,0,100)        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps{extension}") == True:
@@ -1753,7 +1651,7 @@ def times4(rifever):
         on_click2(rifever)
         
         
-        pb4x2() # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the {ffmpeg_command} -hwaccel auto extracts the frames
+        progressBarThread(50,150,50,150) # calls the second 4x progressbar, ik this is dumb, but live with it. This happens after onclick executes Should be called after the {ffmpeg_command} -hwaccel auto extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         global done2
@@ -1793,7 +1691,7 @@ def on_click2(rifever):
     os.system(f'{ffprobe_command} "{filename}"')
     os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
-    pbthread4x() # calls the first 4x progressbar.
+    progressBarThread(0,300,0,100) # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
@@ -1819,17 +1717,17 @@ def on_click2_anime(round, is16x, is8x,rifever):
         progressBarThread(0,200,0,100) # calls the first 4x progressbar.
     if is16x == True and is8x == False:
         if round == 0:
-            Anime16xPb1Thread()
+            progressBarThread(0,600,0,100)
         if round == 1:
-            Anime16xPb3Thread()
+            progressBarThread(200,600,200,300)
     if round == 2:
-        Anime16xPb5Thread()
+        progressBarThread(400,600,400,500)
             
     if is8x == True and is16x == False:
         if round == 0:
-            Anime8xPb1Thread()
+            progressBarThread(0,400,0,100)
         if round == 1:
-            Anime8xPb3Thread()
+            progressBarThread(200,400,200,300)
         
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     if round == 0:
@@ -1847,7 +1745,7 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     os.system(f'{ffprobe_command} "{filename}"')
     os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
-    pbthread8x() #Set this to 8x, this is the first of 3 progressbars
+    progressBarThread(0,700,0,100) #Set this to 8x, this is the first of 3 progressbars
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
 
@@ -1858,7 +1756,7 @@ def on_click3(rifever):
 
     
     
-    pb8x2()
+    progressBarThread(43,300,43,128)
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
     
@@ -1892,7 +1790,7 @@ def times8(rifever):
         
         
         
-        pb8x3() # should be called after {ffmpeg_command} -hwaccel auto extracts the frames
+        progressBarThread(73,170,73,170) # should be called after {ffmpeg_command} -hwaccel auto extracts the frames
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 4}fps.{extension}") == True:
