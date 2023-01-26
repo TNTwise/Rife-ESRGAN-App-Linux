@@ -975,7 +975,7 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
     i = 2
     p=0
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    
+    amount_of_output_files = amount_of_input_files * 2
     global progressbar
     progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
     progressbar.grid(column=4, row=22)
@@ -983,8 +983,8 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
     progressbar["maximum"]=maximum
     while i == 2:
         frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        if p < 1:
-            amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
+        
+        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
             
         e = frames_processed/amount_of_output_files
         e*= 100
