@@ -1363,7 +1363,7 @@ def anime4X(is16x, is8x,rifever):
                 outputdir = homedir
             if i == 0:
                 
-                on_click2_anime(i,is16x, False,rifever)
+                on_click2_anime(i,is16x, is8x,rifever)
             if i == 1 and is16x == False:
                 
                 on_click2_anime(i,is16x, True,rifever)
@@ -1700,8 +1700,8 @@ def on_click2_anime(round, is16x, is8x,rifever):
     get_fps()
     if round != 0:
         os.system(f'{ffmpeg_command} -hwaccel auto -i "{RenderDir}/temp.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  "{RenderDir}/temp2.mp4" -y')
-    if is8x == True or is16x == True and round != 0:
-        filename1 = f'{RenderDir}/temp2.mp4'
+        if is8x == True or is16x == True:
+            filename1 = f'{RenderDir}/temp2.mp4'
     else:
         filename1 = filename
     os.system(f'rm -rf "{RenderDir}/input_frames"')
