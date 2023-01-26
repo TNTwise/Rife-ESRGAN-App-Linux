@@ -840,8 +840,7 @@ def sel_default_output_folder():
         default_output_label_1 = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
         default_output_label_1.grid(column=1, row=1)
         
-def remove_processced_files():
-    
+'''def remove_processced_files():    #scraping this for now
     def start():
         i = 0
         while i == 0:
@@ -852,7 +851,7 @@ def remove_processced_files():
             if os.path.exists(f'{RenderDir}/input_frames/') == False:
                 
                 break
-    Thread(target=start).start()
+    Thread(target=start).start()'''
 
 
 
@@ -984,8 +983,8 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
     progressbar["maximum"]=maximum
     while i == 2:
         frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        if p < 1:
-            amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
+        
+        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
             
         e = frames_processed/amount_of_output_files
         e*= 100
@@ -1037,145 +1036,20 @@ def Anime8xPb2():# called 2nd 8x
     progressBar(100,400,100,200)
 def Anime8xPb1(): # called first 8x
     progressBar(0,400,0,100)
+    
 def Anime16xPb1(): # called first 16x
-    p=0
-    i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    sleep(1)
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        if p < 1:
-            amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) # converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        p=2
-        if progressbar['value'] == 99:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=100,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(0,600,0,100)
 def Anime16xPb2(): # called first 16x
-    i = 2
-    p=0
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        if p < 1:
-            amount_of_output_files_5 = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
-            
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) + 100 # converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        p=3
-        if progressbar['value'] == 199:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=200,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(100,600,100,200)
 def Anime16xPb3(): # called first 16x
-    i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) *2
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) + 200 # converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        if progressbar['value'] == 299:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=300,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(200,600,200,300)
 def Anime16xPb4(): # called first 16x
-    i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) *2
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) + 300 # converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        if progressbar['value'] == 399:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=400,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(300,600,300,400)
 def Anime16xPb5(): # called first 16x
-    i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) *2
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) + 400 # converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        if progressbar['value'] == 499:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=500,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(400,600,400,500)
 def Anime16xPb6(): # called first 16x
     i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=600)
-    progressbar.grid(column=4, row=22)
-    
-    # Add progressbar updater
-    while i == 2: # all this adds up to 100, i change the maximum so that it will even out the progressbar for different rendering times.
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) *2
-        e = frames_processed/amount_of_output_files
-        e*= 100 # converts e to percentage
-        e = int(e) + 500# converts e to integer
-        progressbar['value'] = e # sets the progressbar value to e
-        progressbar.update()
-        if progressbar['value'] == 599:
-            
-            progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",value=600,maximum=600)
-            progressbar.grid(column=4, row=22)
-            break
+    progressBar(500,600,500,600)
 def RealPB():
     i = 2
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
@@ -1632,7 +1506,7 @@ def anime4X(is16x, is8x,rifever):
                 if i == 1:
                     Anime8xPb4Thread()
             if is8x == False and is16x == False:
-                pb4x2()
+                progressBarThread(100,200,100,200)
             
 
             global done2
@@ -1820,7 +1694,7 @@ def on_click(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        remove_processced_files()
+        
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command} -hwaccel auto -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
@@ -1942,7 +1816,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     
     if is16x == False and is8x == False:
         sleep(1)
-        pbthread4x() # calls the first 4x progressbar.
+        progressBarThread(0,200,0,100) # calls the first 4x progressbar.
     if is16x == True and is8x == False:
         if round == 0:
             Anime16xPb1Thread()
