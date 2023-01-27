@@ -42,6 +42,7 @@ make
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
 ## TODO
+Maybe add a message to ask if user wants to save last output files if greater than 2x interpolation.
 Add a try except function for reading settings <br />
 Add a function that deletes already processced files (check if file num x 2 exists in output_folder)
 Fix CPU + GPU combo not working with realsrgan <br />
