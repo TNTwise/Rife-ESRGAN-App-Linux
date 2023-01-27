@@ -1324,7 +1324,7 @@ def AnimeInterpolation():
         anime4X(False,False,rifever)
 
     if interp_opt == "8X":
-        anime8X(False,rifever)
+        anime4X(False,True,rifever)
     if interp_opt == "16X":
         anime4X(True, False,rifever)
 
@@ -1481,12 +1481,7 @@ def anime4X(is16x, is8x,rifever):
     os.chdir(f"{thisdir}")
     if i == X4_loop - 1:
         os.system(f'rm temp*')
-def anime8X(is16x,rifever):
-        if is16x == False:
-            anime4X(False,True,rifever)# this sets is8x to true, which loops the program twice for 8x.
-        else:
-            anime4X(True,False,rifever) # sets 8x and 16x to true, for looping
-            
+
 def realESRGAN(model):
     vidQuality = videoQuality
     if filename != "" and isinstance(filename, str) == True:
