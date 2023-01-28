@@ -1509,9 +1509,9 @@ def anime4X(is16x, is8x,rifever):
             
             os.system(f'rm -rf "{RenderDir}/input_frames"')
             os.system(f'rm -rf "{RenderDir}/output_frames" ')    
-            enable_buttons()
+            
             os.chdir(f"{thisdir}")
-
+    enable_buttons()
     enable_tabs()    
     if is16x == False and is8x == False:
             os.system(f'rm -rf "'+thisdir+'/temp"')
