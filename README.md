@@ -39,8 +39,8 @@ run GUI.py at least once to install PIP dependencies
 make
 ```
 # Compile Appimage
-Download GUIPortable.AppDir from appimage branch
-remove GUIPortable.temp with the compiled GUIPortable
+Download GUIPortable.AppDir from appimage branch<br/>
+remove GUIPortable.temp with the compiled GUIPortable<br/>
 ```
 appimagetool GUIPortable.AppDir
 ```
