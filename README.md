@@ -38,6 +38,13 @@ run GUI.py at least once to install PIP dependencies
 ```
 make
 ```
+# Compile Appimage
+Download GUIPortable.AppDir from appimage branch
+remove GUIPortable.temp with the compiled GUIPortable
+```
+appimagetool GUIPortable.AppDir
+```
+
 ## Errors
 vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
 
