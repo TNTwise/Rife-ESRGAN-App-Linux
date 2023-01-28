@@ -1045,23 +1045,23 @@ def progressBarThread(starting_value,maximum,adding_value,ending_value):
 def RealPB():
     i = 2
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
-    global progressbar
-    progressbar = ttk.Progressbar(tab2,orient='horizontal', length=630, mode="determinate")
-    progressbar.grid(column=4, row=22)
+    amount_of_output_files = amount_of_input_files
+    
+    progressbar1 = ttk.Progressbar(tab2,orient='horizontal', length=630, mode="determinate")
+    progressbar1.grid(column=4, row=22)
     # Add progressbar updater
-    progressbar["maximum"]=100
+    progressbar1["maximum"]=100
     while i == 2:
         frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
         amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) 
         e = frames_processed/amount_of_output_files
         e*= 100
         e = int(e)
-        progressbar['value'] = e
-        progressbar.update()
+        progressbar1['value'] = e
+        progressbar1.update()
 #Calls respective function, creates new thread for progressbar and other things, will only execute if called.
 def pbthreadreal():
-    Thread(target=RealPB)
+    Thread(target=RealPB).start()
 def threading(program):
     # Call work function
     t1 = Thread(target=lambda: show(program))
@@ -1527,6 +1527,7 @@ def realESRGAN(model):
     if filename != "" and isinstance(filename, str) == True:
         delete_done()
         grayout_tabs('realsr')
+        disable_buttons()
         
         os.chdir(f"{onefile_dir}/Real-ESRGAN")
         global done
@@ -1591,6 +1592,7 @@ def realESRGAN(model):
         os.system(f'rm -rf {RenderDir}/output_frames ')
         os.chdir(f"{thisdir}")
         enable_tabs()
+        enable_buttons()
 # different modes of interpolation
 def on_click(rifever):
     
