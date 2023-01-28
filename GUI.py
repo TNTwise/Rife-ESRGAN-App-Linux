@@ -1753,7 +1753,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
     os.system(f'mkdir "{RenderDir}/input_frames"')
     os.system(f'mkdir "{RenderDir}/output_frames"')
     os.system(f'{ffprobe_command} "{filename1}"')
-   
+    os.system(f'{ffmpeg_command} -hwaccel auto -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     os.system(f'{ffmpeg_command}  -i "{filename1}" "{RenderDir}/input_frames/frame_%08d.png"')
     
     if is16x == False and is8x == False:
