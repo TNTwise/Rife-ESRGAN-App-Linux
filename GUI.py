@@ -1861,7 +1861,7 @@ def times8(rifever):
         enable_tabs()
         done3.grid(column=4,row=10)
 
-
+main_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
 main_window.protocol('WM_DELETE_WINDOW',exit_thread)
 
 main_window.geometry("850x490")
