@@ -118,31 +118,6 @@ def write_to_settings_file(description, option):
         f.write(description + ","+option + "\n")
 
 
-
-def write_defaults():
-    write_to_settings_file("Image_Type", "webp")
-    write_to_settings_file("IsAnime", "False")
-    write_to_settings_file("Repository", "stable")
-    write_to_settings_file("rifeversion", "20221029")
-    write_to_settings_file("esrganversion", "0.2.0")
-    write_to_settings_file("videoQuality", "14")
-    write_to_settings_file("Theme", "Light")
-    write_to_settings_file("OutputDir", f"{homedir}")
-    write_to_settings_file("Interpolation_Option", f"2X")
-    write_to_settings_file("Rife_Option" ,'2.3')
-    write_to_settings_file("GPUUsage" ,'Default')
-    write_to_settings_file("RenderDevice" ,'GPU')
-    write_to_settings_file("RenderDir" ,f"{thisdir}")
-    read_settings()
-
-if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
-    os.mknod(f'{thisdir}/files/settings.txt')
-    write_defaults()
-def write_temp(): # im doing this because i am lazy
-    change_setting("Interpolation_Option", f"2X")
-    change_setting("Rife_Option", f"2.3")
-    change_setting("IsAnime", "False")
-
 def read_settings():
     global settings_dict
     settings_dict = {}
@@ -179,7 +154,72 @@ def read_settings():
         global RenderDir
         RenderDir = settings_dict['RenderDir']
     except:
-        write_defaults()
+        write_to_settings_file("Image_Type", "webp")
+        write_to_settings_file("IsAnime", "False")
+        write_to_settings_file("Repository", "stable")
+        write_to_settings_file("rifeversion", "20221029")
+        write_to_settings_file("esrganversion", "0.2.0")
+        write_to_settings_file("videoQuality", "14")
+        write_to_settings_file("Theme", "Light")
+        write_to_settings_file("OutputDir", f"{homedir}")
+        write_to_settings_file("Interpolation_Option", f"2X")
+        write_to_settings_file("Rife_Option" ,'2.3')
+        write_to_settings_file("GPUUsage" ,'Default')
+        write_to_settings_file("RenderDevice" ,'GPU')
+        write_to_settings_file("RenderDir" ,f"{thisdir}")
+        settings_dict = {}
+        with open(f'{thisdir}/files/settings.txt', 'r') as f:
+            f = csv.reader(f)
+            for row in f:
+                settings_dict[row[0]] = row[1]
+        Rife_Option = settings_dict['Rife_Option']
+        
+        Interpolation_Option = settings_dict['Interpolation_Option']
+        
+        Repository = settings_dict['Repository']
+        
+        Image_Type = settings_dict['Image_Type']
+        
+        IsAnime = settings_dict['IsAnime']
+        rifeversion = settings_dict['rifeversion']
+        esrganversion = settings_dict['esrganversion']
+        videoQuality = settings_dict['videoQuality']
+        Theme = settings_dict['Theme']
+        OutputDir = settings_dict['OutputDir']
+        GPUUsage = settings_dict['GPUUsage']
+        RenderDevice = settings_dict['RenderDevice']
+        RenderDir = settings_dict['RenderDir']
+        
+
+        
+def write_defaults():
+    write_to_settings_file("Image_Type", "webp")
+    write_to_settings_file("IsAnime", "False")
+    write_to_settings_file("Repository", "stable")
+    write_to_settings_file("rifeversion", "20221029")
+    write_to_settings_file("esrganversion", "0.2.0")
+    write_to_settings_file("videoQuality", "14")
+    write_to_settings_file("Theme", "Light")
+    write_to_settings_file("OutputDir", f"{homedir}")
+    write_to_settings_file("Interpolation_Option", f"2X")
+    write_to_settings_file("Rife_Option" ,'2.3')
+    write_to_settings_file("GPUUsage" ,'Default')
+    write_to_settings_file("RenderDevice" ,'GPU')
+    write_to_settings_file("RenderDir" ,f"{thisdir}")
+    try:
+        read_settings()
+    except:
+        pass
+
+if os.path.isfile(f'{thisdir}/files/settings.txt') == False:
+    os.mknod(f'{thisdir}/files/settings.txt')
+    write_defaults()
+def write_temp(): # im doing this because i am lazy
+    change_setting("Interpolation_Option", f"2X")
+    change_setting("Rife_Option", f"2.3")
+    change_setting("IsAnime", "False")
+
+
 read_settings()
 def change_setting(setting,svalue):
     original_settings = {}
