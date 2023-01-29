@@ -1253,47 +1253,58 @@ def layout_rife():
 layout_rife()
 
 def layout_realsr():
-    variable1 = StringVar(tab1)
-    video_options1 = ['2X', '3X', '4X']
-    variable1.set('4X')
-    opt2 = OptionMenu(tab2, variable1, *video_options1)
-    opt2.config(width=3,font=('Ariel', '12'))
-    opt2.config(bg=bg)
-    opt2.config(fg=fg)
-    opt2.grid(column=4,row=9)
-    global realsr_scale
-    realsr_scale = '-s 4'
-    def callback(*args):
+    def scale():
+        global variable1
+        variable1 = StringVar(tab1)
+        video_options1 = ['2X', '3X', '4X']
         
-        if variable1.get() == '2X':
-            realsr_scale = '-s 2'
-        if variable1.get() == '3X':
-            realsr_scale = '-s 3'
-        if variable1.get() == '4X':
+        variable1.set('4X')
+        global opt2
+        opt2 = OptionMenu(tab2, variable1, *video_options1)
+        opt2.config(width=3,font=('Ariel', '12'))
+        opt2.config(bg=bg)
+        opt2.config(fg=fg)
+        opt2.grid(column=4,row=9)
+        
+        def callback(*args):
+            global realsr_scale
             realsr_scale = '-s 4'
-
-    variable2 = StringVar(tab1)
-    video_options = ['Default', 'Animation']
-    variable2.set('Default')
-    opt1 = OptionMenu(tab2, variable2, *video_options)
-    opt1.config(width=9,font=('Ariel', '12'))
-    opt1.config(bg=bg)
-    opt1.config(fg=fg)
-    opt1.grid(column=4,row=8)
-    opt2.config(state=DISABLED)
-    def callback(*args):
-        global realsr_model
-        realsr_model = '-n realesrgan-x4plus'
-        if variable2.get() == 'Default':
+            if variable1.get() == '2X':
+                realsr_scale = '-s 2'
+            if variable1.get() == '3X':
+                realsr_scale = '-s 3'
+            if variable1.get() == '4X':
+                realsr_scale = '-s 4'
+        variable1.trace("w", callback)
+    
+    def option():
+        variable2 = StringVar(tab1)
+        video_options = ['Default', 'Animation']
+        variable2.set('Default')
+        opt1 = OptionMenu(tab2, variable2, *video_options)
+        opt1.config(width=9,font=('Ariel', '12'))
+        opt1.config(bg=bg)
+        opt1.config(fg=fg)
+        opt1.grid(column=4,row=8)
+        opt2.config(state=DISABLED)
+        def callback(*args):
+            global realsr_model
+            global realsr_scale
             realsr_model = '-n realesrgan-x4plus'
-            variable1.set('4X')
-            opt2.config(state=DISABLED)
+            if variable2.get() == 'Default':
+                realsr_model = '-n realesrgan-x4plus'
+                variable1.set('4X')
+                opt2.config(state=DISABLED)
+                realsr_scale = '-s 4'
 
-        if variable2.get() == 'Animation':
-            realsr_model = '-n realesr-animevideov3'
-            variable1.set('2X')
-            opt2.config(state='normal')
-    variable2.trace("w", callback)
+            if variable2.get() == 'Animation':
+                realsr_model = '-n realesr-animevideov3'
+                variable1.set('2X')
+                opt2.config(state='normal')
+                realsr_scale = '-s 2'
+        variable2.trace("w", callback)
+    scale()
+    option()
     
     
     
