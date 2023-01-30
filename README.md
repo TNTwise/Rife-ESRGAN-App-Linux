@@ -46,7 +46,21 @@ appimagetool GUIPortable.AppDir
 ```
 
 ## Errors
-vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.
+vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Downscale the video or get a better PC if this happens.<br />
+If RealESRGAN does not seem to be working, or Rife is slow, make sure you have the vulkan package installed based on your hardware.<br/>
+For example:<br />
+Intel:
+```
+sudo pacman -S vulkan-intel
+```
+AMD:
+```
+sudo pacman -S vulkan-radeon
+```
+NVIDIA:
+```
+sudo pacman -S nvidia-utils
+```
 
 ## TODO
 Add automatic conversion to supported format<br/>
