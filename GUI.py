@@ -154,6 +154,8 @@ def read_settings():
         global RenderDir
         RenderDir = settings_dict['RenderDir']
     except:
+        os.system(f'rm -rf "{thisdir}/files/settings.txt"')
+        os.mknod(f'{thisdir}/files/settings.txt')
         write_to_settings_file("Image_Type", "webp")
         write_to_settings_file("IsAnime", "False")
         write_to_settings_file("Repository", "stable")
@@ -1255,7 +1257,6 @@ layout_rife()
 def layout_realsr():
     def scale():
         global variable1
-        
         variable1 = StringVar(tab1)
         video_options1 = ['2X', '3X', '4X']
         
@@ -1267,13 +1268,9 @@ def layout_realsr():
         opt2.config(fg=fg)
         opt2.grid(column=4,row=9)
         
-        global realsr_scale
-        realsr_scale = '-s 4'
         def callback(*args):
             global realsr_scale
-           
             realsr_scale = '-s 4'
-            print(realsr_scale)
             if variable1.get() == '2X':
                 realsr_scale = '-s 2'
             if variable1.get() == '3X':
@@ -1292,12 +1289,10 @@ def layout_realsr():
         opt1.config(fg=fg)
         opt1.grid(column=4,row=8)
         opt2.config(state=DISABLED)
-        global realsr_model
-        global realsr_scale
-        realsr_model = '-n realesrgan-x4plus'
         def callback(*args):
             global realsr_model
             global realsr_scale
+            realsr_model = '-n realesrgan-x4plus'
             if variable2.get() == 'Default':
                 realsr_model = '-n realesrgan-x4plus'
                 variable1.set('4X')
