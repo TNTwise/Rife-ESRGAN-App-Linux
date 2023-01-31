@@ -125,7 +125,10 @@ def read_settings():
     with open(f'{thisdir}/files/settings.txt', 'r') as f:
         f = csv.reader(f)
         for row in f:
-            settings_dict[row[0]] = row[1]
+            try:
+                settings_dict[row[0]] = row[1]
+            except:
+                pass
     try:
         global Rife_Option
         Rife_Option = settings_dict['Rife_Option']
@@ -154,6 +157,8 @@ def read_settings():
         global RenderDir
         RenderDir = settings_dict['RenderDir']
     except:
+        os.system(f'rm -rf "{thisdir}/files/settings.txt"')
+        os.mknod(f'{thisdir}/files/settings.txt')
         write_to_settings_file("Image_Type", "webp")
         write_to_settings_file("IsAnime", "False")
         write_to_settings_file("Repository", "stable")
