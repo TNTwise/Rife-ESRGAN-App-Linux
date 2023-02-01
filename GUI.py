@@ -1456,19 +1456,14 @@ def anime4X(is16x, is8x,rifever):
                 outputdir = homedir
             on_click2_anime(i,is16x, is8x,rifever)
             
-            os.system(f'{ffmpeg_command}   -i "{RenderDir}/temp1.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/temp.mp4" -y')
+            if i == 0:
+                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+            else:
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            
-            
-            os.system(f'rm -rf "{RenderDir}/input_frames"')
-            os.system(f'rm -rf "{RenderDir}/output_frames" ')
-            os.system(f'mkdir "{RenderDir}/input_frames"')
-            os.system(f'mkdir "{RenderDir}/output_frames"')
-            os.system(f'{ffprobe_command} "{RenderDir}/temp.mp4"')
-    
-            os.system(f'{ffmpeg_command}  -i "{RenderDir}/temp.mp4" "{RenderDir}/input_frames/frame_%08d.png"')
+            os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
             if is16x == True and is8x == False:
                 if i == 0:
                     progressBarThread(100,600,100,200)
@@ -1485,7 +1480,7 @@ def anime4X(is16x, is8x,rifever):
             if is8x == False and is16x == False:
                 progressBarThread(100,200,100,200)
             
-
+            
             global done2
             if os.path.isfile(fr"{outputdir}/{mp4name}_60fps{extension}") == True:
                 done2 = Label(tab1,
@@ -1516,13 +1511,18 @@ def anime4X(is16x, is8x,rifever):
                 os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
             if is8x == True and is16x == False:
                 if i == 0:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
+                    
+                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 else:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -crf 0 -c:a copy "{RenderDir}/temp.mp4" -y')
+                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 
                 else:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
@@ -1530,12 +1530,11 @@ def anime4X(is16x, is8x,rifever):
                     done2.grid(column=4,row=10)
     
             
-            os.system(f'rm -rf "{RenderDir}/input_frames"')
-            os.system(f'rm -rf "{RenderDir}/output_frames" ')    
             
             os.chdir(f"{thisdir}")
     enable_buttons()
-    enable_tabs()    
+    enable_tabs()
+    os.system(f'rm -rf "{RenderDir}/input_frames" && rm -rf "{RenderDir}/output_frames"')    
     if is16x == False and is8x == False:
             os.system(f'rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
@@ -1767,19 +1766,16 @@ def on_click2(rifever):
 def on_click2_anime(round, is16x, is8x,rifever):
     
     get_fps()
-    if round != 0:
-        os.system(f'{ffmpeg_command}   -i "{RenderDir}/temp.mp4"  -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264  -crf 0 -c:a copy {get_cpu_load_ffmpeg()}  "{RenderDir}/temp2.mp4" -y')
-        if is8x == True or is16x == True:
-            filename1 = f'{RenderDir}/temp2.mp4'
-    else:
-        filename1 = filename
-    os.system(f'rm -rf "{RenderDir}/input_frames"')
-    os.system(f'rm -rf "{RenderDir}/output_frames" ')
-    os.system(f'mkdir "{RenderDir}/input_frames"')
-    os.system(f'mkdir "{RenderDir}/output_frames"')
-    os.system(f'{ffprobe_command} "{filename1}"')
-    os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-    os.system(f'{ffmpeg_command}  -i "{filename1}" "{RenderDir}/input_frames/frame_%08d.png"')
+    
+    if round == 0:
+        
+        os.system(f'rm -rf "{RenderDir}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/output_frames" ')
+        os.system(f'mkdir "{RenderDir}/input_frames"')
+        os.system(f'mkdir "{RenderDir}/output_frames"')
+        os.system(f'{ffprobe_command} "{filename}"')
+        os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
+        os.system(f'{ffmpeg_command}  -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     
     if is16x == False and is8x == False:
         sleep(1)
@@ -1799,10 +1795,9 @@ def on_click2_anime(round, is16x, is8x,rifever):
             progressBarThread(200,400,200,300)
         
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
-    if round == 0:
-        os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
-    else:
-        os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf 0 -vcodec libx264 {get_cpu_load_ffmpeg()}   "{RenderDir}/temp1.mp4" -y')
+    
+    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+    
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
