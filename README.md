@@ -4,6 +4,11 @@
 
 ## A simple GUI for Rife Vulkan on Linux
 [Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/README.md#errors)
+[Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/README.md#errors)
+[Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/README.md#errors)
+[Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/README.md#errors)
+[Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/README.md#errors)
+
 ## Dependencies: 
 OpenCV <br />
 Tkinter<br />
