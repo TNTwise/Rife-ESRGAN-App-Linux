@@ -159,7 +159,7 @@ def read_settings():
     except:
         os.system(f'rm -rf "{thisdir}/files/settings.txt"')
         os.mknod(f'{thisdir}/files/settings.txt')
-        write_to_settings_file("Image_Type", "png")
+        write_to_settings_file("Image_Type", "webp")
         write_to_settings_file("IsAnime", "False")
         write_to_settings_file("Repository", "stable")
         write_to_settings_file("rifeversion", "20221029")
