@@ -159,7 +159,7 @@ def read_settings():
     except:
         os.system(f'rm -rf "{thisdir}/files/settings.txt"')
         os.mknod(f'{thisdir}/files/settings.txt')
-        write_to_settings_file("Image_Type", "webp")
+        write_to_settings_file("Image_Type", "png")
         write_to_settings_file("IsAnime", "False")
         write_to_settings_file("Repository", "stable")
         write_to_settings_file("rifeversion", "20221029")
@@ -1439,8 +1439,15 @@ def anime4X(is16x, is8x,rifever):
             vidQuality = videoQuality
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
             global done2
-        
-            
+            global compression_level
+            if videoQuality == '7':
+                compression_level = 1
+            if videoQuality == '14':
+                compression_level = 3
+            if videoQuality == '18':
+                compression_level = 5
+            if videoQuality == '22':
+                compression_level = 6
             # this if statement sets default output dir, may need to remove when add selector.
 
             if os.path.isfile(thisdir+"/temp") == False:
@@ -1457,9 +1464,9 @@ def anime4X(is16x, is8x,rifever):
             on_click2_anime(i,is16x, is8x,rifever)
             # test webp option.
             if i == 0:
-                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level 0 -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level} -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             else:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level 0 -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level} -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1513,7 +1520,7 @@ def anime4X(is16x, is8x,rifever):
                 if i == 0:
                     
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level 0  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level}  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 else:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
@@ -1521,7 +1528,7 @@ def anime4X(is16x, is8x,rifever):
             if is16x == True and is8x == False:
                 if i != 2:
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level 0  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level}  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 
                 else:
