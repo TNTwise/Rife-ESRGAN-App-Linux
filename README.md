@@ -51,7 +51,10 @@ appimagetool GUIPortable.AppDir
 ```
 
 ## Errors
-vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. Lower the system load if you see these errors.<br />
+vkQueueSubmit failed and vkAllocateMemory failed happens when there isn't enough VRAM for the current frame. 
+```
+Lower the system load if you see these errors.
+```
 If RealESRGAN does not seem to be working, or Rife is slow, make sure you have the vulkan package installed based on your hardware.<br/>
 For example:<br />
 Intel:
