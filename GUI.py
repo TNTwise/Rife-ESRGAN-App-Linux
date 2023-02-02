@@ -1512,7 +1512,7 @@ def anime4X(is16x, is8x,rifever):
                 if i == 0:
                     
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png    "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 else:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
@@ -1520,7 +1520,7 @@ def anime4X(is16x, is8x,rifever):
             if is16x == True and is8x == False:
                 if i != 2:
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 
                 else:
