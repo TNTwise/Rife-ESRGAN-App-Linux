@@ -73,6 +73,7 @@ sudo pacman -S nvidia-utils
 ```
 
 ## TODO
+Add support for changing between yuv420p yuv422p yuv244p rgb24 pix_fmt <br />
 Add automatic conversion to supported format<br/>
 Maybe add a message to ask if user wants to save last output files if greater than 2x interpolation.
 Add a try except function for reading settings <br />
