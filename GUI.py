@@ -1439,15 +1439,7 @@ def anime4X(is16x, is8x,rifever):
             vidQuality = videoQuality
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
             global done2
-            global compression_level
-            if videoQuality == '7':
-                compression_level = 1
-            if videoQuality == '14':
-                compression_level = 3
-            if videoQuality == '18':
-                compression_level = 5
-            if videoQuality == '22':
-                compression_level = 6
+            
             # this if statement sets default output dir, may need to remove when add selector.
 
             if os.path.isfile(thisdir+"/temp") == False:
@@ -1464,9 +1456,9 @@ def anime4X(is16x, is8x,rifever):
             on_click2_anime(i,is16x, is8x,rifever)
             # test webp option.
             if i == 0:
-                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level} -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             else:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level} -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1503,14 +1495,14 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames"')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -pix_fmt yuv420p -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
                         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality}  -pix_fmt yuv420p -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
@@ -1520,19 +1512,19 @@ def anime4X(is16x, is8x,rifever):
                 if i == 0:
                     
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level}  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy -pix_fmt yuv420p "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png -compression_level {compression_level}  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy -pix_fmt yuv420p "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
     
@@ -1602,14 +1594,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
-            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
