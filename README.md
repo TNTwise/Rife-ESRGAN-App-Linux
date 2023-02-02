@@ -18,7 +18,9 @@ To run this program, you can just click on "Start".
 There is a new install.sh script in the install directory that you can run that will install it to your system. <br />
 You can either search for Rife in your destop enfironment, or can run rife-gui from your terminal. <br />
 This install method will copy everything to the home folder, and execute from there. <br />
-##Installing Dependencies <br />
+
+## Installing Dependencies <br />
+
 On Ubuntu <br />
 ```
 sudo apt install python3-opencv ffmpeg python3-tk konsole
