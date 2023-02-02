@@ -1495,14 +1495,14 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{image_format} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames"')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p  {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
                         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p  {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
@@ -1515,7 +1515,7 @@ def anime4X(is16x, is8x,rifever):
                     os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   -crf 0 -c:a copy {get_cpu_load_ffmpeg()} "{RenderDir}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}   -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
@@ -1524,7 +1524,7 @@ def anime4X(is16x, is8x,rifever):
                     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
                 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()}  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{image_format}" -i "{RenderDir}/audio.m4a" -vcodec libx264 {get_cpu_load_ffmpeg()} -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
     
@@ -1594,14 +1594,14 @@ def realESRGAN(model):
                  fg=fg,bg=bg)
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {image_format} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
-            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()}  "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -pix_fmt yuv420p  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{image_format}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264 {get_cpu_load_ffmpeg()} -pix_fmt yuv420p  "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
