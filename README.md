@@ -36,7 +36,7 @@ Run "Start"
 As of latest SteamOs 3.4, it does not error out when launching it from "Start". <br />
 
 ## Building
-# Note: Building only works on Arch Linux for the time being, I am going to fix this in the future.
+### Note: Building only works on Arch Linux for the time being, I am going to fix this in the future.
 Install needed dependencies
 ```
 yay -S pyinstaller
