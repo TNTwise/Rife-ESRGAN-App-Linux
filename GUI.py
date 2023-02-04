@@ -1455,11 +1455,10 @@ def anime4X(is16x, is8x,rifever):
                 outputdir = homedir
             on_click2_anime(i,is16x, is8x,rifever)
             # test webp option.
-            if i != X4_loop - 1:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
-                
+            if i == 0:
+                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             else:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{image_format}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1775,7 +1774,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
         os.system(f'mkdir "{RenderDir}/output_frames"')
         os.system(f'{ffprobe_command} "{filename}"')
         os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{filename}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/input_frames/%08d.png" -y')
+        os.system(f'{ffmpeg_command}  -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     
     if is16x == False and is8x == False:
         sleep(1)
