@@ -75,7 +75,6 @@ sudo pacman -S nvidia-utils
 ```
 
 ## TODO
-Remove mpdecimate from last interaction of anime interpolation <br />
 put resolution instead of _res in realesr <br/>
 For next release, add advanced settings tab. <br />
 Add support for changing between yuv420p yuv422p yuv244p rgb24 pix_fmt <br />
