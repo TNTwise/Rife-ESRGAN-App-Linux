@@ -50,6 +50,7 @@ git clone https://github.com/TNTwise/Rife-ESRGAN-App-AppImage.git
 ```
 remove GUIPortable.temp with the compiled GUIPortable<br/>
 ```
+chmod +x Rife-ESRGAN-App.AppDir/AppRun
 appimagetool Rife-ESRGAN-App.AppDir 
 ```
 
