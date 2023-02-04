@@ -48,7 +48,7 @@ make
 Download Rife-ESRGAN-App.AppDir from appimage branch<br/>
 remove GUIPortable.temp with the compiled GUIPortable<br/>
 ```
-appimagetool GUIPortable.AppDir
+appimagetool Rife-ESRGAN-App.AppDir 
 ```
 
 ## Errors
