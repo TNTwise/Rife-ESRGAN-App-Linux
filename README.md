@@ -45,7 +45,9 @@ run GUI.py at least once to install PIP dependencies
 make
 ```
 # Compile Appimage
-Download Rife-ESRGAN-App.AppDir from appimage branch<br/>
+```
+https://github.com/TNTwise/Rife-ESRGAN-App-AppImage.git
+```
 remove GUIPortable.temp with the compiled GUIPortable<br/>
 ```
 appimagetool Rife-ESRGAN-App.AppDir 
