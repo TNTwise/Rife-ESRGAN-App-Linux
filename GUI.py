@@ -741,7 +741,7 @@ def gpu_setting(app):
     if GPUUsage == 'High' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
         return "-j 3:7:3"
     if GPUUsage == 'Very High' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
-        return "-j 8:14:8"
+        return "-j 10:10:10"
     if GPUUsage == 'Low' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
         return "-j 1:1:1"
     if app != 'realsr':
