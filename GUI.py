@@ -491,7 +491,6 @@ def install1():
 
 
 
-
 # insert elements by their
 # index and names.
 
@@ -574,24 +573,61 @@ def settings_window():
                 Image_Type = 'jpg'
                 read_settings()
         variable.trace("w", callback)
+
+    
+
     def gpu_usage_dropdown():
         update_branch_label = Label(tab3,text="System Load:",bg=bg,fg=fg)
         update_branch_label.grid(column=4,row=5)
         variable = StringVar(tab3)
-        repo_options = ['Default', 'Low', 'High', 'Very High']
-        variable.set(GPUUsage)
+        repo_options = ['Default', 'Low', 'High', 'Very High', 'Custom']
+        if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
+            variable.set(GPUUsage)
+        else:
+            variable.set('Custom')
+            global save_button
+            global custom_box1
+            custom_box1 = Text(tab3,width=10,height=1)
+            custom_box1.insert("end-1c", GPUUsage)
+            custom_box1.grid(row=7,column=4)
+            save_button = Button(tab3,width=10,height=1,text='Save',command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+            save_button.grid(row=8,column=4)
         opt = OptionMenu(tab3, variable, *repo_options)
         opt.config(width=8,font=('Ariel', '12'))
-        
+            
         opt.config(bg=bg)
         opt.config(fg=fg)
         opt.config(anchor="w")
         opt.grid(column=4,row=6)
         def callback(*args):
-            
-            change_setting("GPUUsage", variable.get())
-            
+            if variable.get() != 'Custom':
+                remove_custom()
+                change_setting("GPUUsage", variable.get())
+                read_settings()
+            else:
+                if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
+                    change_setting("GPUUsage", "10")
+                
+                custom_box1 = Text(tab3,width=10,height=1)
+                custom_box1.insert("end-1c", GPUUsage)
+                custom_box1.grid(row=7,column=4)
+                
+                save_button = Button(tab3,width=10,height=1,text='Save',command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+                save_button.grid(row=8,column=4)
         variable.trace("w", callback)
+    
+        
+        
+
+    def remove_custom():
+        try:
+                    
+                    custom_box1.destroy()
+                    
+                    save_button.destroy()
+        except:
+                    
+                    pass
     def RenderDeviceDropDown():
         update_branch_label = Label(tab3,text="Render Device:",bg=bg,fg=fg)
         update_branch_label.grid(column=6,row=5)
@@ -734,6 +770,8 @@ def get_render_device(app):
     else:
         return ""
 def gpu_setting(app):
+    if GPUUsage != 'Default' or GPUUsage != 'Low' or GPUUsage != 'High' or GPUUsage != 'Very High':
+         return f'-j {GPUUsage}:{GPUUsage}:{GPUUsage}'
     if GPUUsage == 'Default' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
         
         return ""
@@ -761,6 +799,8 @@ def gpu_setting(app):
             return '-j 8:8,8,8:8'
         if GPUUsage =='Very High' and RenderDevice == 'CPU + GPU':
             return '-j 10:10,12,12:10'
+        
+            
     else:
         if GPUUsage == 'Default':
            return "-j 1:2:2"
@@ -768,6 +808,7 @@ def gpu_setting(app):
             return "-j 5:5:5"
         if GPUUsage == 'Very High':
             return "-j 10:10:10"
+    
 def latest_rife():
     # this code gets the latest versaion of rife vulkan
             
