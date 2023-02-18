@@ -770,8 +770,10 @@ def get_render_device(app):
     else:
         return ""
 def gpu_setting(app):
-    if GPUUsage != 'Default' or GPUUsage != 'Low' or GPUUsage != 'High' or GPUUsage != 'Very High':
-         return f'-j {GPUUsage}:{GPUUsage}:{GPUUsage}'
+    if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
+         pass
+    else:
+        return f'-j {GPUUsage}:{GPUUsage}:{GPUUsage}'
     if GPUUsage == 'Default' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
         
         return ""
