@@ -590,7 +590,7 @@ def settings_window():
             custom_box1 = Text(tab3,width=10,height=1)
             custom_box1.insert("end-1c", GPUUsage)
             custom_box1.grid(row=7,column=4)
-            save_button = Button(tab3,width=10,height=1,text='Save',command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+            save_button = Button(tab3,width=10,height=1,text='Save',fg=fg,bg=bg,command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
             save_button.grid(row=8,column=4)
         opt = OptionMenu(tab3, variable, *repo_options)
         opt.config(width=8,font=('Ariel', '12'))
@@ -612,7 +612,7 @@ def settings_window():
                 custom_box1.insert("end-1c", GPUUsage)
                 custom_box1.grid(row=7,column=4)
                 
-                save_button = Button(tab3,width=10,height=1,text='Save',command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+                save_button = Button(tab3,width=10,height=1,text='Save',fg=fg,bg=bg,command=change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
                 save_button.grid(row=8,column=4)
         variable.trace("w", callback)
     
@@ -773,7 +773,8 @@ def gpu_setting(app):
     if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
          pass
     else:
-        return f'-j {GPUUsage}:{GPUUsage}:{GPUUsage}'
+        l = (f'-j {GPUUsage}:{GPUUsage}:{GPUUsage}')
+        return l
     if GPUUsage == 'Default' and RenderDevice == 'GPU' or RenderDevice == 'CPU':
         
         return ""
