@@ -883,7 +883,9 @@ def preview_image():
         g=1
         while i==1:
             if os.path.exists(f'{RenderDir}/output_frames/') == False:
+                 label.destroy()
                  break
+                 
             dir_path = f'{RenderDir}/output_frames/'
             files = os.listdir(dir_path)
             files.sort()
