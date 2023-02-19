@@ -896,7 +896,7 @@ def preview_image():
                 width, height = img.size
                 desired_width = 830
                 proportional_height = int((desired_width / float(width)) * height)
-                img = img.resize((desired_width, proportional_height), PIL.Image.ANTIALIAS)
+                img = img.resize((desired_width, proportional_height), PIL.Image.NEAREST)
 
                 photo = ImageTk.PhotoImage(img)
 
