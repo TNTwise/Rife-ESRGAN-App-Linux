@@ -7,7 +7,7 @@ import requests
 import re
 import sys
 import csv
-import requests
+import PIL.Image
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -108,7 +108,7 @@ import cv2
 from tkinter import *
 import psutil
 from zipfile import ZipFile
-
+from PIL import ImageTk
 
 
 # These change the settings file
@@ -268,6 +268,7 @@ if check_theme() == "Light":
     tab1 = ttk.Frame(tabControl)
     tab2 = ttk.Frame(tabControl)
     tab3 = ttk.Frame(tabControl)
+    tab4 = ttk.Frame(tabControl)
     s = ttk.Style()
 # Create style used by default for all Frames
     s.configure('TFrame', background='White')
@@ -278,6 +279,7 @@ if check_theme() == "Dark":
     tab1 = ttk.Frame(tabControl)
     tab2 = ttk.Frame(tabControl)
     tab3 = ttk.Frame(tabControl)
+    tab4 = ttk.Frame(tabControl)
     s = ttk.Style()
 # Create style used by default for all Frames
     s.configure('TFrame', background='#4C4E52',foreground='#4C4E52')
@@ -287,8 +289,8 @@ if check_theme() == "Dark":
 #Create tabs
 tabControl.add(tab1, text='Rife')
 tabControl.add(tab2, text='Real-ESRGAN')
-
-tabControl.add(tab3, text='Settings')
+tabControl.add(tab3, text='Preview')
+tabControl.add(tab4, text='Settings')
 tabControl.grid(row=0,column=0)
 
 
@@ -298,11 +300,11 @@ def grayout_tabs(mode):
         
     if mode == 'realsr':
         tabControl.tab(tab1, state='disabled')  
-    tabControl.tab(tab3, state='disabled')
+    tabControl.tab(tab4, state='disabled')
 def enable_tabs():
      tabControl.tab(tab1, state='normal')  
      tabControl.tab(tab2, state='normal')  
-     tabControl.tab(tab3, state='normal')  
+     tabControl.tab(tab4, state='normal')  
 
 
 if check_theme() == "Light":
@@ -501,7 +503,7 @@ def install1():
 def settings_window():
     
     
-    button_select_default_output = Button(tab3,
+    button_select_default_output = Button(tab4,
                         text = "Select default output folder",
                         command = sel_default_output_folder, bg=bg_button,fg=fg)
     
@@ -512,7 +514,7 @@ def settings_window():
     #displays current default output folder
     
     global default_output_label
-    default_output_label = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
+    default_output_label = Label(tab4, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
     
     # creates theme button and calls check_theme which returns the theme that is currently on
     global repo
@@ -524,33 +526,33 @@ def settings_window():
     global theme_button
     theme = check_theme()
     if theme == "Light":
-            theme_button = Button(tab3,text="Light",command=darkTheme,bg="white",fg=fg)
+            theme_button = Button(tab4,text="Light",command=darkTheme,bg="white",fg=fg)
     if theme == "Dark":
-            theme_button = Button(tab3,text="Dark",command=lightTheme,bg=bg,fg=fg)
-    theme_label = Label(tab3,text=" Theme: ",bg=bg,fg=fg)
-    spacer_label = Label(tab3,text="            ",bg=bg) # This spaces the middle
-    spacer_label1 = Label(tab3,text="            ",bg=bg) # this spaces the end
-    spacer_label2 = Label(tab3,text="",bg=bg) # this is at the start of the gui
+            theme_button = Button(tab4,text="Dark",command=lightTheme,bg=bg,fg=fg)
+    theme_label = Label(tab4,text=" Theme: ",bg=bg,fg=fg)
+    spacer_label = Label(tab4,text="            ",bg=bg) # This spaces the middle
+    spacer_label1 = Label(tab4,text="            ",bg=bg) # this spaces the end
+    spacer_label2 = Label(tab4,text="",bg=bg) # this is at the start of the gui
     global default_render_label
-    default_render_label = Label(tab3,text=RenderDir,bg=bg,fg=fg,width=25,anchor='w')
+    default_render_label = Label(tab4,text=RenderDir,bg=bg,fg=fg,width=25,anchor='w')
     default_render_label.grid(column=6,row=1)
     global check_updates_button
-    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
-    install_button = Button(tab3, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
+    check_updates_button = Button(tab4,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
+    install_button = Button(tab4, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
     global  update_spacer_label
-    update_spacer_label = Label(tab3,text = " ", bg=bg)
+    update_spacer_label = Label(tab4,text = " ", bg=bg)
     
-    button_select_default_render = Button(tab3,
+    button_select_default_render = Button(tab4,
                         text = "Select default render folder",
                         command = sel_default_render_folder, bg=bg_button,fg=fg).grid(column=6, row=0)
         
     def video_image_dropdown():
-        update_branch_label = Label(tab3,text="Render Image Type: ",bg=bg,fg=fg)
+        update_branch_label = Label(tab4,text="Render Image Type: ",bg=bg,fg=fg)
         update_branch_label.grid(column=1,row=5)
-        variable = StringVar(tab3)
+        variable = StringVar(tab4)
         repo_options = ['webp            (smaller size, lossless)', 'png            (lossless)', 'jpg            (lossy)']
         variable.set(Image_Type)
-        opt = OptionMenu(tab3, variable, *repo_options)
+        opt = OptionMenu(tab4, variable, *repo_options)
         opt.config(width=4,font=('Ariel', '12'))
         
         opt.config(bg=bg)
@@ -578,9 +580,9 @@ def settings_window():
     
 
     def gpu_usage_dropdown():
-        update_branch_label = Label(tab3,text="System Load:",bg=bg,fg=fg)
+        update_branch_label = Label(tab4,text="System Load:",bg=bg,fg=fg)
         update_branch_label.grid(column=4,row=5)
-        variable = StringVar(tab3)
+        variable = StringVar(tab4)
         repo_options = ['Default', 'Low', 'High', 'Very High', 'Custom']
         if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
             variable.set(GPUUsage)
@@ -588,12 +590,12 @@ def settings_window():
             variable.set('Custom')
             global save_button
             global custom_box1
-            custom_box1 = Text(tab3,width=10,height=1)
+            custom_box1 = Text(tab4,width=10,height=1)
             custom_box1.insert("end-1c", GPUUsage)
             custom_box1.grid(row=7,column=4)
-            save_button = Button(tab3,width=10,height=1,text='Save',fg=fg,bg=bg,command=lambda: change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+            save_button = Button(tab4,width=10,height=1,text='Save',fg=fg,bg=bg,command=lambda: change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
             save_button.grid(row=8,column=4)
-        opt = OptionMenu(tab3, variable, *repo_options)
+        opt = OptionMenu(tab4, variable, *repo_options)
         opt.config(width=8,font=('Ariel', '12'))
             
         opt.config(bg=bg)
@@ -609,11 +611,11 @@ def settings_window():
                 if GPUUsage == 'Default' or GPUUsage == 'Low' or GPUUsage == 'High' or GPUUsage == 'Very High':
                     change_setting("GPUUsage", "10")
                 
-                custom_box1 = Text(tab3,width=10,height=1)
+                custom_box1 = Text(tab4,width=10,height=1)
                 custom_box1.insert("end-1c", GPUUsage)
                 custom_box1.grid(row=7,column=4)
                 
-                save_button = Button(tab3,width=10,height=1,text='Save',fg=fg,bg=bg,command=lambda: change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
+                save_button = Button(tab4,width=10,height=1,text='Save',fg=fg,bg=bg,command=lambda: change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
                 save_button.grid(row=8,column=4)
         variable.trace("w", callback)
     
@@ -630,15 +632,15 @@ def settings_window():
                     
                     pass
     def RenderDeviceDropDown():
-        update_branch_label = Label(tab3,text="Render Device:",bg=bg,fg=fg)
+        update_branch_label = Label(tab4,text="Render Device:",bg=bg,fg=fg)
         update_branch_label.grid(column=6,row=5)
-        variable = StringVar(tab3)
+        variable = StringVar(tab4)
         repo_options = ['CPU', 'GPU', 'Dual GPU', 'CPU + GPU']
         if RenderDevice != 'CPU + GPU':
             variable.set(RenderDevice)
         else:
             variable.set('CPU + GPU')
-        opt = OptionMenu(tab3, variable, *repo_options)
+        opt = OptionMenu(tab4, variable, *repo_options)
         opt.config(width=9,font=('Ariel', '12'))
         
         opt.config(bg=bg)
@@ -658,7 +660,7 @@ def settings_window():
     video_image_dropdown()
     #show_dropdown()
     def video_quality_drop_down():
-        vid_quality_label = Label(tab3,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
+        vid_quality_label = Label(tab4,text="Video quality:", bg=bg,fg=fg).grid(column=1,row=2)
         vidQuality = videoQuality
         if vidQuality == "22":
             vidQuality1 = "Low"
@@ -668,10 +670,10 @@ def settings_window():
             vidQuality1 = "High"
         if vidQuality == "7":
             vidQuality1 = "Lossless"
-        variable = StringVar(tab3)
+        variable = StringVar(tab4)
         repo_options = ['Lossless','High', 'Medium', 'Low']
         variable.set(vidQuality1)
-        opt = OptionMenu(tab3, variable, *repo_options)
+        opt = OptionMenu(tab4, variable, *repo_options)
         opt.config(width=9,font=('Ariel', '12'))
         opt.config(bg=bg)
         opt.config(fg=fg)
@@ -717,12 +719,12 @@ def settings_window():
 def start_update_check():
     global update_check_label
     if check_for_updates() == 1:
-        update_check_label = Label(tab3,text="Updated, restart to apply.",bg=bg,fg=fg)
-        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
+        update_check_label = Label(tab4,text="Updated, restart to apply.",bg=bg,fg=fg)
+        check_updates_button = Button(tab4,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
         restart_window("Updated, re-launch the program to apply.")
     else:
-        update_check_label = Label(tab3,text="No Updates",bg=bg,fg=fg)
-        check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
+        update_check_label = Label(tab4,text="No Updates",bg=bg,fg=fg)
+        check_updates_button = Button(tab4,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg).grid(column=6,row=3)
     update_check_label.grid(column=6,row=5)
 # restarts the program
 
@@ -875,16 +877,40 @@ def get_all_models():
 get_all_models()
 
 
-def get_cpu_load_ffmpeg():
-    if GPUUsage == 'Default':
-        return '-cpu-used 5'
-    if GPUUsage == 'Low':
-        return '-cpu-used 5'
-    if GPUUsage == 'High':
-        return '-cpu-used 6'
-    if GPUUsage == 'Very High':
-        return '-cpu-used 7'
-# Switches themes for tkinter
+def preview_image():
+        
+        i=1
+        g=1
+        while i==1:
+            if os.path.exists(f'{RenderDir}/output_frames/') == False:
+                 break
+            dir_path = f'{RenderDir}/output_frames/'
+            files = os.listdir(dir_path)
+            files.sort()
+            sleep(1)
+            try:
+                
+                img = PIL.Image.open(f"{RenderDir}/output_frames/{files[-1]}")
+                width, height = img.size
+                desired_width = 830
+                proportional_height = int((desired_width / float(width)) * height)
+                img = img.resize((desired_width, proportional_height), PIL.Image.ANTIALIAS)
+
+                photo = ImageTk.PhotoImage(img)
+
+                label = Label(tab3,image=photo,width=desired_width,height=proportional_height)
+                
+                label.grid(column=0,row=0)
+                
+                
+            except:
+                pass
+            
+            
+  
+
+
+#switches theme for tkinter
 
 def darkTheme():
     change_setting('Theme', 'Dark')
@@ -919,7 +945,7 @@ def sel_default_render_folder():
         change_setting('RenderDir', select_default_render_folder)
          #displays current default output folder
         default_render_label.destroy()
-        default_render_label_1 = Label(tab3, text=select_default_render_folder,bg=bg,fg=fg, width=25, anchor="w")
+        default_render_label_1 = Label(tab4, text=select_default_render_folder,bg=bg,fg=fg, width=25, anchor="w")
         default_render_label_1.grid(column=6, row=1)
    
 
@@ -933,7 +959,7 @@ def sel_default_output_folder():
         current_default_output_folder = OutputDir
         #displays current default output folder
         default_output_label.destroy()
-        default_output_label_1 = Label(tab3, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
+        default_output_label_1 = Label(tab4, text=current_default_output_folder,bg=bg,fg=fg, width=25, anchor="w")
         default_output_label_1.grid(column=1, row=1)
         
 '''def remove_processced_files():    #scraping this for now
@@ -1125,7 +1151,7 @@ def threading(program):
 def start_update_check_thread():
     t1 = Thread(target=start_update_check)
     t1.start()
-    check_updates_button = Button(tab3,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=6,row=3)
+    check_updates_button = Button(tab4,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg, state=DISABLED).grid(column=6,row=3)
 def anime_thread():
     t1 = Thread(target=AnimeInterpolation)
     t1.start()
@@ -1542,7 +1568,7 @@ def anime4X(is16x, is8x,rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_60fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-    
+            Thread(target=preview_image).start()
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames"')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
@@ -1643,6 +1669,7 @@ def realESRGAN(model):
                  text=f"Done! Output File = {outputdir}/{mp4name}_res{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
+        Thread(target=preview_image).start()
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
             os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res(1){extension}" -y')
@@ -1712,7 +1739,7 @@ def on_click(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 2)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-        
+        Thread(target=preview_image).start()
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
@@ -1780,6 +1807,7 @@ def times4(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 4)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
+        Thread(target=preview_image).start()
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 4}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command}   -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
@@ -1811,6 +1839,7 @@ def on_click2(rifever):
     os.system(f'{ffmpeg_command}   -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     progressBarThread(0,300,0,100) # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
+    Thread(target=preview_image).start()
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
 def on_click2_anime(round, is16x, is8x,rifever):
@@ -1843,7 +1872,7 @@ def on_click2_anime(round, is16x, is8x,rifever):
             progressBarThread(0,400,0,100)
         if round == 1:
             progressBarThread(200,400,200,300)
-        
+    Thread(target=preview_image).start()    
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
@@ -1860,6 +1889,7 @@ def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so diff
     os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
     os.system(f'{ffmpeg_command}   -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
     progressBarThread(0,700,0,100) #Set this to 8x, this is the first of 3 progressbars
+    Thread(target=preview_image).start()
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
 
@@ -1871,6 +1901,7 @@ def on_click3(rifever):
     
     
     progressBarThread(43,300,43,128)
+    Thread(target=preview_image).start()
     os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
     os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
     
@@ -1914,7 +1945,7 @@ def times8(rifever):
                  text=f"Done! Output File = {outputdir}/{mp4name}_{int(fps * 8)}fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
-
+        Thread(target=preview_image).start()
         os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 8}fps.{extension}") == True:
             os.system(fr'{ffmpeg_command}   -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
