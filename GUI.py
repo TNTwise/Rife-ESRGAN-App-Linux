@@ -1291,8 +1291,10 @@ def exi11(): # this funtion kills the program.
                 pid = process.info['pid']
                 
                 return pid
-
-    os.system(f'rm -rf "{RenderDir}/{filename}/"')
+    try:
+        os.system(f'rm -rf "{RenderDir}/{filename}/"')
+    except:
+        pass
     
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
@@ -1543,12 +1545,14 @@ def anime4X(is16x, is8x,rifever):
             # test webp option.
             if i == 0:
                 os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-            else:
+            
+            if i == 2:
                 os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+            if i != 1:
+                os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             if is16x == True and is8x == False:
                 if i == 0:
                     
@@ -1601,15 +1605,21 @@ def anime4X(is16x, is8x,rifever):
                     os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
                     os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png    "{RenderDir}/{filename}/output_frames/%08d.png" -y')
                     os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264   -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
+                if i == 1:
+                    os.system(fr'{ffmpeg_command}   -framerate 120 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vf fps=60 -vcodec libx264   -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                    if i == 1:
+                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                        os.system(f'{ffmpeg_command} -framerate 120  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                    else:
+                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                        os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
                 
+                    
                 else:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
