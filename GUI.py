@@ -261,7 +261,7 @@ def check_theme():
     
     # This code reads the theme file and stores its data in a theme variable
     return Theme
-filename = ""
+videopath = ""
 main_window = Tk()
 tabControl = ttk.Notebook(main_window)
 if check_theme() == "Light":
@@ -341,7 +341,7 @@ def latest_ESRGAN():
 # Ive changed it to the Stable branch which created, this helps prevent unintended bugs from getting in the updates 
 def check_for_updates():
     is_updated = 0
-    os.system(f'mkdir "{thisdir}/temp/"')
+    os.system(f'mkdir -p "{thisdir}/temp/"')
     os.chdir(f"{thisdir}/temp/")
     
     
@@ -837,7 +837,7 @@ def get_all_models():
             f.extractall()
         os.chdir(f"{thisdir}")
         os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
-        os.system(f'mkdir "{thisdir}/rife-vulkan-models"')
+        os.system(f'mkdir -p "{thisdir}/rife-vulkan-models"')
         os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
         os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
         change_setting('rifeversion', f'{latest_ver}')
@@ -851,13 +851,13 @@ def get_all_models():
         latest_ver_ESR = ESRGAN_version[0]
         os.chdir(f"{thisdir}/files/")
         os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
-        os.system(f'mkdir "{thisdir}/Real-ESRGAN/"')
+        os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/"')
         wget('https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
-        os.system(f'mkdir "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
+        os.system(f'mkdir -p "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
         os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
         with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','r') as f:
             f.extractall()
-        os.system(f'mkdir "{thisdir}/Real-ESRGAN/models/"')
+        os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/models/"')
         os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/models/"* "{thisdir}/Real-ESRGAN/models/"')
         os.chdir(f'{thisdir}/files')
         wget('https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip', 'realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip')
@@ -882,17 +882,17 @@ def preview_image():
         i=1
         g=1
         while i==1:
-            if os.path.exists(f'{RenderDir}/output_frames/') == False:
+            if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
                  label.destroy()
                  break
                  
-            dir_path = f'{RenderDir}/output_frames/'
+            dir_path = f'{RenderDir}/{filename}/output_frames/'
             files = os.listdir(dir_path)
             files.sort()
             sleep(1)
             try:
                 
-                img = PIL.Image.open(f"{RenderDir}/output_frames/{files[-1]}")
+                img = PIL.Image.open(f"{RenderDir}/{filename}/output_frames/{files[-1]}")
                 width, height = img.size
                 desired_width = 830
                 proportional_height = int((desired_width / float(width)) * height)
@@ -968,11 +968,11 @@ def sel_default_output_folder():
     def start():
         i = 0
         while i == 0:
-            frames_processced =len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
+            frames_processced =len(list(Path(f'{RenderDir}/{filename}/output_frames/').glob('*')))
             frames_to_remove = int(frames_processced/2) - 20
             frame = str(frames_to_remove).zfill(8)
-            os.system(f'rm -rf "{RenderDir}/input_frames/frame_{frame}.png"')
-            if os.path.exists(f'{RenderDir}/input_frames/') == False:
+            os.system(f'rm -rf "{RenderDir}/{filename}/input_frames/frame_{frame}.png"')
+            if os.path.exists(f'{RenderDir}/{filename}/input_frames/') == False:
                 
                 break
     Thread(target=start).start()'''
@@ -1098,7 +1098,7 @@ show_rife_ver()
 def progressBar(starting_value,maximum,adding_value,ending_value):# This will help me not copy and paste
     i = 2
     p=0
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
+    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/{filename}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
     progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
@@ -1106,9 +1106,9 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
     # Add progressbar updater
     progressbar["maximum"]=maximum
     while i == 2:
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
+        frames_processed = len(list(Path(f'{RenderDir}/{filename}/output_frames/').glob('*')))
         
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) * 2
+        amount_of_output_files = len(list(Path(f'{RenderDir}/{filename}/input_frames/').glob('*'))) * 2
             
         e = frames_processed/amount_of_output_files
         e*= 100
@@ -1122,13 +1122,15 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
             progressbar.destroy()
             
             break
+
+
 def progressBarThread(starting_value,maximum,adding_value,ending_value):
     t1 = Thread(target=lambda: progressBar(starting_value,maximum,adding_value,ending_value))
     t1.start()
 
 def RealPB():
     i = 2
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/input_frames/') if os.path.isfile(name)]))
+    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/{filename}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files
     
     progressbar1 = ttk.Progressbar(tab2,orient='horizontal', length=630, mode="determinate")
@@ -1136,8 +1138,8 @@ def RealPB():
     # Add progressbar updater
     progressbar1["maximum"]=100
     while i == 2:
-        frames_processed = len(list(Path(f'{RenderDir}/output_frames/').glob('*')))
-        amount_of_output_files = len(list(Path(f'{RenderDir}/input_frames/').glob('*'))) 
+        frames_processed = len(list(Path(f'{RenderDir}/{filename}/output_frames/').glob('*')))
+        amount_of_output_files = len(list(Path(f'{RenderDir}/{filename}/input_frames/').glob('*'))) 
         e = frames_processed/amount_of_output_files
         e*= 100
         e = int(e)
@@ -1163,20 +1165,21 @@ def anime_thread():
 settings_window()
 def browseFiles():
 
-    global filename
-    filename = filedialog.askopenfilename(initialdir = fr"{homedir}",
+    global videopath
+    videopath = filedialog.askopenfilename(initialdir = fr"{homedir}",
                                           title = "Select a File",
                                           filetypes = (("Video Files",
                                                         ['*.mp4','*.mov','*.avi','*.mkv']),
                                                         
                                                        ("all files",
                                                         "*.*")))
-
+    global filename 
+    filename = os.path.split(videopath)[1]
     global mp4name
-    mp4name = ntpath.basename(filename)
+    mp4name = ntpath.basename(videopath)
     #change label contents
     global extension
-    extension = (pathlib.Path(f'{filename}/{mp4name}').suffix)
+    extension = (pathlib.Path(f'{videopath}/{mp4name}').suffix)
 
 
 def output(): # this function gets the output directory and writes outputdir to temp if the file doest exist, and if other conditions are met. 
@@ -1204,7 +1207,7 @@ def get_fps():
         for row in f:
             outputdir = row
         outputdir = outputdir[0]
-    cap=cv2.VideoCapture(fr'{filename}')
+    cap=cv2.VideoCapture(fr'{videopath}')
     global fps
     fps = cap.get(cv2.CAP_PROP_FPS)
     # putting these here so it can get referenced every time an interpolation runs.
@@ -1285,13 +1288,9 @@ def exi11(): # this funtion kills the program.
                 pid = process.info['pid']
                 
                 return pid
-    os.system(f'rm -rf "{RenderDir}/temp"')
-    os.system(f'rm -rf "{RenderDir}/temp.mp4"')
-    os.system(f'rm -rf "{RenderDir}/temp2.mp4"')
-    os.system(f'rm -rf "{RenderDir}/temp1.mp4"')
-    os.system(f'rm -rf "{thisdir}/temp"')
-    os.system(f'rm -rf "{RenderDir}/input_frames/"')
-    os.system(f'rm -rf "{RenderDir}/output_frames/"')
+
+    os.system(f'rm -rf "{RenderDir}/{filename}/input_frames/"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/output_frames/"')
     os.system(f'kill -9 {get_pid("ffmpeg")}')
     os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
     os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
@@ -1504,7 +1503,7 @@ def enable_buttons():
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
 def anime4X(is16x, is8x,rifever):
     
-    if filename != "" and isinstance(filename, str) == True:
+    if videopath != "" and isinstance(videopath, str) == True:
         delete_done()
         disable_buttons()
         grayout_tabs('rife')
@@ -1535,15 +1534,16 @@ def anime4X(is16x, is8x,rifever):
             on_click2_anime(i,is16x, is8x,rifever)
             # test webp option.
             if i == 0:
-                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             else:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/output_frames/%08d.png" -y')
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             os.chdir(f"{thisdir}")
             
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+            os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             if is16x == True and is8x == False:
                 if i == 0:
+                    
                     progressBarThread(100,600,100,200)
                 if i == 1:
                     progressBarThread(300,600,300,400)
@@ -1571,17 +1571,17 @@ def anime4X(is16x, is8x,rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
             Thread(target=preview_image).start()
-            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames"')
+            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames"')
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{mp4name}_60fps.{extension}") == True:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p     -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p     -crf {vidQuality} -c:a copy  "{outputdir}/{mp4name}_60fps(1){extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps(1){extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
                         done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p    -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p    -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     if os.path.isfile(f"{outputdir}/{mp4name}_60fps{extension}") == False:
                         error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
                     else:
@@ -1590,20 +1590,20 @@ def anime4X(is16x, is8x,rifever):
             if is8x == True and is16x == False:
                 if i == 0:
                     
-                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png    "{RenderDir}/output_frames/%08d.png" -y')
-                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png    "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -vcodec libx264   -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264   -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     done2.grid(column=4,row=10)
             if is16x == True and is8x == False:
                 if i != 2:
-                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/output_frames/%08d.png" -y')
-                    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
                 
                 else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -vcodec libx264  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
+                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{mp4name}_60fps{extension}" -y')
                     os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
                     done2.grid(column=4,row=10)
     
@@ -1612,7 +1612,7 @@ def anime4X(is16x, is8x,rifever):
             os.chdir(f"{thisdir}")
     enable_buttons()
     enable_tabs()
-    os.system(f'rm -rf "{RenderDir}/input_frames" && rm -rf "{RenderDir}/output_frames"')    
+    os.system(f'rm -rf "{RenderDir}/{filename}/input_frames" && rm -rf "{RenderDir}/{filename}/output_frames"')    
     if is16x == False and is8x == False:
             os.system(f'rm -rf "'+thisdir+'/temp"')
             os.chdir(f"{thisdir}")
@@ -1624,7 +1624,7 @@ def anime4X(is16x, is8x,rifever):
 
 def realESRGAN(model):
     vidQuality = videoQuality
-    if filename != "" and isinstance(filename, str) == True:
+    if videopath != "" and isinstance(videopath, str) == True:
         delete_done()
         grayout_tabs('realsr')
         disable_buttons()
@@ -1650,13 +1650,13 @@ def realESRGAN(model):
         # Calls get_fps function
         get_fps()
         #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-        os.system(f'rm -rf "{RenderDir}/input_frames"')
-        os.system(f'rm -rf "{RenderDir}/output_frames" ')
-        os.system(f'mkdir "{RenderDir}/input_frames"')
-        os.system(f'mkdir "{RenderDir}/output_frames"')
-        os.system(f'{ffprobe_command} "{filename}"')
-        os.system(f'{ffmpeg_command}  -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{filename}"  "{RenderDir}/input_frames/frame_%08d.png"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+        os.system(f'{ffprobe_command} "{videopath}"')
+        os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+        os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
@@ -1672,16 +1672,16 @@ def realESRGAN(model):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
-        os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+        os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_res{extension}") == True:
-            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res(1){extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{mp4name}_res{extension}" -y')
             if os.path.isfile(f'{outputdir}/{mp4name}_res{extension}') == True:
                 done.grid(column=4,row=10)
             else:
@@ -1689,8 +1689,8 @@ def realESRGAN(model):
 
         
        
-        os.system(f'rm -rf {RenderDir}/input_frames')
-        os.system(f'rm -rf {RenderDir}/output_frames ')
+        os.system(f'rm -rf {RenderDir}/{filename}/input_frames')
+        os.system(f'rm -rf {RenderDir}/{filename}/output_frames ')
         os.chdir(f"{thisdir}")
         enable_tabs()
         enable_buttons()
@@ -1698,7 +1698,7 @@ def realESRGAN(model):
 def on_click(rifever):
     
     vidQuality = videoQuality
-    if filename != "" and isinstance(filename, str) == True:
+    if videopath != "" and isinstance(videopath, str) == True:
         delete_done()
         disable_buttons()
         grayout_tabs('rife')
@@ -1721,13 +1721,13 @@ def on_click(rifever):
         # Calls get_fps function
         get_fps()
         #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-        os.system(f'rm -rf "{RenderDir}/input_frames"')
-        os.system(f'rm -rf "{RenderDir}/output_frames" ')
-        os.system(f'mkdir "{RenderDir}/input_frames"')
-        os.system(f'mkdir "{RenderDir}/output_frames"')
-        os.system(f'{ffprobe_command} "{filename}"')
-        os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}   -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+        os.system(f'{ffprobe_command} "{videopath}"')
+        os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+        os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
         progressBarThread(0,100,0,100)        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
             outputdir = homedir
@@ -1742,16 +1742,16 @@ def on_click(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 2}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
             #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 2} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}" -y')
             if os.path.isfile(f'"{outputdir}/{mp4name}_{int(fps * 2)}fps{extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
@@ -1760,8 +1760,8 @@ def on_click(rifever):
             
         done.grid(column=4,row=10)
         enable_buttons()
-        os.system(f'rm -rf "{RenderDir}/input_frames"')
-        os.system(f'rm -rf "{RenderDir}/output_frames" ')
+        os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
         os.chdir(f"../")
         enable_tabs()
 
@@ -1771,7 +1771,7 @@ def on_click(rifever):
 
 def times4(rifever):
     
-    if filename != "" and isinstance(filename, str) == True:
+    if videopath != "" and isinstance(videopath, str) == True:
         delete_done()
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
@@ -1810,11 +1810,11 @@ def times4(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 4}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 4} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps(1).{extension}" -y')
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 4} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 4} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}" -y')
         os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
         if os.path.isfile(f'{outputdir}/{mp4name}_{int(fps * 4)}fps.{extension}') == True:
             done2.grid(column=4,row=10)
@@ -1825,41 +1825,46 @@ def times4(rifever):
         button_output = Button(tab1,text = "Output Folder",command = output, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
         button_explore = Button(tab1,text = "Input Video",command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
         os.system(f'rm -rf "'+thisdir+'/temp"')
-        os.system(f'rm -rf {RenderDir}/input_frames')
-        os.system(f'rm -rf {RenderDir}/output_frames ')    
+        os.system(f'rm -rf {RenderDir}/{filename}/input_frames')
+        os.system(f'rm -rf {RenderDir}/{filename}/output_frames ')    
         os.chdir(f"{thisdir}")
     enable_tabs()
 def on_click2(rifever):
     get_fps()
     
-    os.system(f'rm -rf "{RenderDir}/input_frames"')
-    os.system(f'rm -rf "{RenderDir}/output_frames" ')
-    os.system(f'mkdir "{RenderDir}/input_frames"')
-    os.system(f'mkdir "{RenderDir}/output_frames"')
-    os.system(f'{ffprobe_command} "{filename}"')
-    os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-    os.system(f'{ffmpeg_command}   -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+    os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
+    os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+    os.system(f'{ffprobe_command} "{videopath}"')
+    os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+    os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
     progressBarThread(0,300,0,100) # calls the first 4x progressbar.
             # This is temperary until i can figure out how to have progressbar update based on interpolation selected.
     Thread(target=preview_image).start()
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
-    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
 def on_click2_anime(round, is16x, is8x,rifever):
     
     get_fps()
     
     if round == 0:
         
-        os.system(f'rm -rf "{RenderDir}/input_frames"')
-        os.system(f'rm -rf "{RenderDir}/output_frames" ')
-        os.system(f'mkdir "{RenderDir}/input_frames"')
-        os.system(f'mkdir "{RenderDir}/output_frames"')
-        os.system(f'{ffprobe_command} "{filename}"')
-        os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
+        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+        os.system(f'{ffprobe_command} "{videopath}"')
+        os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+        os.system(f'{ffmpeg_command}  -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
     
     if is16x == False and is8x == False:
         sleep(1)
+        # x/30 / x/30 + 1 * 100
+        #global pb1
+        #pb1 = ((fps/30) / (fps/30) + 1)* 200#if fps is 60, it will be 2/3 split progressbar
+        #global pb2
+        #pb2 = 200 - pb1
         progressBarThread(0,200,0,100) # calls the first 4x progressbar.
     if is16x == True and is8x == False:
         if round == 0:
@@ -1875,25 +1880,25 @@ def on_click2_anime(round, is16x, is8x,rifever):
         if round == 1:
             progressBarThread(200,400,200,300)
     Thread(target=preview_image).start()    
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
     
-    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
     
 
 def on_click2_8(rifever): # the 8x interpolation of on_click, has to set so different progress bars work. Ik i can do this better, but i dont feel like it.
     get_fps()
     
-    os.system(f'rm -rf "{RenderDir}/input_frames"')
-    os.system(f'rm -rf "{RenderDir}/output_frames" ')
-    os.system(f'mkdir "{RenderDir}/input_frames"')
-    os.system(f'mkdir "{RenderDir}/output_frames"')
-    os.system(f'{ffprobe_command} "{filename}"')
-    os.system(f'{ffmpeg_command}   -i "{filename}" -vn -acodec copy "{RenderDir}/audio.m4a" -y')
-    os.system(f'{ffmpeg_command}   -i "{filename}" "{RenderDir}/input_frames/frame_%08d.png"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/input_frames"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+    os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
+    os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+    os.system(f'{ffprobe_command} "{videopath}"')
+    os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+    os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
     progressBarThread(0,700,0,100) #Set this to 8x, this is the first of 3 progressbars
     Thread(target=preview_image).start()
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
-    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
 
 def on_click3(rifever):
     
@@ -1904,13 +1909,13 @@ def on_click3(rifever):
     
     progressBarThread(43,300,43,128)
     Thread(target=preview_image).start()
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
-    os.system(fr'rm -rf "{RenderDir}/input_frames/"  &&  mv "{RenderDir}/output_frames/" "{RenderDir}/input_frames" && mkdir "{RenderDir}/output_frames"')
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
     
 
 def times8(rifever):
     delete_done()
-    if filename != "" and isinstance(filename, str) == True:
+    if videopath != "" and isinstance(videopath, str) == True:
         grayout_tabs('rife')
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         global done3
@@ -1948,17 +1953,17 @@ def times8(rifever):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
-        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/input_frames" -o "{RenderDir}/output_frames" ')
+        os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{mp4name}_{fps * 8}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 8} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps(1).{extension}" -y')
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * 8} -i "{RenderDir}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * 8} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{mp4name}_{int(fps * 8)}fps.{extension}" -y')
     
         os.system(fr'rm -rf "{RenderDir}/temp2.mp4"')
         
         enable_buttons()
-        os.system(f'rm -rf {RenderDir}/input_frames')
-        os.system(f'rm -rf {RenderDir}/output_frames ')
+        os.system(f'rm -rf {RenderDir}/{filename}/input_frames')
+        os.system(f'rm -rf {RenderDir}/{filename}/output_frames ')
         
         os.chdir(f"{thisdir}")
         enable_tabs()
