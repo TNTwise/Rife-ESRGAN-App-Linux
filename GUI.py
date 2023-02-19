@@ -295,9 +295,10 @@ tabControl.grid(row=0,column=0)
 def grayout_tabs(mode):
     if mode == 'rife':
         tabControl.tab(tab2, state='disabled')
+        
     if mode == 'realsr':
         tabControl.tab(tab1, state='disabled')  
-
+    tabControl.tab(tab3, state='disabled')
 def enable_tabs():
      tabControl.tab(tab1, state='normal')  
      tabControl.tab(tab2, state='normal')  
@@ -1730,8 +1731,8 @@ def on_click(rifever):
             
         done.grid(column=4,row=10)
         enable_buttons()
-        #os.system(f'rm -rf "{RenderDir}/input_frames"')
-        #os.system(f'rm -rf "{RenderDir}/output_frames" ')
+        os.system(f'rm -rf "{RenderDir}/input_frames"')
+        os.system(f'rm -rf "{RenderDir}/output_frames" ')
         os.chdir(f"../")
         enable_tabs()
 
