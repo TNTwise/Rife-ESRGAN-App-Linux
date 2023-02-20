@@ -1,6 +1,8 @@
 import os
 import subprocess
 class TransitionDetection:
+    # gets each frame and timestamp
+    # before exporting the video, it will replace the transition frame + the next frame with the transition frame, it will do this after every interpolation
     def __init__(self,vidpath,RenderDir,filename):
         self.get_transitions_amout(vidpath,RenderDir,filename)
     
@@ -31,4 +33,3 @@ class TransitionDetection:
         self.timestamps = timestamps
     def return_timestamps(self):
         return self.timestamps
-TransitionDetection()
