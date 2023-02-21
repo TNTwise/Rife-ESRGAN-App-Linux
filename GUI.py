@@ -8,6 +8,7 @@ import re
 import sys
 import csv
 import PIL.Image
+from frame_detection import TransitionDetection  
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -322,6 +323,8 @@ if check_theme() == "Dark":
 
 
 
+
+       
     
 
 def latest_ESRGAN():
@@ -1488,10 +1491,7 @@ def delete_done():
             done2.destroy()
     except:
             pass
-    try:
-            done3.destroy()
-    except:
-            pass
+    
 
 def disable_buttons():
     Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold'), state=DISABLED).grid(row = 22, column = 0)
@@ -1511,6 +1511,40 @@ def enable_buttons():
     button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
     button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
+
+class TransitionDetection:
+    def __init__(self):
+        os.mkdir(f"{RenderDir}/{filename}/transitions/")
+        os.system(f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.6)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/output_%03d.png"')
+    def find_timestamps(self):
+        # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
+        ffmpeg_cmd = f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -'
+        output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
+
+        # Decode the output as UTF-8 and split it into lines
+        output_lines = output.decode("utf-8").split("\n")
+
+        # Create a list to store the timestamps
+        timestamps = []
+
+        # Iterate over the output lines and extract the timestamps
+        for line in output_lines:
+            if "pts_time" in line:
+                timestamp = str(line.split("_")[3])
+                timestamp = str(timestamp.split(':')[1])
+                timestamps.append(timestamp)
+        
+        self.timestamps = timestamps
+        self.get_frame_num()
+
+    def get_frame_num(self):
+        frame_list =[]
+        for i in self.timestamps:
+            frame = float(i) * float(fps)
+            frame = round(frame)
+            frame = int(frame)
+            frame_list.append(frame)
+        print(frame_list)
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
@@ -1784,7 +1818,7 @@ def default_rife(rifever, times,interp_mode):
             for row in f:
                 outputdir = row
             outputdir = outputdir[0]
-    
+        
         # Calls get_fps function
         get_fps()
         #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
@@ -1792,9 +1826,12 @@ def default_rife(rifever, times,interp_mode):
         os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
         os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
         os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
+        
         os.system(f'{ffprobe_command} "{videopath}"')
         os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
         os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+        trans = TransitionDetection()
+        trans.find_timestamps()
         for i in range(times):
             if i != 0:
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
@@ -1840,7 +1877,7 @@ def default_rife(rifever, times,interp_mode):
             #else:
             #      
             #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-
+        os.system(f'rm -rf "{RenderDir}/{filename}/"')
         enable_tabs()
         enable_buttons()
         done.grid(column=4,row=10)
