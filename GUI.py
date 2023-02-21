@@ -1543,6 +1543,7 @@ class TransitionDetection:
             frame = float(i) * float(fps)
             frame = round(frame)
             frame = int(frame)
+            frame = frame + 1
             frame_list.append(frame)
         print(frame_list)
 def anime4X(is16x, is8x,rifever):
