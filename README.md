@@ -23,7 +23,7 @@ This install method will copy everything to the home folder, and execute from th
 
 On Ubuntu <br />
 ```
-sudo apt install python3-opencv ffmpeg python3-tk konsole libavfilter-dev libavfilter8 libswscale-dev 
+sudo apt install python3-opencv ffmpeg python3-tk konsole libavfilter-dev libavfilter8 libswscale-dev python3-pil.imagetk 
 ```
 On Arch/Arch based Distros <br />
 ```
