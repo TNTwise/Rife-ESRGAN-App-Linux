@@ -1578,7 +1578,7 @@ class TransitionDetection:
             #image = os.path.splitext(f'{image}')[0]
             #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
             os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-            os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}.png" "{RenderDir}/{filename}/transitions/{list2[p]}.png"')
+            # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}.png" "{RenderDir}/{filename}/transitions/{list2[p]}.png"')
             p+=1
             o+=1
             # IK this is dumb. but i cant think of anything else rn
