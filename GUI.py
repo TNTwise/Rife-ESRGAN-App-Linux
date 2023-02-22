@@ -1515,10 +1515,11 @@ def enable_buttons():
 class TransitionDetection:
     def __init__(self):
         os.mkdir(f"{RenderDir}/{filename}/transitions/")
-        os.system(f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.6)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/output_%03d.png"')
+        os.system(f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+        # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self):
         # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
-        ffmpeg_cmd = f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -'
+        ffmpeg_cmd = f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
         output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
 
         # Decode the output as UTF-8 and split it into lines
@@ -1543,9 +1544,52 @@ class TransitionDetection:
             frame = float(i) * float(fps)
             frame = round(frame)
             frame = int(frame)
-            frame = frame + 1
+            
             frame_list.append(frame)
+        self.frame_list = frame_list
         print(frame_list)
+        # This code is shit, i will have to fix later, i have no idea why it works
+        filenames = os.listdir(f'{RenderDir}/{filename}/transitions/')
+        sorted_filenames = sorted(filenames)
+        file_num_list = []
+        list1 = []
+        list2 = []
+        for i in self.frame_list:
+                    
+                    i = int(i) * 2
+                    i = int(i) - 1
+                    i = str(i)
+                    i = i.zfill(8)
+                    list2.append(i)
+        for j in self.frame_list:
+                    
+                    j = int(j) * 2
+                    j = str(j)
+                    j = j.zfill(8)
+                    list1.append(j)
+                    
+        
+        
+        p = 0
+        o = 1
+        for image in self.frame_list:
+            
+            
+            #image = os.path.splitext(f'{image}')[0]
+            #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
+            os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
+            os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}.png" "{RenderDir}/{filename}/transitions/{list2[p]}.png"')
+            p+=1
+            o+=1
+            # IK this is dumb. but i cant think of anything else rn
+            #print(image)
+    def merge_frames(self):
+        
+        print('\n\n\n')
+        os.chdir(f'{RenderDir}/{filename}/transitions/')
+        os.system(f'cp * "{RenderDir}/{filename}/output_frames/"')
+        os.chdir(f'{onefile_dir}/rife-vulkan-models')
+        print('\n\n\n')
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
@@ -1851,7 +1895,8 @@ def default_rife(rifever, times,interp_mode):
             Thread(target=preview_image).start()
             
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-
+        if interp_mode == '2X':
+            trans.merge_frames()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{filename}_{fps * int(interp_mode[0])}fps{extension}") == True:
