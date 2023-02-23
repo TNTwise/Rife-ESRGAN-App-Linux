@@ -1514,7 +1514,8 @@ def enable_buttons():
 
 class TransitionDetection:
     def __init__(self):
-        os.mkdir(f"{RenderDir}/{filename}/transitions/")
+        if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
+            os.mkdir(f"{RenderDir}/{filename}/transitions/")
         os.system(f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
         # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self):
@@ -1536,14 +1537,22 @@ class TransitionDetection:
                 timestamps.append(timestamp)
         
         self.timestamps = timestamps
-        self.get_frame_num()
+        
 
-    def get_frame_num(self):
+    def get_frame_num(self, times,frames_per_second,iteration,frames_subtracted=0):
         frame_list =[]
         for i in self.timestamps:
-            frame = float(i) * float(fps)
+            if times == '2X': # This allows for other methods to have scene detection
+                frame = float(i) * float(fps)
+            else:
+                frame = float(i) * float(frames_per_second)
             frame = round(frame)
             frame = int(frame)
+            
+            #subtract from frame for anime method too
+
+            
+            frame = frame - frames_subtracted
             
             frame_list.append(frame)
         self.frame_list = frame_list
@@ -1567,6 +1576,7 @@ class TransitionDetection:
                     j = str(j)
                     j = j.zfill(8)
                     list1.append(j)
+                    self.list1 = list1
                     
         
         
@@ -1584,12 +1594,18 @@ class TransitionDetection:
             # IK this is dumb. but i cant think of anything else rn
             #print(image)
     def merge_frames(self):
+        p = 0
+        o = 1
         
         print('\n\n\n')
         os.chdir(f'{RenderDir}/{filename}/transitions/')
         os.system(f'cp * "{RenderDir}/{filename}/output_frames/"')
         os.chdir(f'{onefile_dir}/rife-vulkan-models')
         print('\n\n\n')
+        for image in self.frame_list:
+            os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.png" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" ')
+            p+=1
+            o+=1
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
@@ -1632,23 +1648,31 @@ def anime4X(is16x, is8x,rifever):
             os.chdir(f"{onefile_dir}/rife-vulkan-models")
             if i != 1:
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+            
+            
+            trans = TransitionDetection()
+            trans.find_timestamps()
             if is16x == True and is8x == False:
                 if i == 0:
-                    
+                    trans.get_frame_num('anime',30,i)
                     progressBarThread(100,600,100,200)
                 if i == 1:
                     progressBarThread(300,600,300,400)
+                    trans.get_frame_num('anime',30,i)
                 if i == 2:
                     progressBarThread(500,600,500,600)
+                    trans.get_frame_num('anime',30,i)
             
             if is8x == True and is16x == False:
                 if i == 0:
                     progressBarThread(100,400,100,200)
+                    trans.get_frame_num('anime',30,i)
                 if i == 1:
                     progressBarThread(300,400,300,400)
+                    trans.get_frame_num('anime',30,i)
             if is8x == False and is16x == False:
                 progressBarThread(100,200,100,200)
-            
+                trans.get_frame_num('anime',30,i,0)
             
             global done2
             if os.path.isfile(fr"{outputdir}/{filename}_60fps{extension}") == True:
@@ -1663,6 +1687,7 @@ def anime4X(is16x, is8x,rifever):
                  fg=fg,bg=bg)
             Thread(target=preview_image).start()
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames"')
+            trans.merge_frames() 
             if is16x == False and is8x == False:# Exports video based on interpolation option
                 if os.path.isfile(fr"{outputdir}/{filename}_60fps.{extension}") == True:
                     os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p     -crf {vidQuality} -c:a copy  "{outputdir}/{filename}_60fps(1){extension}" -y')
@@ -1730,32 +1755,41 @@ def on_click2_anime(round, is16x, is8x,rifever):
         os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
         os.system(f'{ffprobe_command} "{videopath}"')
         os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
-    
+        os.system(f'{ffmpeg_command}  -i "{videopath}" -r 30 "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+    trans = TransitionDetection()
+    trans.find_timestamps()
     if is16x == False and is8x == False:
+        trans.get_frame_num('anime',30,round,0)
         sleep(1)
         # x/30 / x/30 + 1 * 100
         #global pb1
         #pb1 = ((fps/30) / (fps/30) + 1)* 200#if fps is 60, it will be 2/3 split progressbar
         #global pb2
         #pb2 = 200 - pb1
+        
+        
         progressBarThread(0,200,0,100) # calls the first 4x progressbar.
     if is16x == True and is8x == False:
         if round == 0:
+            trans.get_frame_num('anime',30,round)
             progressBarThread(0,600,0,100)
         if round == 1:
+            trans.get_frame_num('anime',30,round)
             progressBarThread(200,600,200,300)
     if round == 2:
         progressBarThread(400,600,400,500)
-            
+        trans.get_frame_num('anime',30,round)
     if is8x == True and is16x == False:
         if round == 0:
+            trans.get_frame_num('anime',30,round)
             progressBarThread(0,400,0,100)
         if round == 1:
+            trans.get_frame_num('anime',30,round)
             progressBarThread(200,400,200,300)
-    Thread(target=preview_image).start()    
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+    Thread(target=preview_image).start()
     
+    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+    trans.merge_frames()    
     os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
 
 def realESRGAN(model):
@@ -1877,25 +1911,32 @@ def default_rife(rifever, times,interp_mode):
         os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
         trans = TransitionDetection()
         trans.find_timestamps()
+        
         for i in range(times):
             if i != 0:
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             if interp_mode == '2X':
                 progressBarThread(0,100,0,100)        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
+                trans.get_frame_num(interp_mode,fps,i,0)
             if interp_mode == '4X' and i==0:
                 progressBarThread(0,300,0,100)
+                trans.get_frame_num(interp_mode,fps,i,0)
             if interp_mode == '4X' and i==1:
                 progressBarThread(50,150,50,150)
+                trans.get_frame_num(interp_mode,float(fps*2),i,1)
             if interp_mode == '8X' and i==0:
                 progressBarThread(0,700,0,100)
+                trans.get_frame_num(interp_mode,fps,i,0)
             if interp_mode == '8X' and i==1:
                 progressBarThread(43,300,43,128)
+                trans.get_frame_num(interp_mode,fps*2,i,1)
             if interp_mode == '8X' and i==2:
                 progressBarThread(73,170,73,170)
+                trans.get_frame_num(interp_mode,fps*4,i,3)
             Thread(target=preview_image).start()
             
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-        if interp_mode == '2X':
+        
             trans.merge_frames()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
