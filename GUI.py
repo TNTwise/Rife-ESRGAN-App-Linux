@@ -1606,192 +1606,61 @@ class TransitionDetection:
             os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.png" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" ')
             p+=1
             o+=1
+def start():
+    get_fps()
+    os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+        
+    os.system(f'{ffprobe_command} "{videopath}"')
+    os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+    
+    os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+    if os.path.isfile(thisdir+"/temp") == False:
+            outputdir = get_output_dir()
+            
+    else:
+            f = open(thisdir+"/temp")
+            f = csv.reader(f)
+            for row in f:
+                outputdir = row
+            outputdir = outputdir[0]
+    return outputdir
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
         delete_done()
         disable_buttons()
         grayout_tabs('rife')
-        if is8x == True and is16x == False:
-            X4_loop = 2
-        if is8x == False and is16x == False:
-            X4_loop = 1
-        if is8x == False and is16x == True:
-            X4_loop = 3
-        for i in range(X4_loop): # loops through it twice for 8x, 3 times for 16x
-            vidQuality = videoQuality
-            os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            global done2
-            
-            # this if statement sets default output dir, may need to remove when add selector.
+        outputdir = start()
+        os.chdir(f"{onefile_dir}/rife-vulkan-models")
+        if is16x == False and is8x == False: # checks for 4x
+            loops = 2
+        if is8x == True: # checks for 8x
+            loops = 4
+        if is16x == True: # checks for 16x
+            loops = 6
 
-            if os.path.isfile(thisdir+"/temp") == False:
-                outputdir = get_output_dir()
-    
-            else:
-                f = open(thisdir+"/temp")
-                f = csv.reader(f)
-                for row in f:
-                    outputdir = row
-                outputdir = outputdir[0]
-            if os.path.exists(outputdir) == False:
-                outputdir = homedir
-            on_click2_anime(i,is16x, is8x,rifever)
-            # test webp option.
+        for i in range(loops):
+            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
+            os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
+            
             if i == 0:
-                os.system(f'{ffmpeg_command} -framerate {(fps * 2)}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-            
-            if i == 2:
-                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-            os.chdir(f"{thisdir}")
-            
-            os.chdir(f"{onefile_dir}/rife-vulkan-models")
-            if i != 1:
+                os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-            
-            
-            trans = TransitionDetection()
-            trans.find_timestamps()
-            if is16x == True and is8x == False:
-                if i == 0:
-                    trans.get_frame_num('anime',30,i)
-                    progressBarThread(100,600,100,200)
-                if i == 1:
-                    progressBarThread(300,600,300,400)
-                    trans.get_frame_num('anime',30,i)
-                if i == 2:
-                    progressBarThread(500,600,500,600)
-                    trans.get_frame_num('anime',30,i)
-            
-            if is8x == True and is16x == False:
-                if i == 0:
-                    progressBarThread(100,400,100,200)
-                    trans.get_frame_num('anime',30,i)
-                if i == 1:
-                    progressBarThread(300,400,300,400)
-                    trans.get_frame_num('anime',30,i)
-            if is8x == False and is16x == False:
-                progressBarThread(100,200,100,200)
-                trans.get_frame_num('anime',30,i,0)
-            
-            global done2
-            if os.path.isfile(fr"{outputdir}/{filename}_60fps{extension}") == True:
-                done2 = Label(tab1,
-                 text=f"Done! Output File = {outputdir}/{filename}_60fps(1){extension}",
-                 font=("Arial", 11), width=57, anchor="w",
-                 fg=fg,bg=bg)
-            else:
-                done2 = Label(tab1,
-                 text=f"Done! Output File = {outputdir}/{filename}_60fps{extension}",
-                 font=("Arial", 11), width=57, anchor="w",
-                 fg=fg,bg=bg)
-            Thread(target=preview_image).start()
-            os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames"')
-            trans.merge_frames() 
-            if is16x == False and is8x == False:# Exports video based on interpolation option
-                if os.path.isfile(fr"{outputdir}/{filename}_60fps.{extension}") == True:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p     -crf {vidQuality} -c:a copy  "{outputdir}/{filename}_60fps(1){extension}" -y')
-                    if os.path.isfile(f"{outputdir}/{filename}_60fps(1){extension}") == False:
-                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-                    else:
-                        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
+            if i != 0 and i != loops-1:
 
-                else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264 -pix_fmt yuv420p    -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
-                    if os.path.isfile(f"{outputdir}/{filename}_60fps{extension}") == False:
-                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-                    else:
-                        done2.grid(column=4,row=10)# maybe change done label location in code, edit what row it shows up on
-                os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
-            if is8x == True and is16x == False:
-                if i == 0:
-                    
-                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                    os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png    "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-                    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                if i == 1:
-                    os.system(fr'{ffmpeg_command}   -framerate 120 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vf fps=60 -vcodec libx264   -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
-                    done2.grid(column=4,row=10)
-            if is16x == True and is8x == False:
-                if i != 2:
-                    if i == 1:
-                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                        os.system(f'{ffmpeg_command} -framerate 120  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                    else:
-                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                        os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png   "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-                        os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-                
-                    
-                else:
-                    os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -vcodec libx264  -pix_fmt yuv420p  -crf {vidQuality} -c:a copy "{outputdir}/{filename}_60fps{extension}" -y')
-                    os.system(fr'rm -rf "{RenderDir}/temp.mp4"')
-                    done2.grid(column=4,row=10)
-    
+
+                os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             
-            
-            os.chdir(f"{thisdir}")
-    enable_buttons()
-    enable_tabs()
-    os.system(f'rm -rf "{RenderDir}/{filename}/"')
-    if is16x == False and is8x == False:
-            os.system(f'rm -rf "'+thisdir+'/temp"')
-            os.chdir(f"{thisdir}")
-            os.system(f'rm temp*')
-            os.chdir(f"{onefile_dir}/rife-vulkan-models")
-    os.chdir(f"{thisdir}")
-    if i == X4_loop - 1:
-        os.system(f'rm temp*')
-def on_click2_anime(round, is16x, is8x,rifever):
-    
-    get_fps()
-    
-    if round == 0:
+                os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
         
+        
+        os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
+
         os.system(f'rm -rf "{RenderDir}/{filename}/"')
-        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
-        os.system(f'{ffprobe_command} "{videopath}"')
-        os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{videopath}" -r 30 "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
-    trans = TransitionDetection()
-    trans.find_timestamps()
-    if is16x == False and is8x == False:
-        trans.get_frame_num('anime',30,round,0)
-        sleep(1)
-        # x/30 / x/30 + 1 * 100
-        #global pb1
-        #pb1 = ((fps/30) / (fps/30) + 1)* 200#if fps is 60, it will be 2/3 split progressbar
-        #global pb2
-        #pb2 = 200 - pb1
+        os.chdir(f"{thisdir}")
+        enable_tabs()
+        enable_buttons()
         
-        
-        progressBarThread(0,200,0,100) # calls the first 4x progressbar.
-    if is16x == True and is8x == False:
-        if round == 0:
-            trans.get_frame_num('anime',30,round)
-            progressBarThread(0,600,0,100)
-        if round == 1:
-            trans.get_frame_num('anime',30,round)
-            progressBarThread(200,600,200,300)
-    if round == 2:
-        progressBarThread(400,600,400,500)
-        trans.get_frame_num('anime',30,round)
-    if is8x == True and is16x == False:
-        if round == 0:
-            trans.get_frame_num('anime',30,round)
-            progressBarThread(0,400,0,100)
-        if round == 1:
-            trans.get_frame_num('anime',30,round)
-            progressBarThread(200,400,200,300)
-    Thread(target=preview_image).start()
-    
-    os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-    trans.merge_frames()    
-    os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-
 def realESRGAN(model):
     
     vidQuality = videoQuality
@@ -1866,7 +1735,6 @@ def realESRGAN(model):
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-
         
        
         os.system(f'rm -rf "{RenderDir}/{filename}/"')
