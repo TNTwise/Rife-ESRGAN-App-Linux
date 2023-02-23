@@ -1516,11 +1516,11 @@ class TransitionDetection:
     def __init__(self):
         if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
             os.mkdir(f"{RenderDir}/{filename}/transitions/")
-        os.system(f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+        os.system(f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
         # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self):
         # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
-        ffmpeg_cmd = f'ffmpeg -i {videopath} -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
+        ffmpeg_cmd = f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
         output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
 
         # Decode the output as UTF-8 and split it into lines
