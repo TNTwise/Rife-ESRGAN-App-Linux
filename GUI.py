@@ -1833,7 +1833,7 @@ def default_rife(rifever, times,interp_mode):
             #else:
             #      
             #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-        #os.system(f'rm -rf "{RenderDir}/{filename}/"')
+        os.system(f'rm -rf "{RenderDir}/{filename}/"')
         enable_tabs()
         enable_buttons()
         done.grid(column=4,row=10)
