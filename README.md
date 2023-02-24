@@ -3,10 +3,10 @@
 </p>
 
 ## A simple GUI for Rife Vulkan on Linux
-[Dependencies](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/#dependencies)<br />
-[Building](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/#building)<br/>
-[Errors](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/#errors)<br/>
-[TODO](https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/#todo)<br/>
+[Dependencies](https://github.com/TNTwise/Rife-ESRGAN-App-Linux#dependencies)<br />
+[Building](https://github.com/TNTwise/Rife-ESRGAN-App-Linux/#building)<br/>
+[Errors](https://github.com/TNTwise/Rife-ESRGAN-App-Linux/#errors)<br/>
+[TODO](https://github.com/TNTwise/Rife-ESRGAN-App-Linux/#todo)<br/>
 
 ## Dependencies: 
 OpenCV <br />
