@@ -1516,7 +1516,7 @@ class TransitionDetection:
     def __init__(self):
         if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
             os.mkdir(f"{RenderDir}/{filename}/transitions/")
-        os.system(f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+        os.system(f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.{Image_Type}"')
         # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self):
         # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
@@ -1587,8 +1587,8 @@ class TransitionDetection:
             
             #image = os.path.splitext(f'{image}')[0]
             #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-            os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-            # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}.png" "{RenderDir}/{filename}/transitions/{list2[p]}.png"')
+            os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
+            # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
             p+=1
             o+=1
             # IK this is dumb. but i cant think of anything else rn
@@ -1603,7 +1603,7 @@ class TransitionDetection:
         os.chdir(f'{onefile_dir}/rife-vulkan-models')
         print('\n\n\n')
         for image in self.frame_list:
-            os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.png" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" ')
+            os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.{Image_Type}" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" ')
             p+=1
             o+=1
 def start():
@@ -1613,7 +1613,7 @@ def start():
     os.system(f'{ffprobe_command} "{videopath}"')
     os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
     
-    os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+    os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.{Image_Type}"')
     if os.path.isfile(thisdir+"/temp") == False:
             outputdir = get_output_dir()
             
@@ -1833,7 +1833,7 @@ def default_rife(rifever, times,interp_mode):
             #else:
             #      
             #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
+        #os.system(f'rm -rf "{RenderDir}/{filename}/"')
         enable_tabs()
         enable_buttons()
         done.grid(column=4,row=10)
