@@ -76,7 +76,8 @@ sudo pacman -S nvidia-utils
 
 ## TODO
 ### Before all this, The next release will use QT instead of Tkinter. I will also split GUI.py into multiple, easier to manage scripts. The code which this app is based on is bad, so I will attempt to re-write most of it.
-put resolution instead of _res in realesr <br/>
+
+Add CLI support for basic interpolation. <br/>
 For next release, add advanced settings tab. <br />
 Add support for changing between yuv420p yuv422p yuv244p rgb24 pix_fmt <br />
 Add automatic conversion to supported format<br/>
