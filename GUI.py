@@ -1518,9 +1518,12 @@ class TransitionDetection:
             os.mkdir(f"{RenderDir}/{filename}/transitions/")
         os.system(f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.{Image_Type}"')
         # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
-    def find_timestamps(self):
+    def find_timestamps(self,anime=None):
         # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
-        ffmpeg_cmd = f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
+        if anime == None:
+            ffmpeg_cmd = f'ffmpeg -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
+        else:
+            ffmpeg_cmd = f'ffmpeg -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
         output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
 
         # Decode the output as UTF-8 and split it into lines
@@ -1631,6 +1634,8 @@ def anime4X(is16x, is8x,rifever):
         disable_buttons()
         grayout_tabs('rife')
         outputdir = start()
+        trans = TransitionDetection()
+        trans.find_timestamps()
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         if is16x == False and is8x == False: # checks for 4x
             loops = 2
@@ -1645,13 +1650,19 @@ def anime4X(is16x, is8x,rifever):
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             
             if i == 0:
+                trans.get_frame_num('2X',fps,i,0)
+                trans.merge_frames()
+                os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec libx264 -crf 0  -c:a copy  "{RenderDir}/{filename}/output_frames/temp1.mp4" -y')
                 os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                trans = TransitionDetection()
+                trans.find_timestamps('anime')
+                trans.get_frame_num('anime','30',i,0)
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             if i != 0 and i != loops-1:
 
 
                 os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-            
+                trans.merge_frames()
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
         
         
