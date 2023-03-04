@@ -1662,8 +1662,11 @@ def anime4X(is16x, is8x,rifever):
                 os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
                 
                 os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-            if i != 0 and i != loops-1:
 
+            if i != 0 and i != loops-1:
+                trans = TransitionDetection()
+                trans.find_timestamps()
+                trans.get_frame_num('anime','30',0,0)
 
                 os.system(f'{ffmpeg_command} -framerate 60  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
                 trans.merge_frames()
