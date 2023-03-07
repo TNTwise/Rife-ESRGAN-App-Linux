@@ -1643,8 +1643,10 @@ def anime4X(is16x, is8x,rifever):
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
         if is16x == False and is8x == False: # checks for 4x
             
-
+            #Call ProgressBar
+            
             Thread(target=preview_image).start()
+            progressBarThread(0,200,0,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             trans.merge_frames()
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
@@ -1656,7 +1658,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')  
             
             
-            
+            progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             trans1.merge_frames()
 
