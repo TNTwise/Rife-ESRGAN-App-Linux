@@ -76,6 +76,7 @@ sudo pacman -S nvidia-utils
 
 ## TODO
 ### Before all this, The next release will use QT instead of Tkinter. I will also split GUI.py into multiple, easier to manage scripts. The code which this app is based on is bad, so I will attempt to re-write most of it.
+make an option that allows for changing of extracted image type.<br />
 Fix issue where output video errors out if codec is not right, even if filename is .mp4<br/>
 Add CLI support for basic interpolation. <br/>
 For next release, add advanced settings tab. <br />
