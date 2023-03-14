@@ -1550,7 +1550,7 @@ class TransitionDetection:
         for i in self.timestamps:
             if times == '2X': # This allows for other methods to have scene detection
                 frame = float(i) * float(fps)
-            else:
+            if times != '2x':
                 frame = float(i) * float(frames_per_second)
             frame = round(frame)
             frame = int(frame)
@@ -1660,7 +1660,7 @@ def anime4X(is16x, is8x,rifever):
             
             progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-            #trans1.merge_frames()
+            trans1.merge_frames()
             # Why the fuck does this shit not work
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
