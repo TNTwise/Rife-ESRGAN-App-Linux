@@ -1526,23 +1526,27 @@ class TransitionDetection:
         if anime == None:
             ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
         else:
-            ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
-        output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
+            try:
+                ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
+                output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
 
-        # Decode the output as UTF-8 and split it into lines
-        output_lines = output.decode("utf-8").split("\n")
+                # Decode the output as UTF-8 and split it into lines
+                output_lines = output.decode("utf-8").split("\n")
 
-        # Create a list to store the timestamps
-        timestamps = []
+                # Create a list to store the timestamps
+                timestamps = []
 
-        # Iterate over the output lines and extract the timestamps
-        for line in output_lines:
-            if "pts_time" in line:
-                timestamp = str(line.split("_")[3])
-                timestamp = str(timestamp.split(':')[1])
-                timestamps.append(timestamp)
+                # Iterate over the output lines and extract the timestamps
+                for line in output_lines:
+                    if "pts_time" in line:
+                        timestamp = str(line.split("_")[3])
+                        timestamp = str(timestamp.split(':')[1])
+                        timestamps.append(timestamp)
+                
+                self.timestamps = timestamps
+            except:
+                pass
         
-        self.timestamps = timestamps
         
 
     def get_frame_num(self, times,frames_per_second,iteration,frames_subtracted=0):
@@ -1550,7 +1554,7 @@ class TransitionDetection:
         for i in self.timestamps:
             if times == '2X': # This allows for other methods to have scene detection
                 frame = float(i) * float(fps)
-            if times != '2x':
+            else:
                 frame = float(i) * float(frames_per_second)
             frame = round(frame)
             frame = int(frame)
@@ -1652,15 +1656,16 @@ def anime4X(is16x, is8x,rifever):
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
-            trans1 = TransitionDetection()
-            trans1.find_timestamps(True)
-            trans1.get_frame_num('anime','30',0,0)
+            #trans1 = TransitionDetection()
+            #trans1.find_timestamps(True)
+            
+            #trans1.get_frame_num('anime','30',0,0)
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')  
             
             
             progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-            trans1.merge_frames()
+            #trans1.merge_frames()
             # Why the fuck does this shit not work
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
