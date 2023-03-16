@@ -1526,26 +1526,25 @@ class TransitionDetection:
         if anime == None:
             ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
         else:
-            try:
+            
                 ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
-                output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
+        output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
 
-                # Decode the output as UTF-8 and split it into lines
-                output_lines = output.decode("utf-8").split("\n")
+        # Decode the output as UTF-8 and split it into lines
+        output_lines = output.decode("utf-8").split("\n")
 
                 # Create a list to store the timestamps
-                timestamps = []
+        timestamps = []
 
-                # Iterate over the output lines and extract the timestamps
-                for line in output_lines:
+        # Iterate over the output lines and extract the timestamps
+        for line in output_lines:
                     if "pts_time" in line:
                         timestamp = str(line.split("_")[3])
                         timestamp = str(timestamp.split(':')[1])
                         timestamps.append(timestamp)
                 
-                self.timestamps = timestamps
-            except:
-                pass
+        self.timestamps = timestamps
+            
         
         
 
