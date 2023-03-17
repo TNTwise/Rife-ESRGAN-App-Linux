@@ -76,6 +76,7 @@ sudo pacman -S nvidia-utils
 
 ## TODO
 ### Before all this, The next release will use QT instead of Tkinter. I will also split GUI.py into multiple, easier to manage scripts. The code which this app is based on is bad, so I will attempt to re-write most of it.
+make anime progress bar dynamic, have the first section be the fps out of the fps + 30.
 fix missing riff tag when using anything other than png, try converting the frames to webp using ffmpeg <br />
 Have animeintterpolation interpolate regularly until the last iteration and then lower to 30 and interpolate.
 make an option that allows for changing of extracted image type.<br />
