@@ -76,6 +76,7 @@ sudo pacman -S nvidia-utils
 
 ## TODO
 ### Before all this, The next release will use QT instead of Tkinter. I will also split GUI.py into multiple, easier to manage scripts. The code which this app is based on is bad, so I will attempt to re-write most of it.
+automatic detection of max usage per system, do this by having a test video render at 1080p, 4k, and 8k and detect the max settings the system can run without erroring out with a not enough vram error.
 make anime progress bar dynamic, have the first section be the fps out of the fps + 30.
 fix missing riff tag when using anything other than png, try converting the frames to webp using ffmpeg <br />
 Have animeintterpolation interpolate regularly until the last iteration and then lower to 30 and interpolate.
