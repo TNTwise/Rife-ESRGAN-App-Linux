@@ -1608,7 +1608,9 @@ class TransitionDetection:
         
         print('\n\n\n')
         os.chdir(f'{RenderDir}/{filename}/transitions/')
-        os.system(f'cp * "{RenderDir}/{filename}/output_frames/"')
+        for i in os.listdir():
+            if len(i) >7:
+                os.system(f'cp {i} "{RenderDir}/{filename}/output_frames/"')
         os.chdir(f'{onefile_dir}/rife-vulkan-models')
         print('\n\n\n')
         for image in self.frame_list:
@@ -1633,6 +1635,18 @@ def start():
                 outputdir = row
             outputdir = outputdir[0]
     return outputdir
+
+def end():
+        os.chdir(f"{thisdir}")
+        while os.path.exists(f'{RenderDir}/{filename}') == True:
+            os.system(f'rm -rf "{RenderDir}/{filename}"')
+        os.chdir(f"{thisdir}")
+        enable_tabs()
+        enable_buttons()
+        try:
+            done.grid(column=4,row=10)
+        except:
+            pass
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
@@ -1669,18 +1683,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
 
-                
-                
-
-                
-                
-        
-        
-        
-
-        os.chdir(f"{thisdir}")
-        enable_tabs()
-        enable_buttons()
+        end()
         
 def realESRGAN(model):
     
@@ -1758,10 +1761,7 @@ def realESRGAN(model):
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
         
        
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
-        os.chdir(f"{thisdir}")
-        enable_tabs()
-        enable_buttons()
+        end()
 # different modes of interpolation
 
 def default_rife(rifever, times,interp_mode):
@@ -1853,10 +1853,8 @@ def default_rife(rifever, times,interp_mode):
             #else:
             #      
             #                   error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
-        enable_tabs()
-        enable_buttons()
-        done.grid(column=4,row=10)
+        end()
+        
 def on_click(rifever):
     default_rife(rifever,1,'2X')
 
