@@ -696,7 +696,26 @@ def settings_window():
                 
         variable.trace("w", callback)
     video_quality_drop_down()
+    class advancedOptions():
+        def __init__(self):
+            advanced_settings_window = Tk()
+            try:
+                        advanced_settings_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
+            except:
+                pass
+            
+            advanced_settings_window.config(bg=bg)
+            
+            advanced_settings_window.geometry("600x400")
+            advanced_settings_window.title('Advanced Settings')
+            advanced_settings_window.resizable(False, False) 
+            advanced_settings_window.mainloop()
+
+    advanced_options_button = Button(tab4,width=15,height=1,text='Advanced Options',bg=bg,fg=fg,command=advancedOptions,font=('Ariel', '12'))
     
+
+
+
      # lays out the menu
     spacer_label2.grid(column=0,row=0)
     spacer_label2.config(padx=30)
@@ -715,7 +734,8 @@ def settings_window():
     #check_updates_button.grid(column=6,row=3)
     update_spacer_label.grid(column=6,row=2)
     #change_repo_dropdown.grid(column=5,row=2)
-
+    Label(tab4,text='',bg=bg,fg=fg,font=('Ariel', '16')).grid(column=1,row=8)
+    advanced_options_button.grid(column=1,row=9)
 
 
 # this will show if updates exist
