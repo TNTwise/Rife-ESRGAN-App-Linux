@@ -1265,7 +1265,7 @@ def Anime():
             change_setting('IsAnime', "True")
             global iterp_opt_variable1
             iterp_opt_variable1 = StringVar(tab1)
-            interpolation_options = ['4X', '8X', '16X']
+            interpolation_options = ['4X']
             iterp_opt_variable1.set('4X')
             change_setting('Interpolation_Option', iterp_opt_variable1.get())
             interpOptDropDown1 = OptionMenu(tab1, iterp_opt_variable1, *interpolation_options)
@@ -1273,7 +1273,7 @@ def Anime():
             interpOptDropDown1.config(bg=bg)
             interpOptDropDown1.config(fg=fg)
             interpOptDropDown1.grid(column=4,row=6)
-            
+            interpOptDropDown1.config(state='disabled')
             
             def callback(*args):
                 change_setting('Interpolation_Option', iterp_opt_variable1.get())
@@ -1668,6 +1668,8 @@ def anime4X(is16x, is8x,rifever):
             trans.merge_frames()
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+                        #Loop this
+
             os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.png" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection()
             trans1.find_timestamps(True)
@@ -1679,10 +1681,12 @@ def anime4X(is16x, is8x,rifever):
             progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             trans1.merge_frames()
-            # Why the fuck does this shit not work
+            # this shit works now yay
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
-
+        
+        
+        
         end()
         
 def realESRGAN(model):
