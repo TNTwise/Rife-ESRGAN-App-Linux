@@ -1593,9 +1593,13 @@ def start():
     os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
         
     os.system(f'{ffprobe_command} "{videopath}"')
+    print('\n\n\n\n\n'+ExtractionImageType+'\n\n\n\n')
     os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
-    
-    os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+    if ExtractionImageType == 'png':
+        os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+    if ExtractionImageType == 'jpg':
+        os.system(f'{ffmpeg_command}  -i "{videopath}"  -qscale:v 1  "{RenderDir}/{filename}/input_frames/frame_%08d.jpg"')
+
     if os.path.isfile(thisdir+"/temp") == False:
             outputdir = get_output_dir()
             
@@ -1638,10 +1642,14 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             trans.merge_frames()
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-            os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  -c:a copy  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
-                        #Loop this
 
-            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.png" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
+            if ExtractionImageType == 'png':
+                os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
+            if ExtractionImageType == 'jpg':
+                os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec mjpeg -q:v 1   "{RenderDir}/{filename}/output_frames/%08d.jpg" -y')
+
+
+            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection()
             trans1.find_timestamps(True)
             
@@ -1743,36 +1751,14 @@ def default_rife(rifever, times,interp_mode):
     
     vidQuality = videoQuality
     if videopath != "" and isinstance(videopath, str) == True:
+        
+        
         delete_done()
         disable_buttons()
         grayout_tabs('rife')
+        outputdir = start()
         os.chdir(f"{onefile_dir}/rife-vulkan-models")
-        global done
-        
-        
-        # this checks if the temp file exists, which the temp file holds the temp directory if you choose an outputdir manually.
-        # This is for all modes of interpolation
-        if os.path.isfile(thisdir+"/temp") == False:
-            outputdir = get_output_dir()
-            
-        else:
-            f = open(thisdir+"/temp")
-            f = csv.reader(f)
-            for row in f:
-                outputdir = row
-            outputdir = outputdir[0]
-        
-        # Calls get_fps function
-        get_fps()
-        #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
-        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
-        
-        os.system(f'{ffprobe_command} "{videopath}"')
-        os.system(f'{ffmpeg_command}   -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}   -i "{videopath}" "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+
         trans = TransitionDetection()
         trans.find_timestamps()
         
