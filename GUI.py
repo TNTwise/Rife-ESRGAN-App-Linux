@@ -157,6 +157,8 @@ def read_settings():
         RenderDevice = settings_dict['RenderDevice']
         global RenderDir
         RenderDir = settings_dict['RenderDir']
+        global ExtractionImageType
+        ExtractionImageType=settings_dict['ExtractionImageType']
     except:
         os.system(f'rm -rf "{thisdir}/files/settings.txt"')
         os.mknod(f'{thisdir}/files/settings.txt')
@@ -173,6 +175,7 @@ def read_settings():
         write_to_settings_file("GPUUsage" ,'Default')
         write_to_settings_file("RenderDevice" ,'GPU')
         write_to_settings_file("RenderDir" ,f"{thisdir}")
+        write_to_settings_file("ExtractionImageType" ,"jpg")
         settings_dict = {}
         with open(f'{thisdir}/files/settings.txt', 'r') as f:
             f = csv.reader(f)
@@ -212,6 +215,7 @@ def write_defaults():
     write_to_settings_file("GPUUsage" ,'Default')
     write_to_settings_file("RenderDevice" ,'GPU')
     write_to_settings_file("RenderDir" ,f"{thisdir}")
+    write_to_settings_file("ExtractionImageType" ,"jpg")
     try:
         read_settings()
     except:
@@ -421,81 +425,12 @@ if check_theme() == "Dark":
 
 cmd = 'ls -l'
 
-def pass_dialog_box():
-    
-    global pass_window
-    pass_window = Tk()
-    global pass_box
-    pass_box = Entry(pass_window, width = 25,show='*')
-    pass_label = Label(pass_window, text="Enter your password:")
-    pass_button = Button(pass_window, text="Enter",command=install)
 
-    pass_label.grid(column=0,row=0)
-    pass_box.grid(column=0,row=1)
-    pass_button.grid(column=0,row=2)
-    pass_window.geometry("200x100")
-    pass_window.resizable(False, False)
-    
-    pass_window.mainloop()
-
-def pass_dialog_box_err():
-    global pass_window1
-    pass_window1 = Tk()
-    global pass_box1
-    pass_box1 = Entry(pass_window1, width = 25,show='*')
-    pass_label1 = Label(pass_window1, text="Enter your password:")
-    pass_button1 = Button(pass_window1, text="Enter",command=install1)
-    err_lbl = Label(pass_window1, text="Wrong password", fg="red")
-    pass_label1.grid(column=0,row=0)
-    pass_box1.grid(column=0,row=1)
-    pass_button1.grid(column=0,row=2)
-    err_lbl.grid(column=0,row=3)
-    pass_window1.geometry("200x100")
-    pass_window1.resizable(False, False)
-    
-def install():
-    passwd = pass_box.get()
-    pass_window.destroy()
-    
-    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, error = p.communicate()
-    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
-    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":# Add different pop up window here and in other install function that says it completed successfully
-        pass_dialog_box_err()
-    else:
-        os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
-        passwd=""
-        
-        os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
-        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
-        os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
-        os.chdir(f"{thisdir}")
-        
-def install1():
-    
-    passwd = pass_box1.get()
-    pass_window1.destroy()
-    os.system(f'chmod +x "{thisdir}/install/rife-gui"')
-    p = subprocess.Popen((f'echo {passwd} | sudo -S cp "{thisdir}/install/rife-gui" /usr/bin/rife-gui'),shell=TRUE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, error = p.communicate()
-    os.system(f'echo {passwd} | sudo -S cp "{thisdir}/icons/Icon.svg" /usr/share/icons/hicolor/scalable/apps/Rife.svg')
-    if str(error) != f"b'[sudo] password for {getpass.getuser()}: '":
-        pass_dialog_box_err()
-    else:
-        os.system(f"echo {passwd} | sudo -S chmod +x /usr/bin/rife-gui")
-        passwd=""
-        
-        os.system(f'cp "{thisdir}/install/Rife-Vulkan-GUI.desktop" /home/$USER/.local/share/applications/')
-        os.system("mkdir /home/$USER/Rife-Vulkan-GUI")
-        os.system(f"echo {passwd} | sudo -S rm -rf {thisdir}/.git/")
-        os.system(f"cp -r * /home/$USER/Rife-Vulkan-GUI")
-        os.chdir(f"{thisdir}")
-    
 # use threading
 
 
 
+    
 
 # insert elements by their
 # index and names.
@@ -541,7 +476,6 @@ def settings_window():
     default_render_label.grid(column=6,row=1)
     global check_updates_button
     check_updates_button = Button(tab4,text="Check For Updates", command=start_update_check_thread, bg=bg,fg=fg)
-    install_button = Button(tab4, text="Install", command=pass_dialog_box,bg=bg,fg=fg)
     global  update_spacer_label
     update_spacer_label = Label(tab4,text = " ", bg=bg)
     
@@ -698,18 +632,40 @@ def settings_window():
     video_quality_drop_down()
     class advancedOptions():
         def __init__(self):
-            advanced_settings_window = Tk()
+            self.advanced_settings_window = Tk()
             try:
-                        advanced_settings_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
+                        self.advanced_settings_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
             except:
                 pass
             
-            advanced_settings_window.config(bg=bg)
+            self.advanced_settings_window.config(bg=bg)
+            self.layout()
+
+            self.advanced_settings_window.geometry("600x400")
+            self.advanced_settings_window.title('Advanced Settings')
+            self.advanced_settings_window.resizable(False, False) 
+            self.advanced_settings_window.mainloop()
+
+        def layout(self):
+            Label(self.advanced_settings_window, text='Extraction Image Type:',font=('Ariel', '12'),bg=bg,fg=fg).grid(column=1,row=0)
             
-            advanced_settings_window.geometry("600x400")
-            advanced_settings_window.title('Advanced Settings')
-            advanced_settings_window.resizable(False, False) 
-            advanced_settings_window.mainloop()
+
+            def extraction_image_drop_down():
+                extraction_image_variable = StringVar(self.advanced_settings_window)
+                extraction_image_options = ['JPG','PNG']
+                extraction_image_variable.set(ExtractionImageType.upper())
+                extraction_imageDropDown = OptionMenu(self.advanced_settings_window, extraction_image_variable, *extraction_image_options)
+                extraction_imageDropDown.config(width=4,font=('Ariel', '12'))
+                extraction_imageDropDown.config(bg=bg)
+                extraction_imageDropDown.config(fg=fg)
+                extraction_imageDropDown.grid(column=1,row=1)
+                
+                def callback(*args):
+                    change_setting('ExtractionImageType',(extraction_image_variable.get().lower()))
+                    
+                extraction_image_variable.trace("w", callback)
+            extraction_image_drop_down()
+
 
     advanced_options_button = Button(tab4,width=15,height=1,text='Advanced Options',bg=bg,fg=fg,command=advancedOptions,font=('Ariel', '12'))
     
@@ -721,12 +677,7 @@ def settings_window():
     spacer_label2.config(padx=30)
     button_select_default_output.grid(column=1, row=0)
     default_output_label.grid(column=1, row=1)
-    if os.path.exists(f"{homedir}/Rife-Vulkan-GUI/") == False:
-        is_installed = True
-    else:
-        is_installed = True
-    if is_installed == False:
-        install_button.grid(column=4,row=4)
+    
     spacer_label.grid(column=2,row=0)
     theme_label.grid(column=4,row=0)
     theme_button.grid(column=4, row=1)
