@@ -851,7 +851,7 @@ def get_all_models():
 get_all_models()
 
 
-def preview_image():
+def preview_image(fullscreen=False):
         
         i=1
         g=1
@@ -868,7 +868,7 @@ def preview_image():
                 
                 img = PIL.Image.open(f"{RenderDir}/{filename}/output_frames/{files[-1]}")
                 width, height = img.size
-                desired_width = 830
+                desired_width = 820
                 proportional_height = int((desired_width / float(width)) * height)
                 img = img.resize((desired_width, proportional_height), PIL.Image.NEAREST)
 
@@ -876,13 +876,15 @@ def preview_image():
 
                 label = Label(tab3,image=photo,width=desired_width,height=proportional_height)
                 
-                label.grid(column=0,row=0)
+                label.grid(column=1,row=0)
                 
                 
             except:
                 pass
-            
-            
+def layout_preview_tab():
+    fullscreen_button = Button(tab3,command=lambda:preview_image(True),text='☐',bg=bg,fg=fg)
+    fullscreen_button.grid(column=0,row=0)
+layout_preview_tab()     
   
 
 
