@@ -851,7 +851,7 @@ def get_all_models():
 get_all_models()
 
 
-def preview_image(fullscreen=False):
+def preview_image():
         
         i=1
         g=1
@@ -881,10 +881,7 @@ def preview_image(fullscreen=False):
                 
             except:
                 pass
-def layout_preview_tab():
-    fullscreen_button = Button(tab3,command=lambda:preview_image(True),text='☐',bg=bg,fg=fg)
-    fullscreen_button.grid(column=0,row=0)
-layout_preview_tab()     
+
   
 
 
