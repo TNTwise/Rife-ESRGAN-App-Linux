@@ -159,6 +159,9 @@ def read_settings():
         RenderDir = settings_dict['RenderDir']
         global ExtractionImageType
         ExtractionImageType=settings_dict['ExtractionImageType']
+        global SceneChangeDetection
+        SceneChangeDetection=settings_dict['SceneChangeDetection']
+
     except:
         os.system(f'rm -rf "{thisdir}/files/settings.txt"')
         os.mknod(f'{thisdir}/files/settings.txt')
@@ -176,6 +179,8 @@ def read_settings():
         write_to_settings_file("RenderDevice" ,'GPU')
         write_to_settings_file("RenderDir" ,f"{thisdir}")
         write_to_settings_file("ExtractionImageType" ,"jpg")
+        write_to_settings_file('SceneChangeDetection','0.4')
+
         settings_dict = {}
         with open(f'{thisdir}/files/settings.txt', 'r') as f:
             f = csv.reader(f)
@@ -216,6 +221,7 @@ def write_defaults():
     write_to_settings_file("RenderDevice" ,'GPU')
     write_to_settings_file("RenderDir" ,f"{thisdir}")
     write_to_settings_file("ExtractionImageType" ,"jpg")
+    write_to_settings_file('SceneChangeDetection','0.4')
     try:
         read_settings()
     except:
@@ -648,7 +654,7 @@ def settings_window():
 
         def layout(self):
             Label(self.advanced_settings_window, text='Extraction Image Type:',font=('Ariel', '12'),bg=bg,fg=fg).grid(column=1,row=0)
-            
+            Label(self.advanced_settings_window, text='                 Scene change detection sensitivity:',font=('Ariel', '12'),bg=bg,fg=fg).grid(column=2,row=0)
 
             def extraction_image_drop_down():
                 extraction_image_variable = StringVar(self.advanced_settings_window)
@@ -666,6 +672,35 @@ def settings_window():
                 extraction_image_variable.trace("w", callback)
             extraction_image_drop_down()
 
+            def transition_detection_drop_down():
+                transition_detection_variable = StringVar(self.advanced_settings_window)
+                extraction_image_options = ['Off','Low','Medium','High']
+                if SceneChangeDetection == 'Off':
+                    transition_detection_variable.set('Off')
+                if SceneChangeDetection == '0.2':
+                    transition_detection_variable.set('High')
+                if SceneChangeDetection == '0.4':
+                    transition_detection_variable.set('Medium')
+                if SceneChangeDetection == '0.6':
+                    transition_detection_variable.set('Low')
+                transition_detection_drop_down = OptionMenu(self.advanced_settings_window, transition_detection_variable, *extraction_image_options)
+                transition_detection_drop_down.config(width=6,font=('Ariel', '12'))
+                transition_detection_drop_down.config(bg=bg)
+                transition_detection_drop_down.config(fg=fg)
+                transition_detection_drop_down.grid(column=2,row=1)
+                
+                def callback(*args):
+                    if transition_detection_variable.get() == 'Off':
+                        change_setting('SceneChangeDetection','Off')
+                    if transition_detection_variable.get() == 'High':
+                        change_setting('SceneChangeDetection','0.2')
+                    if transition_detection_variable.get() == 'Medium':
+                        change_setting('SceneChangeDetection','0.4')
+                    if transition_detection_variable.get() == 'Low':
+                        change_setting('SceneChangeDetection','0.6')
+                    
+                transition_detection_variable.trace("w", callback)
+            transition_detection_drop_down()
 
     advanced_options_button = Button(tab4,width=15,height=1,text='Advanced Options',bg=bg,fg=fg,command=advancedOptions,font=('Ariel', '12'))
     
@@ -1484,94 +1519,97 @@ def enable_buttons():
 
 class TransitionDetection:
     def __init__(self):
-        if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
-            os.mkdir(f"{RenderDir}/{filename}/transitions/")
-        os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
-        for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
-            p = i.replace('.png',f'.{Image_Type}')
-            os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
-        # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
+        if SceneChangeDetection != 'Off':
+            if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
+                os.mkdir(f"{RenderDir}/{filename}/transitions/")
+            os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+            for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
+                p = i.replace('.png',f'.{Image_Type}')
+                os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
+            # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self,anime=None):
-        # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
-        if anime == None:
-            ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
-        else:
-            
-                ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,0.4)\',metadata=print" -f null -' 
-        output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
-
-        # Decode the output as UTF-8 and split it into lines
-        output_lines = output.decode("utf-8").split("\n")
-
-                # Create a list to store the timestamps
-        timestamps = []
-
-        # Iterate over the output lines and extract the timestamps
-        for line in output_lines:
-                    if "pts_time" in line:
-                        timestamp = str(line.split("_")[3])
-                        timestamp = str(timestamp.split(':')[1])
-                        timestamps.append(timestamp)
+        if SceneChangeDetection != 'Off':
+            # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
+            if anime == None:
+                ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -f null -' 
+            else:
                 
-        self.timestamps = timestamps
+                    ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -f null -' 
+            output = subprocess.check_output(ffmpeg_cmd, shell=True, stderr=subprocess.STDOUT)
+
+            # Decode the output as UTF-8 and split it into lines
+            output_lines = output.decode("utf-8").split("\n")
+
+                    # Create a list to store the timestamps
+            timestamps = []
+
+            # Iterate over the output lines and extract the timestamps
+            for line in output_lines:
+                        if "pts_time" in line:
+                            timestamp = str(line.split("_")[3])
+                            timestamp = str(timestamp.split(':')[1])
+                            timestamps.append(timestamp)
+                    
+            self.timestamps = timestamps
             
         
         
 
     def get_frame_num(self, times,frames_per_second,iteration,frames_subtracted=0):
-        frame_list =[]
-        for i in self.timestamps:
-            if times == '2X': # This allows for other methods to have scene detection
-                frame = float(i) * float(fps)
-            else:
-                frame = float(i) * float(frames_per_second)
-            frame = round(frame)
-            frame = int(frame)
-            
-            #subtract from frame for anime method too
+        if SceneChangeDetection != 'Off':
+            frame_list =[]
+            for i in self.timestamps:
+                if times == '2X': # This allows for other methods to have scene detection
+                    frame = float(i) * float(fps)
+                else:
+                    frame = float(i) * float(frames_per_second)
+                frame = round(frame)
+                frame = int(frame)
+                
+                #subtract from frame for anime method too
 
-            
-            frame = frame - frames_subtracted
-            
-            frame_list.append(frame)
-        self.frame_list = frame_list
-        print(frame_list)
-        # This code is shit, i will have to fix later, i have no idea why it works
-        filenames = os.listdir(f'{RenderDir}/{filename}/transitions/')
-        sorted_filenames = sorted(filenames)
-        file_num_list = []
-        list1 = []
-        list2 = []
-        for i in self.frame_list:
-                    
-                    i = int(i) * 2
-                    i = int(i) - 1
-                    i = str(i)
-                    i = i.zfill(8)
-                    list2.append(i)
-        for j in self.frame_list:
-                    
-                    j = int(j) * 2
-                    j = str(j)
-                    j = j.zfill(8)
-                    list1.append(j)
-                    self.list1 = list1
-                    
-        
-        
-        p = 0
-        o = 1
-        for image in self.frame_list:
+                
+                frame = frame - frames_subtracted
+                
+                frame_list.append(frame)
+            self.frame_list = frame_list
+            print(frame_list)
+            # This code is shit, i will have to fix later, i have no idea why it works
+            filenames = os.listdir(f'{RenderDir}/{filename}/transitions/')
+            sorted_filenames = sorted(filenames)
+            file_num_list = []
+            list1 = []
+            list2 = []
+            for i in self.frame_list:
+                        
+                        i = int(i) * 2
+                        i = int(i) - 1
+                        i = str(i)
+                        i = i.zfill(8)
+                        list2.append(i)
+            for j in self.frame_list:
+                        
+                        j = int(j) * 2
+                        j = str(j)
+                        j = j.zfill(8)
+                        list1.append(j)
+                        self.list1 = list1
+                        
             
             
-            #image = os.path.splitext(f'{image}')[0]
-            #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-            os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
-            # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
-            p+=1
-            o+=1
-            # IK this is dumb. but i cant think of anything else rn
-            #print(image)
+            p = 0
+            o = 1
+            for image in self.frame_list:
+                
+                
+                #image = os.path.splitext(f'{image}')[0]
+                #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
+                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
+                # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
+                p+=1
+                o+=1
+                # IK this is dumb. but i cant think of anything else rn
+                #print(image)
     def merge_frames(self):
         p = 0
         o = 1
@@ -1639,7 +1677,8 @@ def anime4X(is16x, is8x,rifever):
             Thread(target=preview_image).start()
             progressBarThread(0,200,0,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-            trans.merge_frames()
+            if SceneChangeDetection != 'Off':
+                trans.merge_frames()
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
 
             if ExtractionImageType == 'png':
@@ -1658,7 +1697,8 @@ def anime4X(is16x, is8x,rifever):
             
             progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-            trans1.merge_frames()
+            if SceneChangeDetection != 'Off':
+                trans.merge_frames()
             # this shit works now yay
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
@@ -1786,7 +1826,8 @@ def default_rife(rifever, times,interp_mode):
             
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         
-            trans.merge_frames()
+            if SceneChangeDetection != 'Off':
+                trans.merge_frames()
         if os.path.exists(outputdir) == False:
             outputdir = homedir
         if os.path.isfile(fr"{outputdir}/{filename}_{fps * int(interp_mode[0])}fps{extension}") == True:
