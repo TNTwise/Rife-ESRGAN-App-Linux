@@ -3,7 +3,7 @@
 </p>
 
 ## A simple GUI for Frame Interpolation and Upscaling on Linux
-This project aims to accomplish a simple frame interpolation experience on linux, while also using open technologies that rely on Vulkan to allow for seemless compatibility with a wide range of hardware.
+This project aims to accomplish a simple frame interpolation experience on linux, while also using open technologies that rely on Vulkan to allow for seemless compatibility with a wide range of hardware. <br/>
 rife-ncnn-vulkan: https://github.com/nihui/rife-ncnn-vulkan<br/>
 Real-ESRGAN-ncnn-vulkan: https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan<br />
 #
