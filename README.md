@@ -2,7 +2,9 @@
   <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/icon-256x256.png" width = "25%">
 </p>
 
-## A simple GUI for Rife Vulkan on Linux
+## A simple GUI for Frame Interpolation and Upscaling on Linux
+rife-ncnn-vulkan: https://github.com/nihui/rife-ncnn-vulkan<br/>
+Real-ESRGAN-ncnn-vulkan: https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan<br />
 [Dependencies](https://github.com/TNTwise/Rife-ESRGAN-App-Linux#dependencies)<br />
 [Building](https://github.com/TNTwise/Rife-ESRGAN-App-Linux/#building)<br/>
 [Errors](https://github.com/TNTwise/Rife-ESRGAN-App-Linux/#errors)<br/>
