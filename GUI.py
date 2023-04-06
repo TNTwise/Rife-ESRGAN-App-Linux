@@ -1516,9 +1516,9 @@ class TransitionDetection:
             if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
                 os.mkdir(f"{RenderDir}/{filename}/transitions/")
             if(isAnime) == False:
-                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
             else:
-                os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+                os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
             for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
                 p = i.replace('.png',f'.{Image_Type}')
                 os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
@@ -1600,7 +1600,7 @@ class TransitionDetection:
                 
                 #image = os.path.splitext(f'{image}')[0]
                 #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
+                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(8))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
                 # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
                 p+=1
                 o+=1
@@ -1618,7 +1618,7 @@ class TransitionDetection:
         os.chdir(f'{onefile_dir}/rife-vulkan-models')
         print('\n\n\n')
         for image in self.frame_list:
-            os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.{Image_Type}" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.{Image_Type}" ')
+            os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.{Image_Type}" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(8))}.{Image_Type}" ')
             p+=1
             o+=1
 def start():
