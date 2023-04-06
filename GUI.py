@@ -8,7 +8,6 @@ import re
 import sys
 import csv
 import PIL.Image
-from frame_detection import TransitionDetection  
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -1512,11 +1511,14 @@ def enable_buttons():
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
 
 class TransitionDetection:
-    def __init__(self):
+    def __init__(self,isAnime=False):
         if SceneChangeDetection != 'Off':
             if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
                 os.mkdir(f"{RenderDir}/{filename}/transitions/")
-            os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+            if(isAnime) == False:
+                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
+            else:
+                os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%03d.png"')
             for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
                 p = i.replace('.png',f'.{Image_Type}')
                 os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
@@ -1652,6 +1654,7 @@ def end():
         enable_tabs()
         enable_buttons()
         try:
+            
             done.grid(column=4,row=10)
         except:
             pass
@@ -1684,7 +1687,7 @@ def anime4X(is16x, is8x,rifever):
 
 
             os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
-            trans1 = TransitionDetection()
+            trans1 = TransitionDetection(True)
             trans1.find_timestamps(True)
             
             trans1.get_frame_num('anime','30',0,0)
@@ -1698,7 +1701,11 @@ def anime4X(is16x, is8x,rifever):
             # this shit works now yay
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
-        
+            global done
+            done = Label(tab2,
+                 text=f"Done! Output File = {outputdir}/{filename}_60fps{extension}",
+                 font=("Arial", 11), width=57, anchor="w",
+                 fg=fg,bg=bg)
         
         
         end()
