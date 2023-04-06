@@ -1171,7 +1171,7 @@ def browseFiles():
     videopath = filedialog.askopenfilename(initialdir = fr"{homedir}",
                                           title = "Select a File",
                                           filetypes = (("Video Files",
-                                                        ['*.mp4','*.mov','*.avi','*.mkv','*.webm']),
+                                                        ['*.mp4','*.mov','*.avi','*.mkv']),
                                                         
                                                        ("all files",
                                                         "*.*")))
