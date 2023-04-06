@@ -18,8 +18,6 @@ thisdir = os.getcwd()
 onefile_dir = thisdir
 global ffmpeg_command
 ffmpeg_command = 'ffmpeg'
-global ffprobe_command
-ffprobe_command = 'ffprobe'
 homedir = os.path.expanduser(r"~")
 
 if len(sys.argv) > 1: 
@@ -44,10 +42,7 @@ if len(sys.argv) > 1:
                     line_index = GUI_List.index(line)
                     GUI_List[line_index] = '#get_all_models()\n'
                     print(GUI_List[line_index])
-                if line =='#ffprobe_command = ../ffprobe\n':
-                    line_index = GUI_List.index(line)
-                    GUI_List[line_index] = 'ffprobe_command = "../ffprobe"\n'
-                    print(GUI_List[line_index])
+                
     if os.path.isfile('GUIPortable.py') == False:
         os.mknod('GUIPortable.py')
     with open ('GUIPortable.py', 'w') as f:
@@ -60,7 +55,6 @@ if len(sys.argv) > 1:
 #ffmpeg_command = ../ffmpeg
 #thisdir = f{homedir}/.Rife-Vulkan-GUI
 #onefile_dir = sys._MEIPASS
-#ffprobe_command = ../ffprobe
 #you can edit from down here on
 if os.path.exists(f'{homedir}/.Rife-Vulkan-GUI') == False:
     os.mkdir(f'{homedir}/.Rife-Vulkan-GUI')
@@ -1177,7 +1171,7 @@ def browseFiles():
     videopath = filedialog.askopenfilename(initialdir = fr"{homedir}",
                                           title = "Select a File",
                                           filetypes = (("Video Files",
-                                                        ['*.mp4','*.mov','*.avi','*.mkv']),
+                                                        ['*.mp4','*.mov','*.avi','*.mkv','*.webm']),
                                                         
                                                        ("all files",
                                                         "*.*")))
@@ -1627,9 +1621,11 @@ class TransitionDetection:
             o+=1
 def start():
     get_fps()
+    os.system(f'rm -rf "{RenderDir}/{filename}/"')
+    os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
+    
     os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
         
-    os.system(f'{ffprobe_command} "{videopath}"')
     print('\n\n\n\n\n'+ExtractionImageType+'\n\n\n\n')
     os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
     if ExtractionImageType == 'png':
@@ -1745,13 +1741,8 @@ def realESRGAN(model):
             end_vid_width = vidWidth * 4
             end_vid_height = vidHeight * 4
         #this runs through basic rife steps, this is straight from rife vulkan ncnn github.
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
-        os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames"')
-        os.system(f'mkdir -p "{RenderDir}/{filename}/output_frames"')
-        os.system(f'{ffprobe_command} "{videopath}"')
-        os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
-        os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
+        
+        outputdir = start()
 
         pbthreadreal()        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
         if os.path.exists(outputdir) == False:
