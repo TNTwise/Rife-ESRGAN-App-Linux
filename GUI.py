@@ -1519,9 +1519,7 @@ class TransitionDetection:
                 os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
             else:
                 os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
-            for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
-                p = i.replace('.png',f'.{Image_Type}')
-                os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
+            
             # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self,anime=None):
         if SceneChangeDetection != 'Off':
@@ -1576,13 +1574,7 @@ class TransitionDetection:
             file_num_list = []
             list1 = []
             list2 = []
-            for i in self.frame_list:
-                        
-                        i = int(i) * 2
-                        i = int(i) - 1
-                        i = str(i)
-                        i = i.zfill(8)
-                        list2.append(i)
+            
             for j in self.frame_list:
                         
                         j = int(j) * 2
@@ -1593,19 +1585,25 @@ class TransitionDetection:
                         
             
             
-            p = 0
-            o = 1
-            for image in self.frame_list:
+            o = 0
+            dir_path = f'{RenderDir}/{filename}/transitions/'
+            all_files = glob.glob(os.path.join(dir_path, '*'))
+
+            # Sort the list of files alphabetically
+            sorted_files = sorted(all_files)
+            sorted_files.reverse()# Have to reverse it otherwise the file that is also detected as a transition will get moved as well. Have to go from greatest to least because sometimes the frame detected as a transition can also be a frame that is a number that is zfilled.
+            list1.reverse()
+            for file in sorted_files:
                 
                 
                 #image = os.path.splitext(f'{image}')[0]
-                #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(8))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
-                # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
-                p+=1
+                print(f'mv "{file}" "{RenderDir}/{filename}/transitions/{list1[o]}.{Image_Type}"')
+                
+                os.system(f'mv "{file}" "{RenderDir}/{filename}/transitions/{list1[o]}.{Image_Type}"')
+                
                 o+=1
-                # IK this is dumb. but i cant think of anything else rn
-                #print(image)
+                
+            exit()
     def merge_frames(self):
         p = 0
         o = 1
@@ -1686,7 +1684,7 @@ def anime4X(is16x, is8x,rifever):
                 os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec mjpeg -q:v 1   "{RenderDir}/{filename}/output_frames/%08d.jpg" -y')
 
 
-            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
+            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}"   "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection(True)
             trans1.find_timestamps(True)
             
@@ -1697,7 +1695,7 @@ def anime4X(is16x, is8x,rifever):
             progressBarThread(100,200,100,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             if SceneChangeDetection != 'Off':
-                trans1.merge_frames()
+                trans.merge_frames()
             # this shit works now yay
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
