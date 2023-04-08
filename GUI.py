@@ -1518,6 +1518,7 @@ class TransitionDetection:
             if(isAnime) == False:
                 os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
             else:
+                os.system(f'rm -rf "{RenderDir}/{filename}/transitions/*"')
                 os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%08d.png"')
             
             # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
