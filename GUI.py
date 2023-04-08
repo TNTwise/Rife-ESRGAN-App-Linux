@@ -1686,7 +1686,7 @@ def anime4X(is16x, is8x,rifever):
                 os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec mjpeg -q:v 1   "{RenderDir}/{filename}/output_frames/%08d.jpg" -y')
 
 
-            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" -s 1280x720  "{RenderDir}/{filename}/temp1.mp4" -y')
+            os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection(True)
             trans1.find_timestamps(True)
             
