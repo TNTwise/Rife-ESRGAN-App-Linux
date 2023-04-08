@@ -1597,13 +1597,11 @@ class TransitionDetection:
                 
                 
                 #image = os.path.splitext(f'{image}')[0]
-                print(f'mv "{file}" "{RenderDir}/{filename}/transitions/{list1[o]}.{Image_Type}"')
                 
                 os.system(f'mv "{file}" "{RenderDir}/{filename}/transitions/{list1[o]}.{Image_Type}"')
                 
                 o+=1
                 
-            exit()
     def merge_frames(self):
         p = 0
         o = 1
