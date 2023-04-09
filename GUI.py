@@ -1515,9 +1515,7 @@ class TransitionDetection:
         if SceneChangeDetection != 'Off':
             if os.path.exists(f"{RenderDir}/{filename}/transitions/") == False:
                 os.mkdir(f"{RenderDir}/{filename}/transitions/")
-            if(isAnime) == False:
-                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"')
-            else:
+            if(isAnime) == True:
                 for file in os.listdir(f'{RenderDir}/{filename}/transitions/'):
                      os.remove(f'{RenderDir}/{filename}/transitions/{file}')
                 
@@ -1531,11 +1529,11 @@ class TransitionDetection:
         if SceneChangeDetection != 'Off':
             # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
             if anime != True:
-                ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -f null -' 
+                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"')
             else:
                 #THIS IS THE LINE CAUSING THE TROUBLE IM PRETTY SURE
                 ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"' 
-                if Image_Type != 'png':
+            if Image_Type != 'png':
                     for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
                         p = i.replace('.png',f'.{Image_Type}')
                         os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
@@ -1554,7 +1552,6 @@ class TransitionDetection:
                             timestamps.append(timestamp)
                     
             self.timestamps = timestamps
-            print(timestamps)
         
         
 
@@ -1576,9 +1573,7 @@ class TransitionDetection:
                 
                 frame_list.append(frame)
             self.frame_list = frame_list
-            print(frame_list)
-            print(len(frame_list))
-            print(len(self.timestamps))
+            
             # This code is shit, i will have to fix later, i have no idea why it works
             filenames = os.listdir(f'{RenderDir}/{filename}/transitions/')
             sorted_filenames = sorted(filenames)
@@ -1604,26 +1599,21 @@ class TransitionDetection:
             p = 0
             o = 1
             os.chdir(f'{RenderDir}/{filename}/transitions/')
-            print(len(list1))
             for image in list1:
                 
                 
-                #image = os.path.splitext(f'{image}')[0]
-                #print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(3))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.png"')
-                print(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(7))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}')
+               
                 os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(7))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
                 # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
                 
                 p+=1
                 o+=1
                 # IK this is dumb. but i cant think of anything else rn
-                #print(image)
             os.chdir(f'{onefile_dir}/rife-vulkan-models')
     def merge_frames(self):
         p = 0
         o = 1
         
-        print('\n\n\n')
         os.chdir(f'{RenderDir}/{filename}/transitions/')
         for i in os.listdir():
             if len(i) >7:
@@ -1633,7 +1623,6 @@ class TransitionDetection:
             p+=1
             o+=1
         os.chdir(f'{onefile_dir}/rife-vulkan-models')
-        print('\n\n\n')
         
 
 def start():
@@ -1643,7 +1632,6 @@ def start():
     
     os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
         
-    print('\n\n\n\n\n'+ExtractionImageType+'\n\n\n\n')
     os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
     if ExtractionImageType == 'png':
         os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
