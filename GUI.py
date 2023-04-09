@@ -1519,9 +1519,10 @@ class TransitionDetection:
                 os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"')
             else:
                 os.system(f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"')
-            for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
-                p = i.replace('.png',f'.{Image_Type}')
-                os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
+            if Image_Type != 'png':
+                for i in os.listdir(f'{RenderDir}/{filename}/transitions/'):
+                    p = i.replace('.png',f'.{Image_Type}')
+                    os.system(f'mv "{RenderDir}/{filename}/transitions/{i}" "{RenderDir}/{filename}/transitions/{p}"')
             # Change scene\,0.6 to edit how much scene detections it does, do this for both ffmpeg commands
     def find_timestamps(self,anime=None):
         if SceneChangeDetection != 'Off':
