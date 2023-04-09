@@ -1529,7 +1529,7 @@ class TransitionDetection:
         if SceneChangeDetection != 'Off':
             # This will get the timestamps of the scene changes, and for every scene change timestamp, i can times it by the fps count to get its current frame, and after interpolation, double it and replace it and it -1 frame with the transition frame stored in the transitions folder
             if anime != True:
-                os.system(f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"')
+               ffmpeg_cmd = f'{ffmpeg_command} -i "{videopath}" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"' 
             else:
                 #THIS IS THE LINE CAUSING THE TROUBLE IM PRETTY SURE
                 ffmpeg_cmd = f'{ffmpeg_command} -i "{RenderDir}/{filename}/temp1.mp4" -filter_complex "select=\'gt(scene\,{SceneChangeDetection})\',metadata=print" -vsync vfr -q:v 2 "{RenderDir}/{filename}/transitions/%07d.png"' 
