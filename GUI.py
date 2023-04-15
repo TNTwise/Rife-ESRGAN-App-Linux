@@ -11,7 +11,9 @@ import PIL.Image
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
-    open(f"{name}", 'wb').write(response.content)
+    with open(f"{name}", 'wb') as file:
+        file.write(response.content)
+    
 global onefile_dir
 thisdir = os.getcwd()
 onefile_dir = thisdir
@@ -27,15 +29,15 @@ if len(sys.argv) > 1:
                 GUI_List.append(line)
                 if line == '#ffmpeg_command = ../ffmpeg\n':
                     line_index = GUI_List.index(line)
-                    GUI_List[line_index] = 'ffmpeg_command = "../ffmpeg"\n'
+                    GUI_List[line_index] = 'ffmpeg_command = onefile_dir + "/ffmpeg"\n'
                     print(GUI_List[line_index])
                 if line == '#thisdir = f{homedir}/.Rife-Vulkan-GUI\n':
                     line_index = GUI_List.index(line)
                     GUI_List[line_index] ='thisdir = f\'{homedir}/.Rife-Vulkan-GUI\'\n'
                     print(GUI_List[line_index])
-                if line == '#onefile_dir = thisdir\n':
+                if line == '#onefile_dir = sys._MEIPASS\n':
                     line_index = GUI_List.index(line)
-                    GUI_List[line_index] = 'onefile_dir = thisdir\n'
+                    GUI_List[line_index] = 'onefile_dir = sys._MEIPASS\n'
                     print(GUI_List[line_index])
                 
                 
@@ -48,9 +50,10 @@ if len(sys.argv) > 1:
     exit()
 #do not edit these lines.
 
-#ffmpeg_command = ../ffmpeg
+
 #thisdir = f{homedir}/.Rife-Vulkan-GUI
-#onefile_dir = thisdir
+#onefile_dir = sys._MEIPASS
+#ffmpeg_command = ../ffmpeg
 #you can edit from down here on
 if os.path.exists(f'{homedir}/.Rife-Vulkan-GUI') == False:
     os.mkdir(f'{homedir}/.Rife-Vulkan-GUI')
@@ -263,6 +266,7 @@ def check_theme():
     # This code reads the theme file and stores its data in a theme variable
     return Theme
 videopath = ""
+global main_window
 main_window = Tk()
 tabControl = ttk.Notebook(main_window)
 if check_theme() == "Light":
@@ -824,56 +828,7 @@ def latest_rife():
             latest = latest[0]
             current = rifeversion
             return(latest,current)
-def get_all_models():
-    if os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
-        os.mkdir(f"{thisdir}/rife-vulkan-models/")
-    if os.path.exists(f"{thisdir}/rife-vulkan-models/rife-HD/") != True:
-        version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
-        latest_ver = version[0]
-        os.chdir(f"{thisdir}/files/")
-        wget(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip")
-        with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
-            f.extractall()
-        os.chdir(f"{thisdir}")
-        os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
-        os.system(f'mkdir -p "{thisdir}/rife-vulkan-models"')
-        os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
-        os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
-        change_setting('rifeversion', f'{latest_ver}')
-        os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
-        os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
-        os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
-    if os.path.exists(f"{thisdir}/Real-ESRGAN/") == False:
-            os.mkdir(f"{thisdir}/Real-ESRGAN/")
-    if os.path.isfile(f"{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan") == False:
-        ESRGAN_version = latest_ESRGAN()
-        latest_ver_ESR = ESRGAN_version[0]
-        os.chdir(f"{thisdir}/files/")
-        os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
-        os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/"')
-        wget('https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
-        os.system(f'mkdir -p "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
-        os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
-        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','r') as f:
-            f.extractall()
-        os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/models/"')
-        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/models/"* "{thisdir}/Real-ESRGAN/models/"')
-        os.chdir(f'{thisdir}/files')
-        wget('https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip', 'realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip')
-        with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip','r') as f:
-            f.extractall()
-        os.chdir(f"{thisdir}")
-        
-        os.system(f'mv "{thisdir}/realesrgan-ncnn-vulkan-v0.2.0-ubuntu" "{thisdir}/files/"')
-        os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu/"* "{thisdir}/Real-ESRGAN"')
-        change_setting('esrganversion', f'{latest_ver_ESR}')
-        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip"')
-        os.system(f'rm -rf "{thisdir}/files/realesrgan-ncnn-vulkan-v0.2.0-ubuntu"')
-        os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
-        os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu')
-        os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
-    os.system(f'rm -rf "{thisdir}/temp/"')
-get_all_models()
+
 
 
 def preview_image():
@@ -1094,13 +1049,13 @@ show_rife_ver()
 # The 4x portion is 1/7-3/7
 # the 8x protion is 3/7-7/7
 
-def progressBar(starting_value,maximum,adding_value,ending_value):# This will help me not copy and paste
+def progressBar(starting_value,maximum,adding_value,ending_value,window=tab1):# This will help me not copy and paste
     i = 2
     p=0
     amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/{filename}/input_frames/') if os.path.isfile(name)]))
     amount_of_output_files = amount_of_input_files * 2
     global progressbar
-    progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
+    progressbar = ttk.Progressbar(window,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
     progressbar.grid(column=4, row=22)
     # Add progressbar updater
     progressbar["maximum"]=maximum
@@ -1116,7 +1071,7 @@ def progressBar(starting_value,maximum,adding_value,ending_value):# This will he
         progressbar.update()
         p =2
         if progressbar['value'] == ending_value - 1: 
-            progressbar1 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=ending_value)
+            progressbar1 = ttk.Progressbar(window,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=ending_value)
             progressbar1.grid(column=4, row=22)
             progressbar.destroy()
             
@@ -1607,7 +1562,7 @@ class TransitionDetection:
                 p+=1
                 o+=1
                 # IK this is dumb. but i cant think of anything else rn
-            os.chdir(f'{onefile_dir}/rife-vulkan-models')
+            os.chdir(f'{thisdir}/rife-vulkan-models')
     def merge_frames(self):
         p = 0
         o = 1
@@ -1620,7 +1575,7 @@ class TransitionDetection:
             os.system(f'mv "{RenderDir}/{filename}/transitions/{self.list1[p]}.{Image_Type}" "{RenderDir}/{filename}/transitions/{str(str(o).zfill(7))}.{Image_Type}" ')
             p+=1
             o+=1
-        os.chdir(f'{onefile_dir}/rife-vulkan-models')
+        os.chdir(f'{thisdir}/rife-vulkan-models')
         
 
 def start():
@@ -1669,7 +1624,7 @@ def anime4X(is16x, is8x,rifever):
         trans = TransitionDetection()
         trans.find_timestamps()
         trans.get_frame_num('2X',fps,0,0)
-        os.chdir(f"{onefile_dir}/rife-vulkan-models")
+        os.chdir(f"{thisdir}/rife-vulkan-models")
         if is16x == False and is8x == False: # checks for 4x
             
             #Call ProgressBar
@@ -1719,7 +1674,7 @@ def realESRGAN(model):
         grayout_tabs('realsr')
         disable_buttons()
         
-        os.chdir(f"{onefile_dir}/Real-ESRGAN")
+        os.chdir(f"{thisdir}/Real-ESRGAN")
         global done
         #done = Label(tab1,text="                                                                                                                                                                ",bg=bg)
         #done.grid(column=4, row=10)
@@ -1795,7 +1750,7 @@ def default_rife(rifever, times,interp_mode):
         disable_buttons()
         grayout_tabs('rife')
         outputdir = start()
-        os.chdir(f"{onefile_dir}/rife-vulkan-models")
+        os.chdir(f"{thisdir}/rife-vulkan-models")
 
         trans = TransitionDetection()
         trans.find_timestamps()
@@ -1865,17 +1820,119 @@ def times8(rifever):
     default_rife(rifever,3,'8X')
 
 
-    
+
 
 
 try:
     main_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
 except:
     pass
-main_window.protocol('WM_DELETE_WINDOW',exit_thread)
 
-main_window.geometry("850x490")
-main_window.title('Rife - ESRGAN - App')
-main_window.resizable(False, False) 
-main_window.mainloop()
+class get_all_models:
+    def __init__(self, main_window):
+         main_window.destroy()
+         self.get_rife()
+         self.get_realesrgan()
+         os.chdir(f"{thisdir}")
+         
+    def show_loading_window(self, model):
+        self.loading_window = Tk()
+        self.loading_window.geometry("400x300")
+        self.loading_window.title('Downloading Models')
+        self.loading_window.resizable(False, False)
+        
+        
+        
+        os.chdir(f"{thisdir}/files/")
+        
+        
+        
+
+        version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+        latest_ver = version[0]
+        if model == 'rife':
+            file=f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"
+            response = requests.get(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", stream=True)
+        else:
+            file=f"realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
+            response = requests.get(f"https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip", stream=True)
+        total_size_in_bytes= int(response.headers.get('content-length', 0))
+        block_size = 1024 #1 Kibibyte
+        progressbar = ttk.Progressbar(self.loading_window,orient='horizontal', length=100, mode="determinate",maximum=total_size_in_bytes,value=0)
+        progressbar.grid(column=4, row=22)
+        # Add progressbar updater
+        progressbar["maximum"]=total_size_in_bytes
+        
+        with open(file, 'wb') as f:
+            for data in response.iter_content(block_size):
+                    
+                progressbar['value'] += block_size
+                progressbar.update()
+                f.write(data)
+            
+            return
+        
+        
+
+        
+        self.loading_window.mainloop()
+
+
+    def get_rife(self): 
+        
+        if os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
+            
+
+            self.show_loading_window('rife')
+            version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+            latest_ver = version[0]
+            os.chdir(f"{thisdir}/files/")
+            with ZipFile(f'rife-ncnn-vulkan-{latest_ver}-ubuntu.zip','r') as f:
+                f.extractall()
+            os.chdir(f"{thisdir}")
+            os.system(f'rm -rf "{thisdir}/rife-vulkan-models"')
+            os.system(f'mkdir -p "{thisdir}/rife-vulkan-models"')
+            os.system(f'mv "{thisdir}/rife-ncnn-vulkan-{latest_ver}-ubuntu" "{thisdir}/files/"')
+            os.system(f'mv "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu/"* "{thisdir}/rife-vulkan-models/"')
+            change_setting('rifeversion', f'{latest_ver}')
+            os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"')
+            os.system(f'rm -rf "{thisdir}/files/rife-ncnn-vulkan-{latest_ver}-ubuntu"')
+            os.system(f'chmod +x "{thisdir}/rife-vulkan-models/rife-ncnn-vulkan"')
+            
+            self.loading_window.destroy()
+            
+    def get_realesrgan(self):
+        
+        if os.path.exists(f"{thisdir}/Real-ESRGAN/") == False:
+            
+        
+            
+            
+            os.chdir(f"{thisdir}/files/")
+            os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
+            os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/"')
+            self.show_loading_window('realesrgan')
+            os.system(f'mkdir -p "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
+            os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
+            with ZipFile(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip','r') as f:
+                f.extractall()
+            os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/models/"')
+            os.system(f'mv "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"* "{thisdir}/Real-ESRGAN/"')
+            os.chdir(f'{thisdir}/files')
+            
+            os.system(f'chmod +x "{thisdir}/Real-ESRGAN/realesrgan-ncnn-vulkan"')
+            os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu')
+            os.system(f'rm -rf {thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu.zip')
+            self.loading_window.destroy()
+        os.system(f'rm -rf "{thisdir}/temp/"')
+
+if os.path.exists(f'{thisdir}/Real-ESRGAN/') == False or os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
+    get_all_models(main_window)
+else:
+    main_window.protocol('WM_DELETE_WINDOW',exit_thread)
+
+    main_window.geometry("850x490")
+    main_window.title('Rife - ESRGAN - App')
+    main_window.resizable(False, False) 
+    main_window.mainloop()
 
