@@ -1096,6 +1096,7 @@ show_rife_ver()
 # the 2x portion is 0/7 - 1/7
 # The 4x portion is 1/7-3/7
 # the 8x protion is 3/7-7/7
+
 def progressBar(starting_value,maximum,adding_value,ending_value):# This will help me not copy and paste
     i = 2
     p=0
@@ -1705,7 +1706,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
             os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
             global done
-            done = Label(tab2,
+            done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{filename}_60fps{extension}",
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
