@@ -1556,7 +1556,7 @@ class TransitionDetection:
                 
                 
                
-                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(7))}.{Image_Type}" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
+                os.system(f'mv "{RenderDir}/{filename}/transitions/{str(str(o).zfill(7))}.png" "{RenderDir}/{filename}/transitions/{list1[p]}.{Image_Type}"')
                 # Commenting this out due to it overlaping frames os.system(f'cp "{RenderDir}/{filename}/transitions/{list1[p]}{Image_Type}" "{RenderDir}/{filename}/transitions/{list2[p]}{Image_Type}"')
                 
                 p+=1
