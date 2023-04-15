@@ -33,9 +33,9 @@ if len(sys.argv) > 1:
                     line_index = GUI_List.index(line)
                     GUI_List[line_index] ='thisdir = f\'{homedir}/.Rife-Vulkan-GUI\'\n'
                     print(GUI_List[line_index])
-                if line == '#onefile_dir = sys._MEIPASS\n':
+                if line == '#onefile_dir = thisdir\n':
                     line_index = GUI_List.index(line)
-                    GUI_List[line_index] = 'onefile_dir = sys._MEIPASS\n'
+                    GUI_List[line_index] = 'onefile_dir = thisdir\n'
                     print(GUI_List[line_index])
                 
                 
