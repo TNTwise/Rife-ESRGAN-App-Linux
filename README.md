@@ -32,7 +32,7 @@ sudo apt install python3-opencv ffmpeg python3-tk konsole libavfilter-dev libavf
 ```
 On Arch/Arch based Distros <br />
 ```
-sudo pacman -S tk opencv konsole ffmpeg python-pip
+sudo pacman -S tk opencv konsole ffmpeg python-pip wget
 ```
 On SteamOS/Steam Deck <br />
 ```
