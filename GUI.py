@@ -37,10 +37,7 @@ if len(sys.argv) > 1:
                     line_index = GUI_List.index(line)
                     GUI_List[line_index] = 'onefile_dir = sys._MEIPASS\n'
                     print(GUI_List[line_index])
-                if line =='get_all_models()\n':
-                    line_index = GUI_List.index(line)
-                    GUI_List[line_index] = '#get_all_models()\n'
-                    print(GUI_List[line_index])
+                
                 
     if os.path.isfile('GUIPortable.py') == False:
         os.mknod('GUIPortable.py')
@@ -53,7 +50,7 @@ if len(sys.argv) > 1:
 
 #ffmpeg_command = ../ffmpeg
 #thisdir = f{homedir}/.Rife-Vulkan-GUI
-#onefile_dir = sys._MEIPASS
+#onefile_dir = thisdir
 #you can edit from down here on
 if os.path.exists(f'{homedir}/.Rife-Vulkan-GUI') == False:
     os.mkdir(f'{homedir}/.Rife-Vulkan-GUI')
