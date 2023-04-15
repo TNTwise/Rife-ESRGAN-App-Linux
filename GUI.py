@@ -8,6 +8,7 @@ import re
 import sys
 import csv
 import PIL.Image
+
 #This will replace wget
 def wget(URL,name):
     response = requests.get(URL)
@@ -835,32 +836,33 @@ def preview_image():
         
         i=1
         g=1
+        dir_path = f'{RenderDir}/{filename}/output_frames/'
         while i==1:
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
                  label.destroy()
                  break
-                 
-            dir_path = f'{RenderDir}/{filename}/output_frames/'
+            sleep(1)
+            
             files = os.listdir(dir_path)
             files.sort()
-            sleep(1)
+            
+            
             try:
-                
                 img = PIL.Image.open(f"{RenderDir}/{filename}/output_frames/{files[-1]}")
                 width, height = img.size
                 desired_width = 820
                 proportional_height = int((desired_width / float(width)) * height)
-                img = img.resize((desired_width, proportional_height), PIL.Image.NEAREST)
+                img = img.resize((desired_width, proportional_height), PIL.Image.LANCZOS)
 
                 photo = ImageTk.PhotoImage(img)
 
                 label = Label(tab3,image=photo,width=desired_width,height=proportional_height)
                 
                 label.grid(column=1,row=0)
-                
-                
             except:
                 pass
+                
+           
 
   
 
