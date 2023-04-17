@@ -1853,9 +1853,10 @@ class get_all_models:
         
         
 
-        version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
-        latest_ver = version[0]
+        
         try:
+            version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+            latest_ver = version[0]
             if model == 'rife':
                 message = Label(self.loading_window, text='Downloading Rife Models',font=('Ariel', '12'),bg=bg,fg=fg)
                 file=f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"
@@ -1888,7 +1889,7 @@ class get_all_models:
             
         
         except:
-            message = Label(self.loading_window, text='Your are offline, Please Reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
+            message = Label(self.loading_window, text='You are offline, Please reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
             message.grid(column=0,row=0)
             
 
