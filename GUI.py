@@ -165,7 +165,7 @@ def read_settings():
         write_to_settings_file("rifeversion", "20221029")
         write_to_settings_file("esrganversion", "0.2.0")
         write_to_settings_file("videoQuality", "14")
-        write_to_settings_file("Theme", "Light")
+        write_to_settings_file("Theme", "Dark")
         write_to_settings_file("OutputDir", f"{homedir}")
         write_to_settings_file("Interpolation_Option", f"2X")
         write_to_settings_file("Rife_Option" ,'2.3')
@@ -207,7 +207,7 @@ def write_defaults():
     write_to_settings_file("rifeversion", "20221029")
     write_to_settings_file("esrganversion", "0.2.0")
     write_to_settings_file("videoQuality", "14")
-    write_to_settings_file("Theme", "Light")
+    write_to_settings_file("Theme", "Dark")
     write_to_settings_file("OutputDir", f"{homedir}")
     write_to_settings_file("Interpolation_Option", f"2X")
     write_to_settings_file("Rife_Option" ,'2.3')
@@ -1842,7 +1842,11 @@ class get_all_models:
         self.loading_window.geometry("400x100")
         self.loading_window.title('Downloading Models')
         self.loading_window.resizable(False, False)
-        
+        self.loading_window.config(bg=bg)
+        try:
+           self.loading_window.iconphoto(False, PhotoImage(file=f'{onefile_dir}/icons/icon-256x256.png'))
+        except:
+            pass
         
         
         os.chdir(f"{thisdir}/files/")
@@ -1853,14 +1857,14 @@ class get_all_models:
         version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
         latest_ver = version[0]
         if model == 'rife':
-            message = Label(self.loading_window, text='Downloading Rife Models',font=('Ariel', '12'))
+            message = Label(self.loading_window, text='Downloading Rife Models',font=('Ariel', '12'),bg=bg,fg=fg)
             file=f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"
             response = requests.get(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", stream=True)
-        else:
+        if model == 'realesrgan':
             file=f"realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
             
             response = requests.get(f"https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip", stream=True)
-            message = Label(self.loading_window, text='Downloading Real-ESRGAN Models',font=('Ariel', '12'))
+            message = Label(self.loading_window, text='Downloading Real-ESRGAN Models',font=('Ariel', '12'),bg=bg,fg=fg)
         total_size_in_bytes= int(response.headers.get('content-length', 0))
         block_size = 1024 #1 Kibibyte
         progressbar = ttk.Progressbar(self.loading_window,orient='horizontal', length=400, mode="determinate",maximum=total_size_in_bytes,value=0)
