@@ -159,7 +159,7 @@ def read_settings():
     except:
         os.system(f'rm -rf "{thisdir}/files/settings.txt"')
         os.mknod(f'{thisdir}/files/settings.txt')
-        write_to_settings_file("Image_Type", "webp")
+        write_to_settings_file("Image_Type", "png")
         write_to_settings_file("IsAnime", "False")
         write_to_settings_file("Repository", "stable")
         write_to_settings_file("rifeversion", "20221029")
@@ -201,7 +201,7 @@ def read_settings():
 
         
 def write_defaults():
-    write_to_settings_file("Image_Type", "webp")
+    write_to_settings_file("Image_Type", "png")
     write_to_settings_file("IsAnime", "False")
     write_to_settings_file("Repository", "stable")
     write_to_settings_file("rifeversion", "20221029")
@@ -1821,7 +1821,8 @@ def times4(rifever):
 def times8(rifever):
     default_rife(rifever,3,'8X')
 
-    
+
+
 
 
 try:
@@ -1853,52 +1854,43 @@ class get_all_models:
         
         
 
+        version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
+        latest_ver = version[0]
+        if model == 'rife':
+            message = Label(self.loading_window, text='Downloading Rife Models',font=('Ariel', '12'),bg=bg,fg=fg)
+            file=f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"
+            response = requests.get(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", stream=True)
+        if model == 'realesrgan':
+            file=f"realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
+            
+            response = requests.get(f"https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip", stream=True)
+            message = Label(self.loading_window, text='Downloading Real-ESRGAN Models',font=('Ariel', '12'),bg=bg,fg=fg)
+        total_size_in_bytes= int(response.headers.get('content-length', 0))
+        block_size = 1024 #1 Kibibyte
+        progressbar = ttk.Progressbar(self.loading_window,orient='horizontal', length=400, mode="determinate",maximum=total_size_in_bytes,value=0)
+        message.grid(column=0,row=0)
+        progressbar.grid(column=0, row=1)
+        # Add progressbar updater
+        progressbar["maximum"]=total_size_in_bytes
         
-        try:
-            version = latest_rife() # calls latest function which gets the latest version release of rife and returns the latest and the current, if the version file doesnt exist, it updates and creates the file
-            latest_ver = version[0]
-            if model == 'rife':
-                message = Label(self.loading_window, text='Downloading Rife Models',font=('Ariel', '12'),bg=bg,fg=fg)
-                file=f"rife-ncnn-vulkan-{latest_ver}-ubuntu.zip"
-                response = requests.get(f"https://github.com/nihui/rife-ncnn-vulkan/releases/download/{latest_ver}/rife-ncnn-vulkan-{latest_ver}-ubuntu.zip", stream=True)
-            if model == 'realesrgan':
-                file=f"realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
-                
-                response = requests.get(f"https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip", stream=True)
-                message = Label(self.loading_window, text='Downloading Real-ESRGAN Models',font=('Ariel', '12'),bg=bg,fg=fg)
-            total_size_in_bytes= int(response.headers.get('content-length', 0))
-            block_size = 1024 #1 Kibibyte
-            progressbar = ttk.Progressbar(self.loading_window,orient='horizontal', length=400, mode="determinate",maximum=total_size_in_bytes,value=0)
-            message.grid(column=0,row=0)
-            progressbar.grid(column=0, row=1)
-            # Add progressbar updater
-            progressbar["maximum"]=total_size_in_bytes
+        with open(file, 'wb') as f:
+            for data in response.iter_content(block_size):
+                    
+                progressbar['value'] += block_size
+                progressbar.update()
+                f.write(data)
             
-            with open(file, 'wb') as f:
-                for data in response.iter_content(block_size):
-                        
-                    progressbar['value'] += block_size
-                    progressbar.update()
-                    f.write(data)
-                
-                return
-            
-            
-
-            
-            
+            return
         
-        except:
-            message = Label(self.loading_window, text='You are offline, Please reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
-            message.grid(column=0,row=0)
-            
+        
 
+        
         self.loading_window.mainloop()
 
 
     def get_rife(self): 
         
-        if os.path.isfile(f"{thisdir}/rife-vulkan-models/rife-ncnn-vulkan") == False:
+        if os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
             
 
             self.show_loading_window('rife')
@@ -1921,7 +1913,7 @@ class get_all_models:
             
     def get_realesrgan(self):
         
-        if os.path.exists(f"{thisdir}/Real-ESRGAN/models") == False:
+        if os.path.exists(f"{thisdir}/Real-ESRGAN/") == False:
             
         
             
@@ -1944,7 +1936,7 @@ class get_all_models:
             self.loading_window.destroy()
         os.system(f'rm -rf "{thisdir}/temp/"')
 
-if os.path.exists(f'{thisdir}/Real-ESRGAN/models') == False or os.path.exists(f"{thisdir}/rife-vulkan-models/rife-ncnn-vulkan") == False:
+if os.path.exists(f'{thisdir}/Real-ESRGAN/') == False or os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
     get_all_models(main_window)
 else:
     main_window.protocol('WM_DELETE_WINDOW',exit_thread)
