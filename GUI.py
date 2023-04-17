@@ -1898,7 +1898,7 @@ class get_all_models:
 
     def get_rife(self): 
         
-        if os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
+        if os.path.isfile(f"{thisdir}/rife-vulkan-models/rife-ncnn-vulkan") == False:
             
 
             self.show_loading_window('rife')
@@ -1921,7 +1921,7 @@ class get_all_models:
             
     def get_realesrgan(self):
         
-        if os.path.exists(f"{thisdir}/Real-ESRGAN/") == False:
+        if os.path.exists(f"{thisdir}/Real-ESRGAN/models") == False:
             
         
             
@@ -1944,7 +1944,7 @@ class get_all_models:
             self.loading_window.destroy()
         os.system(f'rm -rf "{thisdir}/temp/"')
 
-if os.path.exists(f'{thisdir}/Real-ESRGAN/') == False or os.path.exists(f"{thisdir}/rife-vulkan-models/") == False:
+if os.path.exists(f'{thisdir}/Real-ESRGAN/models') == False or os.path.exists(f"{thisdir}/rife-vulkan-models/rife-ncnn-vulkan") == False:
     get_all_models(main_window)
 else:
     main_window.protocol('WM_DELETE_WINDOW',exit_thread)
