@@ -42,13 +42,13 @@ if len(sys.argv) > 1:
                     print(GUI_List[line_index])
                 
                 
-    if os.path.isfile('GUIPortable.py') == False:
-        os.mknod('GUIPortable.py')
-    with open ('GUIPortable.py', 'w') as f:
-        for i in GUI_List:
-            f.write(i)
-    print('Completed')
-    exit()
+        if os.path.isfile('GUIPortable.py') == False:
+            os.mknod('GUIPortable.py')
+        with open ('GUIPortable.py', 'w') as f:
+            for i in GUI_List:
+                f.write(i)
+        print('Completed')
+        exit()
 #do not edit these lines.
 
 
@@ -1836,7 +1836,7 @@ class get_all_models:
          self.get_rife()
          self.get_realesrgan()
          os.chdir(f"{thisdir}")
-         
+         os.execv(sys.executable, ['python'] + sys.argv)
     def show_loading_window(self, model):
         self.loading_window = Tk()
         self.loading_window.geometry("400x100")
