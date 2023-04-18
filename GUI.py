@@ -104,7 +104,7 @@ from tkinter import *
 import psutil
 from zipfile import ZipFile
 from PIL import ImageTk
-
+import time
 
 # These change the settings file
 def write_to_settings_file(description, option):
@@ -1175,8 +1175,50 @@ def get_fps():
 
 
 #create labels
-def Anime():
+
+def exi11(): # this funtion kills the program.
+        #os.system(f'pkill rife-ncnn-vulkan')
+    #os.system(f'pkill GUI.py')
+    from subprocess import check_output
+    def get_pid(name):
+        import psutil
+
+        p = psutil.process_iter(attrs=['pid', 'name'])
+        for process in p:
+            if process.info['name'] == name:
+                pid = process.info['pid']
+                
+                return pid
+    try:
+        os.system(f'rm -rf "{RenderDir}/{filename}/"')
+    except:
+        pass
     
+    os.system(f'kill -9 {get_pid("ffmpeg")}')
+    os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
+    os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
+    os.system(f'kill -9 {os.getpid()}')
+    
+
+def layout_rife():
+    rife_vulkan = Label (tab1,
+                            text = "Rife Vulkan"
+                                                           ,
+                            font=("Arial", 35),
+                            bg=bg,fg=fg,padx='200')# adjust this padx for adjustment of center
+    button_explore = Button(tab1,
+                        text = "Input Video",
+                        command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12'))
+    button_output = Button(tab1,
+                        text = "Output Folder",
+                        command = output, bg=bg_button,fg=fg,font=('Ariel', '12'))
+    #set outputdir textbox
+    
+    #this is getting ready for textboxes                                                                                                                                           
+    settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
+    start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
+
+
     variable2 = StringVar(tab1)
     video_options = ['Default', 'Animation (Uneven Framerate)']
     variable2.set('Default')
@@ -1185,13 +1227,14 @@ def Anime():
     opt1.config(bg=bg)
     opt1.config(fg=fg)
     opt1.grid(column=4,row=8)
+    
 
     def callback(*args):
         if variable2.get() == 'Default':
             #start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
             # UNGREY inter_opt and rive_ver buttons
             rifeVerDropDown.config(state="normal")
-            global iterp_opt_variable2
+            
             iterp_opt_variable2 = StringVar(tab1)
             interpolation_options = ['2X','4X', '8X']
             interpOptDropDown2 = OptionMenu(tab1, iterp_opt_variable2, *interpolation_options)
@@ -1232,54 +1275,6 @@ def Anime():
                 change_setting('Interpolation_Option', iterp_opt_variable1.get())
             iterp_opt_variable1.trace("w", callback)
     variable2.trace("w", callback)
-
-Anime()
-def exi11(): # this funtion kills the program.
-        #os.system(f'pkill rife-ncnn-vulkan')
-    #os.system(f'pkill GUI.py')
-    from subprocess import check_output
-    def get_pid(name):
-        import psutil
-
-        p = psutil.process_iter(attrs=['pid', 'name'])
-        for process in p:
-            if process.info['name'] == name:
-                pid = process.info['pid']
-                
-                return pid
-    try:
-        os.system(f'rm -rf "{RenderDir}/{filename}/"')
-    except:
-        pass
-    
-    os.system(f'kill -9 {get_pid("ffmpeg")}')
-    os.system(f'kill -9 {get_pid("rife-ncnn-vulkan")}')
-    os.system(f'kill -9 {get_pid("realesrgan-ncnn-vulkan")}')
-    os.system(f'kill -9 {os.getpid()}')
-    
-
-def layout_rife():
-    rife_vulkan = Label (tab1,
-                            text = "Rife Vulkan"
-                                                           ,
-                            font=("Arial", 35),
-                            bg=bg,fg=fg,padx='200')# adjust this padx for adjustment of center
-    button_explore = Button(tab1,
-                        text = "Input Video",
-                        command = browseFiles, bg=bg_button,fg=fg,font=('Ariel', '12'))
-    button_output = Button(tab1,
-                        text = "Output Folder",
-                        command = output, bg=bg_button,fg=fg,font=('Ariel', '12'))
-    #set outputdir textbox
-    '''global output_textbox
-    output_textbox = Text(tab1,width=20,height=1)
-    #output_textbox.delete(0,"end")
-    output_textbox.insert(1.0,OutputDir)
-    output_textbox.grid(column=4,row=4)'''
-    #this is getting ready for textboxes                                                                                                                                           
-    settings_menu_button = Label(tab1,padx='500',bg=bg,fg=fg)
-    start_button = Button(tab1, text="Start!", command=lambda: threading('rife'),bg=bg_button,fg=fg,width=7,height=3,font=('Ariel 13 bold')).grid(row = 22, column = 0)
-
     # Last column is 22
     spacer= Label(tab1, padx='0',
                  fg=fg,bg=bg)
@@ -1400,6 +1395,43 @@ def layout_realsr():
     realsr_vulkan.grid(column=4, row=0)
 layout_realsr()
 
+def ETA(times):
+    
+    total_iterations = len(os.listdir(f'{RenderDir}/{filename}/input_frames/')) * times
+    
+    start_time = time.time()
+    sleep(1)
+    for i in range(total_iterations):
+        # Do some work for each iteration
+        try:
+            if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
+                 
+                 break
+                
+            completed_iterations = len(os.listdir(f'{RenderDir}/{filename}/output_frames/'))
+            
+            # Increment the completed iterations counter
+            sleep(1)
+
+            # Estimate the remaining time
+            elapsed_time = time.time() - start_time
+            time_per_iteration = elapsed_time / completed_iterations
+            remaining_iterations = total_iterations - completed_iterations
+            remaining_time = remaining_iterations * time_per_iteration
+            remaining_time = int(remaining_time) 
+            # Print the estimated time remaining
+            #convert to hours, minutes, and seconds
+            hours = remaining_time // 3600
+            remaining_time-= 3600*hours
+            minutes = remaining_time // 60
+            remaining_time -= minutes * 60
+            seconds = remaining_time
+            os.system('clear')
+            print(f"Estimated time remaining: Hours: {hours}, Minutes: {minutes} Seconds: {seconds}")
+            
+        except:
+             pass
+
 def AnimeInterpolation():
     read_settings()
     interp_opt = settings_dict['Interpolation_Option']
@@ -1440,10 +1472,6 @@ def delete_done():
             done.destroy()
     except:
             pass
-    try:
-            done2.destroy()
-    except:
-            pass
     
 
 def disable_buttons():
@@ -1464,7 +1492,6 @@ def enable_buttons():
     button_output = Button(tab1,text = "Output Folder",command = output,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 4)
     button_explore = Button(tab1,text = "Input Video",command = browseFiles,bg=bg,fg=fg,font=('Ariel', '12')).grid(column = 4, row = 3)
          # removes the temp file, this is after every times function, not on onclick functions as they do not require the outputdir variable.
-
 class TransitionDetection:
     def __init__(self,isAnime=False):
         if SceneChangeDetection != 'Off':
@@ -1723,6 +1750,7 @@ def realESRGAN(model):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
+        Thread(target=lambda: ETA(1)).start()
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}{extension}") == True:
             os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}(1){extension}" -y')
@@ -1779,7 +1807,7 @@ def default_rife(rifever, times,interp_mode):
                 progressBarThread(73,170,73,170)
                 trans.get_frame_num(interp_mode,fps*4,i,3)
             Thread(target=preview_image).start()
-            
+            Thread(target=lambda: ETA(int(interp_mode[0]))).start()
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         
             if SceneChangeDetection != 'Off':
@@ -1805,7 +1833,7 @@ def default_rife(rifever, times,interp_mode):
 
         else:
             os.system(fr'{ffmpeg_command}   -framerate {fps * int(interp_mode[0])} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps{extension}" -y')
-            
+            done.grid(column=4,row=10)
                 
             #else:
             #      
