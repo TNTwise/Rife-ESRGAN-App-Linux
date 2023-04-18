@@ -1438,6 +1438,10 @@ def ETA(times):
                     eta_label.destroy()
                 except:
                     pass
+                try:
+                    eta_label2.destroy()
+                except:
+                    pass
                 eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
                 eta_label2 = Label(tab2,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
                 eta_label.grid(row=10,column=4)
@@ -1448,9 +1452,13 @@ def ETA(times):
         except:
             try:
                 eta_label.destroy()
-                eta_label2.destroy
             except:
                 pass
+            try:
+                eta_label2.destroy()
+            except:
+                pass
+
             pass
 
 def AnimeInterpolation():
