@@ -1979,9 +1979,7 @@ class get_all_models:
         
             
             
-            os.chdir(f"{thisdir}/files/")
-            os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
-            os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/"')
+            
             self.show_loading_window('realesrgan')
             os.system(f'mkdir -p "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
             os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
