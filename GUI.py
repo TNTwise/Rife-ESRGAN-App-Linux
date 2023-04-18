@@ -1394,6 +1394,8 @@ def layout_realsr():
     button_output.grid(column = 4, row = 4)
     realsr_vulkan.grid(column=4, row=0)
 layout_realsr()
+eta_label = Label(tab1,text=f'',font=('Ariel', '12'),bg=bg,fg=fg)
+eta_label.grid(row=10,column=4)
 
 def ETA(times):
     
@@ -1405,7 +1407,7 @@ def ETA(times):
         # Do some work for each iteration
         try:
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
-                 
+                 eta_label.destroy()
                  break
                 
             completed_iterations = len(os.listdir(f'{RenderDir}/{filename}/output_frames/'))
@@ -1426,11 +1428,25 @@ def ETA(times):
             minutes = remaining_time // 60
             remaining_time -= minutes * 60
             seconds = remaining_time
-            os.system('clear')
-            print(f"Estimated time remaining: Hours: {hours}, Minutes: {minutes} Seconds: {seconds}")
-            
+            if minutes < 10:
+                minutes = str(f'0{minutes}')
+            if seconds < 10:
+                seconds = str(f'0{seconds}')
+            def display_ETA():
+                try:
+                    eta_label.destroy()
+                except:
+                    pass
+                eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
+                eta_label.grid(row=10,column=4)
+            if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == True:
+                display_ETA()
         except:
-             pass
+            try:
+                eta_label.destroy()
+            except:
+                pass
+            pass
 
 def AnimeInterpolation():
     read_settings()
