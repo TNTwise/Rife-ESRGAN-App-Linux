@@ -1396,7 +1396,8 @@ def layout_realsr():
 layout_realsr()
 eta_label = Label(tab1,text=f'',font=('Ariel', '12'),bg=bg,fg=fg)
 eta_label.grid(row=10,column=4)
-
+eta_label2 = Label(tab2,text=f'',font=('Ariel', '12'),bg=bg,fg=fg)
+eta_label2.grid(row=10,column=4)
 def ETA(times):
     
     total_iterations = len(os.listdir(f'{RenderDir}/{filename}/input_frames/')) * times
@@ -1438,12 +1439,16 @@ def ETA(times):
                 except:
                     pass
                 eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
+                eta_label2 = Label(tab2,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
                 eta_label.grid(row=10,column=4)
+                eta_label2.grid(row=10,column=4)
+
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == True:
                 display_ETA()
         except:
             try:
                 eta_label.destroy()
+                eta_label2.destroy
             except:
                 pass
             pass
