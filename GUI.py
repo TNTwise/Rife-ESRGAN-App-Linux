@@ -1394,11 +1394,10 @@ def layout_realsr():
     button_output.grid(column = 4, row = 4)
     realsr_vulkan.grid(column=4, row=0)
 layout_realsr()
-eta_label = Label(tab1,text=f'',font=('Ariel', '12'),bg=bg,fg=fg)
-eta_label.grid(row=10,column=4)
-eta_label2 = Label(tab2,text=f'',font=('Ariel', '12'),bg=bg,fg=fg)
-eta_label2.grid(row=10,column=4)
-def ETA(times):
+Label(tab1,text=f'',font=('Ariel', '12'),bg=bg,fg=fg).grid(row=10,column=4)
+
+
+def ETA(times, model='rife'):
     
     total_iterations = len(os.listdir(f'{RenderDir}/{filename}/input_frames/')) * times
     
@@ -1406,10 +1405,14 @@ def ETA(times):
     sleep(1)
     for i in range(total_iterations):
         # Do some work for each iteration
+        global eta_label
         try:
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
-                 eta_label.destroy()
-                 break
+                 
+                 
+                 
+                break
+                
                 
             completed_iterations = len(os.listdir(f'{RenderDir}/{filename}/output_frames/'))
             
@@ -1434,30 +1437,23 @@ def ETA(times):
             if seconds < 10:
                 seconds = str(f'0{seconds}')
             def display_ETA():
-                try:
-                    eta_label.destroy()
-                except:
-                    pass
-                try:
-                    eta_label2.destroy()
-                except:
-                    pass
-                eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
-                eta_label2 = Label(tab2,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
+                
+                if model == 'rife':
+                    eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
+                if model == 'realesrgan':
+                    eta_label = Label(tab2,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
                 eta_label.grid(row=10,column=4)
-                eta_label2.grid(row=10,column=4)
 
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == True:
                 display_ETA()
+            else:
+                eta_label.destroy()
         except:
             try:
                 eta_label.destroy()
             except:
                 pass
-            try:
-                eta_label2.destroy()
-            except:
-                pass
+            
 
             pass
 
@@ -1779,7 +1775,7 @@ def realESRGAN(model):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         Thread(target=preview_image).start()
-        Thread(target=lambda: ETA(1)).start()
+        Thread(target=lambda: ETA(1,'realesrgan')).start()
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}{extension}") == True:
             os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}(1){extension}" -y')
@@ -1889,11 +1885,12 @@ except:
 
 class get_all_models:
     def __init__(self, main_window):
-         main_window.destroy()
-         self.get_rife()
-         self.get_realesrgan()
-         os.chdir(f"{thisdir}")
-         os.execv(sys.executable, ['python'] + sys.argv)
+        main_window.destroy()
+        self.get_rife()
+        self.get_realesrgan()
+        os.chdir(f"{thisdir}")
+        os.execv(sys.executable, ['python'] + sys.argv)
+            
     def show_loading_window(self, model):
         self.loading_window = Tk()
         self.loading_window.geometry("400x100")
@@ -1976,8 +1973,7 @@ class get_all_models:
             
             
             os.chdir(f"{thisdir}/files/")
-            os.system(f'rm -rf "{thisdir}/Real-ESRGAN"')
-            os.system(f'mkdir -p "{thisdir}/Real-ESRGAN/"')
+            
             self.show_loading_window('realesrgan')
             os.system(f'mkdir -p "{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/"')
             os.chdir(f'{thisdir}/files/realesrgan-ncnn-vulkan-20220424-ubuntu/')
