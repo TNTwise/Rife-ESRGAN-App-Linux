@@ -1658,8 +1658,10 @@ def start():
 
 def end():
         os.chdir(f"{thisdir}")
-        while os.path.exists(f'{RenderDir}/{filename}') == True:
-            os.system(f'rm -rf "{RenderDir}/{filename}"')
+        
+        os.system(f'rm -rf "{RenderDir}/{filename}"')
+        if os.path.isfile (f'{RenderDir}/{filename}') == True:
+             os.system(f'rm -rf "{RenderDir}/{filename}"')
         os.chdir(f"{thisdir}")
         enable_tabs()
         enable_buttons()
