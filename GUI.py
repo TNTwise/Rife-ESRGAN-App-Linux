@@ -1051,37 +1051,43 @@ show_rife_ver()
 # The 4x portion is 1/7-3/7
 # the 8x protion is 3/7-7/7
 
-def progressBar(starting_value,maximum,adding_value,ending_value,window=tab1):# This will help me not copy and paste
+def progressBar(starting_value,maximum,adding_value,ending_value,hold=False):# This will help me not copy and paste
     i = 2
     p=0
-    amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/{filename}/input_frames/') if os.path.isfile(name)]))
-    amount_of_output_files = amount_of_input_files * 2
     global progressbar
-    progressbar = ttk.Progressbar(window,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
-    progressbar.grid(column=4, row=22)
-    # Add progressbar updater
-    progressbar["maximum"]=maximum
-    while i == 2:
-        frames_processed = len(list(Path(f'{RenderDir}/{filename}/output_frames/').glob('*')))
+    if hold == True:
+        progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
+        progressbar.grid(column=4, row=22)
+        progressbar['value'] = 100
+    else:
+        amount_of_input_files = (len([name for name in os.listdir(f'{RenderDir}/{filename}/input_frames/') if os.path.isfile(name)]))
+        amount_of_output_files = amount_of_input_files * 2
         
-        amount_of_output_files = len(list(Path(f'{RenderDir}/{filename}/input_frames/').glob('*'))) * 2
+        progressbar = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=starting_value)
+        progressbar.grid(column=4, row=22)
+        # Add progressbar updater
+        progressbar["maximum"]=maximum
+        while i == 2:
+            frames_processed = len(list(Path(f'{RenderDir}/{filename}/output_frames/').glob('*')))
             
-        e = frames_processed/amount_of_output_files
-        e*= 100
-        e = int(e) + adding_value
-        progressbar['value'] = e
-        progressbar.update()
-        p =2
-        if progressbar['value'] == ending_value - 1: 
-            progressbar1 = ttk.Progressbar(window,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=ending_value)
-            progressbar1.grid(column=4, row=22)
-            progressbar.destroy()
-            
-            break
+            amount_of_output_files = len(list(Path(f'{RenderDir}/{filename}/input_frames/').glob('*'))) * 2
+                
+            e = frames_processed/amount_of_output_files
+            e*= 100
+            e = int(e) + adding_value
+            progressbar['value'] = e
+            progressbar.update()
+            p =2
+            if progressbar['value'] == ending_value - 1: 
+                progressbar1 = ttk.Progressbar(tab1,orient='horizontal', length=630, mode="determinate",maximum=maximum,value=ending_value)
+                progressbar1.grid(column=4, row=22)
+                progressbar.destroy()
+                
+                break
 
 
-def progressBarThread(starting_value,maximum,adding_value,ending_value):
-    t1 = Thread(target=lambda: progressBar(starting_value,maximum,adding_value,ending_value))
+def progressBarThread(starting_value,maximum,adding_value,ending_value,hold=False):
+    t1 = Thread(target=lambda: progressBar(starting_value,maximum,adding_value,ending_value,hold))
     t1.start()
 
 def RealPB():
@@ -1691,7 +1697,7 @@ def anime4X(is16x, is8x,rifever):
             if SceneChangeDetection != 'Off':
                 trans.merge_frames()
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-
+            progressBarThread(100,200,100,200,True)
             if ExtractionImageType == 'png':
                 os.system(f'{ffmpeg_command} -framerate {fps*2}  -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -vf mpdecimate,fps=30 -vsync vfr -vcodec png  "{RenderDir}/{filename}/output_frames/%08d.png" -y')
             if ExtractionImageType == 'jpg':
