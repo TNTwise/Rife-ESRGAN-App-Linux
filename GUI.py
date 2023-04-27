@@ -1693,6 +1693,8 @@ def anime4X(is16x, is8x,rifever):
             
             Thread(target=preview_image).start()
             progressBarThread(0,200,0,200)
+            Thread(target=lambda: ETA(4,'rife')).start()
+            eta_label.destroy()
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             if SceneChangeDetection != 'Off':
                 trans.merge_frames()
@@ -1707,7 +1709,8 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection(True)
             trans1.find_timestamps(True)
-            
+            Thread(target=lambda: ETA(2,'rife')).start()
+
             trans1.get_frame_num('anime','30',0,0,True)
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')  
             
