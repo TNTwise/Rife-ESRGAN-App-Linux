@@ -1950,7 +1950,7 @@ class get_all_models:
             
         
         except:
-            message = Label(self.loading_window, text='You are offline, Please Reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
+            message = Label(self.loading_window, text='You are offline, Please reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
             message.grid(column=0,row=0)
             
 
