@@ -556,10 +556,28 @@ def settings_window():
                 save_button = Button(tab4,width=10,height=1,text='Save',fg=fg,bg=bg,command=lambda: change_setting("GPUUsage", custom_box1.get('1.0', 'end-1c')))
                 save_button.grid(row=8,column=4)
         variable.trace("w", callback)
-    
-        
-        
 
+    
+    def after_interpolation():
+        update_branch_label = Label(tab4,text="After interpolation: ",bg=bg,fg=fg)
+        update_branch_label.grid(column=4,row=8)
+        variable = StringVar(tab4)
+        repo_options = ['Nothing', 'Shutdown']
+        variable.set('Nothing')
+        opt = OptionMenu(tab4, variable, *repo_options)
+        opt.config(width=9,font=('Ariel', '12'))
+        
+        opt.config(bg=bg)
+        opt.config(fg=fg)
+        opt.config(anchor="w")
+        opt.grid(column=4,row=9)
+        
+        def callback(*args):
+            global after_interpolation_var
+            after_interpolation_var = variable.get()
+        variable.trace("w", callback)
+        
+    after_interpolation()
     def remove_custom():
         try:
                     
@@ -1676,6 +1694,9 @@ def end():
             done.grid(column=4,row=10)
         except:
             pass
+        print(after_interpolation_var)
+        if after_interpolation_var == "Shutdown":
+             os.system("poweroff")
 def anime4X(is16x, is8x,rifever):
     
     if videopath != "" and isinstance(videopath, str) == True:
@@ -1693,8 +1714,6 @@ def anime4X(is16x, is8x,rifever):
             
             Thread(target=preview_image).start()
             progressBarThread(0,200,0,200)
-            Thread(target=lambda: ETA(4,'rife')).start()
-            eta_label.destroy()
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
             if SceneChangeDetection != 'Off':
                 trans.merge_frames()
@@ -1709,8 +1728,7 @@ def anime4X(is16x, is8x,rifever):
             os.system(f'{ffmpeg_command} -framerate 30  -i "{RenderDir}/{filename}/output_frames/%08d.{ExtractionImageType}" "{RenderDir}/{filename}/temp1.mp4" -y')
             trans1 = TransitionDetection(True)
             trans1.find_timestamps(True)
-            Thread(target=lambda: ETA(2,'rife')).start()
-
+            
             trans1.get_frame_num('anime','30',0,0,True)
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')  
             
@@ -1953,7 +1971,7 @@ class get_all_models:
             
         
         except:
-            message = Label(self.loading_window, text='You are offline, Please reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
+            message = Label(self.loading_window, text='Your are offline, Please Reconnect to the internet\n or download the offline binary.',font=('Ariel', '12'),bg=bg,fg=fg)
             message.grid(column=0,row=0)
             
 
