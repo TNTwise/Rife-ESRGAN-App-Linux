@@ -1422,19 +1422,18 @@ Label(tab1,text=f'',font=('Ariel', '12'),bg=bg,fg=fg).grid(row=10,column=4)
 
 
 def ETA(times, model='rife'):
-    
     total_iterations = len(os.listdir(f'{RenderDir}/{filename}/input_frames/')) * times
     
     start_time = time.time()
     sleep(1)
     for i in range(total_iterations):
         # Do some work for each iteration
-        global eta_label
+        
         try:
             if os.path.exists(f'{RenderDir}/{filename}/output_frames/') == False:
                  
                  
-                 
+                eta_label.destroy()
                 break
                 
                 
@@ -1461,8 +1460,10 @@ def ETA(times, model='rife'):
             if seconds < 10:
                 seconds = str(f'0{seconds}')
             def display_ETA():
-                
+                global eta_label
                 if model == 'rife':
+                    
+
                     eta_label = Label(tab1,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
                 if model == 'realesrgan':
                     eta_label = Label(tab2,text=f'ETA: {hours}:{minutes}:{seconds}',font=('Ariel', '12'),bg=bg,fg=fg)
@@ -1662,8 +1663,10 @@ def start():
     os.system(f'rm -rf "{RenderDir}/{filename}/output_frames" ')
     
     os.system(f'mkdir -p "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-        
-    os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+    if ".mp4" in filename:
+        os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -acodec copy "{RenderDir}/{filename}/audio.m4a" -y')
+    else:
+        os.system(f'{ffmpeg_command}  -i "{videopath}" -vn -c:a aac -b:a 320k "{RenderDir}/{filename}/audio.m4a" -y')
     if ExtractionImageType == 'png':
         os.system(f'{ffmpeg_command}  -i "{videopath}"  "{RenderDir}/{filename}/input_frames/frame_%08d.png"')
     if ExtractionImageType == 'jpg':
@@ -1711,7 +1714,10 @@ def anime4X(is16x, is8x,rifever):
         if is16x == False and is8x == False: # checks for 4x
             
             #Call ProgressBar
-            
+            #Calculate percentage
+            fps_total = fps+30
+            first_iteration_percentage = fps/fps_total
+            print(first_iteration_percentage)
             Thread(target=preview_image).start()
             progressBarThread(0,200,0,200)
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
@@ -1739,7 +1745,7 @@ def anime4X(is16x, is8x,rifever):
                 trans1.merge_frames()
             # this shit works now yay
             os.system(fr'rm -rf "{RenderDir}/{filename}/input_frames/"  &&  mv "{RenderDir}/{filename}/output_frames/" "{RenderDir}/{filename}/input_frames" && mkdir -p "{RenderDir}/{filename}/output_frames"')
-            os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate 60 -i "{RenderDir}/{filename}/input_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {videoQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_60fps.mp4" -y')
             global done
             done = Label(tab1,
                  text=f"Done! Output File = {outputdir}/{filename}_60fps{extension}",
@@ -1807,14 +1813,14 @@ def realESRGAN(model):
         Thread(target=lambda: ETA(1,'realesrgan')).start()
         os.system(f'./realesrgan-ncnn-vulkan {model} {realsr_scale} -f {Image_Type} {gpu_setting("realsr")} {get_render_device("realsr")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
         if os.path.isfile(fr"{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}{extension}") == True:
-            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}    -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}(1).mp4" -y')
             if os.path.isfile(f'{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}(1){extension}') == True:
                 done.grid(column=4,row=10)
             else:
                                     error = Label(tab2,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps} -i "{RenderDir}/{filename}/output_frames/frame_%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264  -pix_fmt yuv420p  "{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}.mp4" -y')
             if os.path.isfile(f'{outputdir}/{filename}_{int(end_vid_width)}x{int(end_vid_height)}{extension}') == True:
                 done.grid(column=4,row=10)
             else:
@@ -1845,6 +1851,7 @@ def default_rife(rifever, times,interp_mode):
             if interp_mode == '2X':
                 progressBarThread(0,100,0,100)        # progressbar is fixed, may want to make it more accurate and not just split into even secitons. 
                 trans.get_frame_num(interp_mode,fps,i,0)
+                Thread(target=lambda: ETA(int(interp_mode[0]))).start()
             if interp_mode == '4X' and i==0:
                 progressBarThread(0,300,0,100)
                 trans.get_frame_num(interp_mode,fps,i,0)
@@ -1857,13 +1864,15 @@ def default_rife(rifever, times,interp_mode):
             if interp_mode == '8X' and i==1:
                 progressBarThread(43,300,43,128)
                 trans.get_frame_num(interp_mode,fps*2,i,1)
+
             if interp_mode == '8X' and i==2:
                 progressBarThread(73,170,73,170)
                 trans.get_frame_num(interp_mode,fps*4,i,3)
             Thread(target=preview_image).start()
-            Thread(target=lambda: ETA(int(interp_mode[0]))).start()
+            
             os.system(f'./rife-ncnn-vulkan {rifever} -f %08d.{Image_Type} {gpu_setting("rife")} {get_render_device("rife")} -i "{RenderDir}/{filename}/input_frames" -o "{RenderDir}/{filename}/output_frames" ')
-        
+                            
+
             if SceneChangeDetection != 'Off':
                 trans.merge_frames()
         if os.path.exists(outputdir) == False:
@@ -1879,14 +1888,14 @@ def default_rife(rifever, times,interp_mode):
                  font=("Arial", 11), width=57, anchor="w",
                  fg=fg,bg=bg)
         if os.path.isfile(fr"{outputdir}/{filename}_{fps * int(interp_mode[0])}fps.{extension}") == True:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * int(interp_mode[0])} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps(1){extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * int(interp_mode[0])} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps(1).mp4" -y')
             if os.path.isfile(f'"{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps(1){extension}"') == True:
                 done.grid(column=4,row=10)
             #else:
             #                        error = Label(tab1,text="The output file does not exist.",bg=bg,fg='red').grid(column=4,row=10)
 
         else:
-            os.system(fr'{ffmpeg_command}   -framerate {fps * int(interp_mode[0])} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps{extension}" -y')
+            os.system(fr'{ffmpeg_command}   -framerate {fps * int(interp_mode[0])} -i "{RenderDir}/{filename}/output_frames/%08d.{Image_Type}" -i "{RenderDir}/{filename}/audio.m4a" -c:a copy -crf {vidQuality} -vcodec libx264   -pix_fmt yuv420p "{outputdir}/{filename}_{int(fps * int(interp_mode[0]))}fps.mp4" -y')
             done.grid(column=4,row=10)
                 
             #else:
