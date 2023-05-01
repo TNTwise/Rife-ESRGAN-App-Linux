@@ -173,7 +173,7 @@ def read_settings():
         write_to_settings_file("RenderDevice" ,'GPU')
         write_to_settings_file("RenderDir" ,f"{thisdir}")
         write_to_settings_file("ExtractionImageType" ,"jpg")
-        write_to_settings_file('SceneChangeDetection','0.4')
+        write_to_settings_file('SceneChangeDetection','0.3')
 
         settings_dict = {}
         with open(f'{thisdir}/files/settings.txt', 'r') as f:
@@ -215,7 +215,7 @@ def write_defaults():
     write_to_settings_file("RenderDevice" ,'GPU')
     write_to_settings_file("RenderDir" ,f"{thisdir}")
     write_to_settings_file("ExtractionImageType" ,"jpg")
-    write_to_settings_file('SceneChangeDetection','0.4')
+    write_to_settings_file('SceneChangeDetection','0.3')
     try:
         read_settings()
     except:
@@ -231,6 +231,8 @@ def write_temp(): # im doing this because i am lazy
 
 
 read_settings()
+
+
 def change_setting(setting,svalue):
     original_settings = {}
     with open(f'{thisdir}/files/settings.txt', 'r') as f:
@@ -692,10 +694,12 @@ def settings_window():
                     transition_detection_variable.set('Off')
                 if SceneChangeDetection == '0.2':
                     transition_detection_variable.set('High')
-                if SceneChangeDetection == '0.4':
+                if SceneChangeDetection == '0.3':
                     transition_detection_variable.set('Medium')
-                if SceneChangeDetection == '0.6':
+                if SceneChangeDetection == '0.4':
                     transition_detection_variable.set('Low')
+                else:
+                    write_defaults()
                 transition_detection_drop_down = OptionMenu(self.advanced_settings_window, transition_detection_variable, *extraction_image_options)
                 transition_detection_drop_down.config(width=6,font=('Ariel', '12'))
                 transition_detection_drop_down.config(bg=bg)
@@ -708,9 +712,9 @@ def settings_window():
                     if transition_detection_variable.get() == 'High':
                         change_setting('SceneChangeDetection','0.2')
                     if transition_detection_variable.get() == 'Medium':
-                        change_setting('SceneChangeDetection','0.4')
+                        change_setting('SceneChangeDetection','0.3')
                     if transition_detection_variable.get() == 'Low':
-                        change_setting('SceneChangeDetection','0.6')
+                        change_setting('SceneChangeDetection','0.4')
                     
                 transition_detection_variable.trace("w", callback)
             transition_detection_drop_down()
