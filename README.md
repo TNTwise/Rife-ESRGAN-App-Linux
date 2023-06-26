@@ -1,4 +1,4 @@
-# NOTICE: This repo is being moved to https://github.com/TNTwise/Rife-ESRGAN-App-Linux-QT, and is now archived.
+# NOTICE: This repo is being moved to https://github.com/TNTwise/Rife-ESRGAN-App-Linux-QT, This repo will be archived.
 
 
 <p align=center>
