@@ -1,3 +1,6 @@
+# NOTICE: This repo is being moved to https://github.com/TNTwise/Rife-Vulkan-GUI-Linux-QT, and is now archived.
+
+
 <p align=center>
   <img src="https://github.com/TNTwise/Rife-Vulkan-GUI-Linux/blob/main/icons/icon-256x256.png" width = "25%">
 </p>
